@@ -1,0 +1,125 @@
+{
+  "version": "1.0.0",
+  "description": "先生回话模板（输出模板.md 模板三）",
+  "source": "输出模板.md 模板三：每日命理对话",
+  "templates": {
+    "empathy": {
+      "description": "共情段模板（根据场景定制）",
+      "scenes": {
+        "决策": "先生明白这件事对您很重要——选对时机，往往比努力本身更能决定结果。先生陪您把日子算明白。",
+        "择吉": "选个吉日，是给这件事一个好的开头。先生帮您挑个气场最合的日子，让事情顺顺利利。",
+        "宜忌": "您每日开盘来问，是把命理当作清晨的一杯茶。先生很乐意陪您过这一天。",
+        "开放": "您的这个问题，先生需要细细思量。人生千头万绪，命理只是其中一盏灯，咱们慢慢看。"
+      }
+    },
+    "explanation": {
+      "description": "解释段模板",
+      "ganRoleTemplates": {
+        "primary": "{wuxing}正为您主用神",
+        "secondary": "{wuxing}为您次用神",
+        "ji": "{wuxing}恰为您所忌",
+        "neutral": "{wuxing}于您命局气场中性"
+      },
+      "zhiRoleTemplates": {
+        "primary": "地支{zhi}（{wuxing}）助用",
+        "ji": "地支{zhi}（{wuxing}）扰用",
+        "neutral": "地支{zhi}（{wuxing}）平和"
+      },
+      "relationTemplates": {
+        "合": "今日地支与您日支{dayZhi}相合，是\"外缘来配\"之象",
+        "冲": "今日地支与您日支{dayZhi}相冲，主\"外物动您根基\"，行事易生波折",
+        "刑": "今日地支与您日支{dayZhi}相刑，易有口舌、暗损",
+        "害": "今日地支与您日支{dayZhi}相害，宜避锋芒",
+        "无": "今日地支与您日支{dayZhi}无显著相犯"
+      },
+      "overallTemplates": {
+        "good": "整体顺意",
+        "caution": "整体宜谨慎",
+        "neutral": "整体平稳"
+      },
+      "template": "今日{ganZhi}日（您日主{dayGan}），{ganRole}，{zhiRole}；{relation}。综合来看，{overall}。"
+    },
+    "suggestion": {
+      "description": "建议段模板（根据 verdict 定制）",
+      "decision": {
+        "宜": [
+          "① 今日可放心推进，时段首选 {bestHour}；",
+          "② 行事前先把要点列清，避免临场漏项；",
+          "③ 着装与场所方位以您用神之色为佳，借势而行。"
+        ],
+        "慎": [
+          "① 今日如非紧要，建议放缓半步——先以电话/线上沟通为主；",
+          "② {bestAltOrHint}",
+          "③ 今日多饮温水、少思虑，傍晚早睡，养回精神再战。"
+        ],
+        "忌": [
+          "① 今日强行不利，建议主动延期，礼貌说明并约下一档；",
+          "② {bestAltOrHint}",
+          "③ 今日宜居守、复盘、整理资料，为下一档做足功课。"
+        ],
+        "中性": [
+          "① 今日气场无明显助力或阻力，按平日节奏做事即可；",
+          "② 关键时段建议放在 {bestHour}；",
+          "③ 不必凡事求问，心安即是吉时。"
+        ]
+      },
+      "timing": {
+        "success": [
+          "① 首选 {date}（{ganZhi}日）{hour} 正式落定；",
+          "② 前一日把所有附件、版本、材料整理好，避免临场改动；",
+          "③ 场地方位尽量选与您用神同向，借势而行。"
+        ],
+        "fail": [
+          "① 未来两周内未见显著吉日，建议再向后推一档；",
+          "② 如必须近期落定，选最近一个气场平稳之日，避开冲日。"
+        ]
+      },
+      "daily": [
+        "① **宜**：{goodActions}；",
+        "② **忌**：{badActions}；",
+        "③ 吉时：{bestHour}。"
+      ],
+      "open": [
+        "① 近期可多接触{yongShen}相关之物（颜色/方位/行业），以{yongActions}等事补气；",
+        "② {jiHint}",
+        "③ {focusHint}"
+      ]
+    },
+    "focusHints": {
+      "description": "领域引导提示",
+      "健康": "健康类问题命理只是一面镜子，若身体不适请务必先就医，不能代替医嘱。",
+      "感情": "感情之事三分天注定七分人为，先生只看大运起伏，具体进退请您自己拿主意。",
+      "财运": "财运起伏看大运不看流月，建议把眼光放长，不为一时得失乱了方寸。",
+      "default": "若有具体决策，可把场景换成「决策建议」再问一次，先生给您更精准的回话。"
+    },
+    "basis": {
+      "description": "命理依据模板",
+      "liuRiTemplate": "{ganZhi}日 · {brief}",
+      "liuNianTemplate": "{liuNian}流年",
+      "yongShenTemplate": "用神{yongShen}{jiPart}",
+      "daYunTemplate": "{ganZhi}大运 · {shiShen}",
+      "jiPartTemplate": "，忌{jiShen}"
+    },
+    "verdictMapping": {
+      "description": "compatibility → verdict 映射",
+      "rules": [
+        {
+          "minScore": 70,
+          "verdict": "宜",
+          "description": "70分以上为宜"
+        },
+        {
+          "minScore": 50,
+          "maxScore": 69,
+          "verdict": "慎",
+          "description": "50-69分为慎"
+        },
+        {
+          "maxScore": 49,
+          "verdict": "忌",
+          "description": "49分以下为忌"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,339 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===== 全局基础样式：中式古典风（基于 image2 优化原型图重做） ===== */
+
+:root {
+  /* 基础色板：暖米色羊皮纸 + 酒红朱砂 + 沉棕 */
+  --color-paper: #f5ecd7;
+  --color-paper-deep: #ebe0c4;
+  --color-paper-card: #fbf3df;          /* 卡片底色（半透明米色） */
+  --color-paper-card-soft: #f8eed4;
+  --color-cinnabar: #b8372f;            /* 主红：原型图酒红朱砂 */
+  --color-cinnabar-light: #d9594f;
+  --color-ink: #3a2f24;                 /* 文字主色：深棕 sepia */
+  --color-ink-light: #6b5a48;
+  --color-ink-soft: #8a7a66;
+  --color-gold: #b8860b;
+  --color-gold-soft: #c8a04a;
+  --color-border: #d4c8a8;              /* 卡片描边 */
+  --color-border-soft: #e6dcc0;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: 'Noto Sans SC', 'PingFang SC', system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 标题统一用宋体（古典感） */
+h1,
+h2,
+h3,
+h4,
+.font-classic {
+  font-family: 'Noto Serif SC', 'Songti SC', STSong, serif;
+  letter-spacing: 0.05em;
+}
+
+/* ===== 中式古典装饰组件 ===== */
+
+/* 古典卡片：半透明米色 + 大圆角 + 柔和阴影 */
+.classic-card {
+  background-color: var(--color-paper-card);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 24px;
+  box-shadow:
+    0 1px 2px rgba(58, 47, 36, 0.04),
+    0 4px 16px rgba(58, 47, 36, 0.06);
+  position: relative;
+}
+
+/* 标题装饰：菱形图标 + 宋体（取代旧的左侧竖条） */
+.classic-section-title {
+  font-family: 'Noto Serif SC', 'Songti SC', STSong, serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--color-ink);
+  margin-bottom: 20px;
+  letter-spacing: 0.08em;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.classic-section-title::before {
+  content: '◇';
+  color: var(--color-cinnabar);
+  font-size: 18px;
+  transform: rotate(0deg);
+  display: inline-block;
+}
+
+/* 居中云纹标题（用于消费者模式 / Dashboard 区段） */
+.classic-cloud-title {
+  font-family: 'Noto Serif SC', 'Songti SC', STSong, serif;
+  font-size: 22px;
+  letter-spacing: 0.25em;
+  color: var(--color-ink);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 28px 0 22px;
+}
+.classic-cloud-title::before,
+.classic-cloud-title::after {
+  content: '';
+  flex: 0 1 80px;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--color-gold-soft),
+    transparent
+  );
+  position: relative;
+}
+.classic-cloud-title > .cloud-mark {
+  color: var(--color-gold);
+  font-size: 14px;
+  letter-spacing: 0;
+  opacity: 0.7;
+}
+
+/* 印章风格小标题（红底白字方印） */
+.classic-seal {
+  display: inline-block;
+  background-color: var(--color-cinnabar);
+  color: #fff7e6;
+  padding: 3px 11px;
+  font-family: 'Noto Serif SC', 'Songti SC', serif;
+  font-size: 13px;
+  letter-spacing: 0.25em;
+  border-radius: 3px;
+  box-shadow: 0 1px 2px rgba(184, 55, 47, 0.3);
+}
+
+/* 篆体方印（更立体、带描边） */
+.zhuan-seal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background-color: var(--color-cinnabar);
+  color: #fff7e6;
+  font-family: 'Noto Serif SC', 'Songti SC', serif;
+  font-size: 18px;
+  font-weight: 700;
+  border-radius: 4px;
+  box-shadow:
+    inset 0 0 0 1.5px rgba(255, 247, 230, 0.35),
+    0 2px 4px rgba(184, 55, 47, 0.25);
+  letter-spacing: 0;
+}
+
+/* 分隔线（双线古典风） */
+.classic-divider {
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--color-border),
+    transparent
+  );
+  margin: 24px 0;
+  position: relative;
+}
+.classic-divider::after {
+  content: '◇';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--color-paper-card);
+  padding: 0 12px;
+  color: var(--color-gold);
+  font-size: 12px;
+}
+
+/* 长滚动页面背景：暖米色 + 山水水墨纹理 */
+.page-paper {
+  background-color: var(--color-paper);
+  background-image:
+    /* 顶部远山墨韵 */
+    radial-gradient(ellipse 600px 280px at 12% 0%, rgba(58, 47, 36, 0.08) 0, transparent 60%),
+    radial-gradient(ellipse 500px 240px at 88% 0%, rgba(58, 47, 36, 0.06) 0, transparent 65%),
+    /* 底部远山 */
+    radial-gradient(ellipse 700px 260px at 18% 100%, rgba(58, 47, 36, 0.07) 0, transparent 60%),
+    radial-gradient(ellipse 500px 240px at 82% 100%, rgba(58, 47, 36, 0.06) 0, transparent 65%),
+    /* 中部柔和云韵 */
+    radial-gradient(circle at 20% 35%, rgba(184, 134, 11, 0.04) 0, transparent 45%),
+    radial-gradient(circle at 80% 60%, rgba(184, 55, 47, 0.04) 0, transparent 45%);
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+/* 干支大字风格 */
+.gan-zhi-char {
+  font-family: 'Noto Serif SC', 'Songti SC', STSong, serif;
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+/* 五行配色（不同五行字着色） */
+.wuxing-jin { color: #b8860b; } /* 金 */
+.wuxing-mu  { color: #6b8e23; } /* 木 */
+.wuxing-shui{ color: #1e6091; } /* 水 */
+.wuxing-huo { color: #c5392f; } /* 火 */
+.wuxing-tu  { color: #8b6f47; } /* 土 */
+
+/* 印章圆形 */
+.seal-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border: 2px solid var(--color-cinnabar);
+  background-color: rgba(197, 57, 47, 0.05);
+  color: var(--color-cinnabar);
+  border-radius: 50%;
+  font-family: 'Noto Serif SC', serif;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+/* ===== 多法同断（Convergence）专用样式 ===== */
+/* 命理判断中：≥2 个独立分析路径指向同一结论时，使用金色双印章强突出 */
+
+/* 多法同断卡片：金边 + 微金底 + 双印章定位 */
+.convergence-card {
+  position: relative;
+  border: 1.5px solid var(--color-gold) !important;
+  background: linear-gradient(
+    135deg,
+    rgba(184, 134, 11, 0.06) 0%,
+    rgba(184, 134, 11, 0.02) 50%,
+    rgba(184, 134, 11, 0.06) 100%
+  ) !important;
+  box-shadow:
+    0 0 0 1px rgba(184, 134, 11, 0.15),
+    0 2px 8px rgba(184, 134, 11, 0.10);
+}
+
+/* 双印章徽章（左叠右） */
+.convergence-seal {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px 3px 8px;
+  background: var(--color-gold);
+  color: #fff7e6;
+  font-family: 'Noto Serif SC', 'Songti SC', serif;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  border-radius: 2px;
+  position: relative;
+  font-weight: 600;
+}
+.convergence-seal::before {
+  content: '⊙⊙';
+  font-size: 13px;
+  letter-spacing: -2px;
+  line-height: 1;
+  margin-right: 2px;
+  opacity: 0.85;
+}
+
+/* 证据链列表容器 */
+.convergence-methods {
+  margin-top: 10px;
+  padding: 10px 12px;
+  background: rgba(184, 134, 11, 0.05);
+  border-left: 3px solid var(--color-gold);
+  border-radius: 3px;
+}
+.convergence-methods-title {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--color-gold);
+  margin-bottom: 6px;
+  font-family: 'Noto Serif SC', serif;
+}
+.convergence-methods ul {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 12px;
+  color: var(--color-ink-light);
+  line-height: 1.7;
+}
+.convergence-methods ul li {
+  position: relative;
+}
+.convergence-methods ul li::marker {
+  color: var(--color-gold);
+}
+
+/* 消费者模式：柔和小注脚（一行 + 念珠 emoji） */
+.convergence-note-soft {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 6px 10px;
+  background: rgba(184, 134, 11, 0.06);
+  border-left: 2px solid var(--color-gold);
+  border-radius: 2px;
+  font-size: 12px;
+  color: var(--color-ink-light);
+  line-height: 1.6;
+  font-style: normal;
+}
+.convergence-note-soft::before {
+  content: '📿';
+  font-size: 13px;
+  flex-shrink: 0;
+  line-height: 1.5;
+}
+
+/* 消费者出路点的右上角小金角（轻提示是多法同断） */
+.convergence-corner-mark {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  font-size: 10px;
+  color: var(--color-gold);
+  letter-spacing: 0.15em;
+  opacity: 0.85;
+  font-family: 'Noto Serif SC', serif;
+}
+
+/* AntD 主色覆盖（部分样式与古典风匹配） */
+.ant-btn-primary {
+  background-color: var(--color-cinnabar) !important;
+  border-color: var(--color-cinnabar) !important;
+}
+.ant-btn-primary:hover {
+  background-color: #d9594f !important;
+  border-color: #d9594f !important;
+}
+
+/* 滚动条 */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 4px; }
+::-webkit-scrollbar-track { background: transparent; }

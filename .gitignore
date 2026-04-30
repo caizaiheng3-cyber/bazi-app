@@ -1,0 +1,19 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Node
+node_modules/
+dist/
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+
+# 环境变量
+.env
+.env.local

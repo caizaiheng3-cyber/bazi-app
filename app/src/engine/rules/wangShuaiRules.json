@@ -1,0 +1,163 @@
+{
+  "version": "1.0.0",
+  "description": "旺衰判定规则（命理分析方法论 §3.1）",
+  "source": "命理分析方法论.md §3.1 四步判断法 + 综合判断投票表",
+  "rules": {
+    "wangXiangTable": {
+      "description": "五行旺相休囚死表（日主五行 vs 月令五行）",
+      "mapping": {
+        "木": {
+          "木": "旺",
+          "火": "相",
+          "土": "休",
+          "金": "囚",
+          "水": "死"
+        },
+        "火": {
+          "木": "相",
+          "火": "旺",
+          "土": "休",
+          "金": "囚",
+          "水": "死"
+        },
+        "土": {
+          "木": "囚",
+          "火": "相",
+          "土": "旺",
+          "金": "休",
+          "水": "死"
+        },
+        "金": {
+          "木": "死",
+          "火": "囚",
+          "土": "相",
+          "金": "旺",
+          "水": "休"
+        },
+        "水": {
+          "木": "相",
+          "火": "死",
+          "土": "囚",
+          "金": "休",
+          "水": "旺"
+        }
+      }
+    },
+    "zhiToSeasonWuxing": {
+      "description": "地支 → 当令五行（季节论）",
+      "mapping": {
+        "寅": "木", "卯": "木",
+        "巳": "火", "午": "火",
+        "申": "金", "酉": "金",
+        "亥": "水", "子": "水",
+        "辰": "土", "戌": "土", "丑": "土", "未": "土"
+      }
+    },
+    "deLingThreshold": {
+      "description": "得令判定：旺/相 → 得令，休/囚/死 → 失令",
+      "positive": ["旺", "相"],
+      "negative": ["休", "囚", "死"]
+    },
+    "verdictTable": {
+      "description": "综合判断投票表（7 种组合 → 5 档结论）",
+      "combinations": [
+        {
+          "deLing": true,
+          "deDi": true,
+          "deSheng": true,
+          "label": "极旺",
+          "suffix": "势汪洋，易成专旺",
+          "toneIsRich": true,
+          "toneIsWeak": false,
+          "toneScore": 3,
+          "confidence": 5
+        },
+        {
+          "deLing": false,
+          "deDi": false,
+          "deSheng": false,
+          "label": "极弱",
+          "suffix": "气衰微，易成从弱",
+          "toneIsRich": false,
+          "toneIsWeak": true,
+          "toneScore": -3,
+          "confidence": 5
+        },
+        {
+          "deLing": true,
+          "deDi": true,
+          "deSheng": false,
+          "label": "偏旺",
+          "suffix": "气有余，宜泄宜耗",
+          "toneIsRich": true,
+          "toneIsWeak": false,
+          "toneScore": 2,
+          "confidence": 4
+        },
+        {
+          "deLing": false,
+          "deDi": false,
+          "deSheng": true,
+          "label": "偏弱",
+          "suffix": "气不足，宜扶宜生",
+          "toneIsRich": false,
+          "toneIsWeak": true,
+          "toneScore": -2,
+          "confidence": 4
+        },
+        {
+          "deLing": true,
+          "deDi": false,
+          "deSheng": true,
+          "label": "中和偏旺",
+          "suffix": "气近平衡偏强",
+          "toneIsRich": true,
+          "toneIsWeak": false,
+          "toneScore": 1,
+          "confidence": 3
+        },
+        {
+          "deLing": false,
+          "deDi": true,
+          "deSheng": true,
+          "label": "中和偏旺",
+          "suffix": "气近平衡偏强",
+          "toneIsRich": true,
+          "toneIsWeak": false,
+          "toneScore": 1,
+          "confidence": 3
+        },
+        {
+          "deLing": false,
+          "deDi": true,
+          "deSheng": false,
+          "label": "中和偏弱",
+          "suffix": "气近平衡偏弱",
+          "toneIsRich": false,
+          "toneIsWeak": true,
+          "toneScore": -1,
+          "confidence": 3
+        }
+      ]
+    },
+    "convergenceRules": {
+      "description": "多法同断识别规则",
+      "allPositive": {
+        "methods": [
+          "得令法（月令旺相）",
+          "得地法（地支通根透印）",
+          "得生法（天干助力 ≥ 克泄）"
+        ],
+        "consumerNoteTemplate": "\"{wuxing}气{label}\"这个判断，是从月令、根气、天干三个独立角度都印证的，可信度最高。"
+      },
+      "allNegative": {
+        "methods": [
+          "失令法（月令休囚死）",
+          "失地法（地支无根无印）",
+          "受克法（天干克泄 > 助力）"
+        ],
+        "consumerNoteTemplate": "\"{wuxing}气{label}\"这个判断，是从月令、根气、天干三个独立角度都印证的，可信度最高。"
+      }
+    }
+  }
+}

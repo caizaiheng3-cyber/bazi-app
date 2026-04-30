@@ -1,0 +1,176 @@
+{
+  "version": "1.0.0",
+  "description": "格局判定规则（命理分析方法论 §3.3）",
+  "source": "命理分析方法论.md §3.3 格局体系",
+  "rules": {
+    "shiShenToGe": {
+      "description": "十神 → 格局名称映射",
+      "mapping": {
+        "正官": "正官格",
+        "七杀": "偏官格",
+        "正印": "正印格",
+        "偏印": "偏印格",
+        "正财": "正财格",
+        "偏财": "偏财格",
+        "食神": "食神格",
+        "伤官": "伤官格"
+      }
+    },
+    "zhengGeConditions": {
+      "description": "正格成格条件评估",
+      "rules": [
+        {
+          "geShiShen": "正官",
+          "successConditions": {
+            "印护官": { "minCount": 1, "description": "印星 ≥ 1 个护官" },
+            "财生官": { "minCount": 1, "description": "财星 ≥ 1 个生官" }
+          },
+          "successTemplate": "{geName}成格：{yinReason}{caiyinReason}",
+          "failTemplate": "{geName}破格：缺印护官、缺财生官（印={yinCount}，财={caiCount}）"
+        },
+        {
+          "geShiShen": "七杀",
+          "successConditions": {
+            "食神制杀": { "minCount": 1, "description": "食神 ≥ 1 个" },
+            "印化杀": { "minCount": 1, "description": "印星 ≥ 1 个" }
+          },
+          "successTemplate": "偏官（七杀）格成格：{shiReason}{yinReason}",
+          "failTemplate": "偏官格破格：缺食神制杀、缺印化杀（食神={shiCount}，印={yinCount}）"
+        },
+        {
+          "geShiShen": "正印",
+          "successConditions": {
+            "官生印": { "minCount": 1, "description": "官杀 ≥ 1 个生印" },
+            "财破印": { "maxCount": 1, "description": "财 ≤ 1 个（财≥2才破印）" }
+          },
+          "successTemplate": "{geName}成格：官杀{guanCount}个生印，财{caiCount}个未破印",
+          "halfSuccessTemplate": "{geName}半成：官杀{guanCount}个生印，但{flaws}",
+          "failTemplate": "{geName}破格：无官杀生印（官杀={guanCount}）"
+        },
+        {
+          "geShiShen": "偏印",
+          "successConditions": {
+            "官生印": { "minCount": 1, "description": "官杀 ≥ 1 个生印" },
+            "财破印": { "maxCount": 1, "description": "财 ≤ 1 个" },
+            "食神夺印": { "maxCount": 0, "description": "食神 = 0" }
+          },
+          "successTemplate": "{geName}成格：官杀{guanCount}个生印，财{caiCount}个未破印，无食神夺印",
+          "halfSuccessTemplate": "{geName}半成：官杀{guanCount}个生印，但{flaws}",
+          "failTemplate": "{geName}破格：无官杀生印（官杀={guanCount}）"
+        },
+        {
+          "geShiShen": "正财",
+          "successConditions": {
+            "食伤生财": { "minCount": 1, "description": "食伤 ≥ 1 个生财" },
+            "比劫夺财": { "maxCount": 1, "description": "比劫 ≤ 1 个" }
+          },
+          "successTemplate": "{geName}成格：食伤{shiShangCount}个生财，比劫{biJieCount}个未夺财",
+          "halfSuccessTemplate": "{geName}半成：食伤{shiShangCount}个生财，但比劫{biJieCount}个偏旺有夺财之嫌",
+          "failTemplate": "{geName}破格：无食伤生财（食伤={shiShangCount}）"
+        },
+        {
+          "geShiShen": "偏财",
+          "successConditions": {
+            "食伤生财": { "minCount": 1, "description": "食伤 ≥ 1 个生财" },
+            "比劫夺财": { "maxCount": 1, "description": "比劫 ≤ 1 个" }
+          },
+          "successTemplate": "{geName}成格：食伤{shiShangCount}个生财，比劫{biJieCount}个未夺财",
+          "halfSuccessTemplate": "{geName}半成：食伤{shiShangCount}个生财，但比劫{biJieCount}个偏旺有夺财之嫌",
+          "failTemplate": "{geName}破格：无食伤生财（食伤={shiShangCount}）"
+        },
+        {
+          "geShiShen": "食神",
+          "successConditions": {
+            "财泄食": { "minCount": 1, "description": "财 ≥ 1 个泄食" },
+            "偏印夺食": { "maxCount": 0, "description": "偏印 = 0" }
+          },
+          "successTemplate": "{geName}成格：财{caiCount}个泄食，无偏印夺食",
+          "halfSuccessTemplate": "{geName}半成：财{caiCount}个泄食，但偏印{pianYinCount}个有夺食之嫌",
+          "failTemplate": "{geName}破格：无财泄食{pianYinReason}（财={caiCount}）"
+        },
+        {
+          "geShiShen": "伤官",
+          "successConditions": {
+            "伤官配印": { "minCount": 1, "description": "印 ≥ 1 个" },
+            "伤官生财": { "minCount": 1, "description": "财 ≥ 1 个" }
+          },
+          "successTemplate": "{geName}成格：{peiYinReason}{shengCaiReason}",
+          "failTemplate": "{geName}破格：既无印配、又无财生（印={yinCount}，财={caiCount}）"
+        }
+      ]
+    },
+    "levelEvaluation": {
+      "description": "格局层次评估",
+      "rules": [
+        {
+          "status": "破格",
+          "level": "低"
+        },
+        {
+          "status": "半成",
+          "level": "中"
+        },
+        {
+          "status": "成格",
+          "conditions": [
+            {
+              "check": "yongShenPrimary.includes(geWx)",
+              "level": "高",
+              "description": "用神与格神契合，列为上格"
+            },
+            {
+              "check": "true",
+              "level": "中",
+              "description": "与格神部分契合或格局有瑕疵，列为中格"
+            }
+          ]
+        }
+      ]
+    },
+    "biJieGeRules": {
+      "description": "比劫格偏格规则",
+      "threshold": {
+        "extremeMinPercent": 40,
+        "pianWangConclusion": "日主偏旺",
+        "description": "极旺≥40%或偏旺时为半成，否则破格"
+      },
+      "zhuanWangTendency": {
+        "木": "从旺",
+        "火": "从旺",
+        "土": "从旺",
+        "金": "从旺",
+        "水": "从旺"
+      },
+      "zhuanWangGeName": {
+        "木": "曲直格",
+        "火": "炎上格",
+        "土": "稼穑格",
+        "金": "从革格",
+        "水": "润下格"
+      },
+      "aiTargetWx": {
+        "description": "碍日主成专旺的他柱五行",
+        "types": ["克日主(官杀)", "泄日主(食伤)", "耗日主(财)"]
+      }
+    },
+    "specialGeRules": {
+      "description": "特殊格识别规则",
+      "threshold": {
+        "minPercent": 50,
+        "description": "日主同五行 ≥ 50% 且日主极旺时识别为专旺格"
+      },
+      "zhuanWangGeNames": {
+        "木": "曲直格",
+        "火": "炎上格",
+        "土": "稼穑格",
+        "金": "从革格",
+        "水": "润下格"
+      },
+      "congGeRules": {
+        "description": "从格识别规则（从强/从财/从官/从儿/从弱）",
+        "minPercent": 40,
+        "conclusionPatterns": ["日主极弱", "日主偏弱", "日主中和偏弱"]
+      }
+    }
+  }
+}

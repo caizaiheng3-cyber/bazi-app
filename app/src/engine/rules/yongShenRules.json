@@ -1,0 +1,145 @@
+{
+  "version": "1.0.0",
+  "description": "用神选取规则（命理分析方法论 §3.2）",
+  "source": "命理分析方法论.md §3.2 扶抑法/调候法/通关法",
+  "rules": {
+    "shengKe": {
+      "description": "五行相生相克关系",
+      "mapping": {
+        "木": { "sheng": "火", "ke": "土", "keMe": "金", "shengMe": "水" },
+        "火": { "sheng": "土", "ke": "金", "keMe": "水", "shengMe": "木" },
+        "土": { "sheng": "金", "ke": "水", "keMe": "木", "shengMe": "火" },
+        "金": { "sheng": "水", "ke": "木", "keMe": "火", "shengMe": "土" },
+        "水": { "sheng": "木", "ke": "火", "keMe": "土", "shengMe": "金" }
+      }
+    },
+    "tiaoHouTable": {
+      "description": "调候用神表（命理分析方法论 §3.2.2）",
+      "mapping": {
+        "木": {
+          "冬": { "use": ["火"], "reason": "冬月木寒，需火暖局" },
+          "春": { "use": [], "reason": "春月木旺，无需调候" }
+        },
+        "火": {
+          "夏": { "use": ["水"], "reason": "夏月火燥，需水润局" },
+          "冬": { "use": ["木"], "reason": "冬月火弱，需木生火" }
+        },
+        "金": {
+          "夏": { "use": ["土", "水"], "reason": "夏月金熔，需土生金、水润局" },
+          "秋": { "use": [], "reason": "秋月金旺，无需调候" }
+        },
+        "水": {
+          "夏": { "use": ["金"], "reason": "夏月水蒸，需金生水" },
+          "冬": { "use": [], "reason": "冬月水旺，无需调候" }
+        }
+      }
+    },
+    "zhiToSeason": {
+      "description": "地支 → 季节（用于调候法）",
+      "mapping": {
+        "寅": "春", "卯": "春", "辰": "春",
+        "巳": "夏", "午": "夏", "未": "夏",
+        "申": "秋", "酉": "秋", "戌": "秋",
+        "亥": "冬", "子": "冬", "丑": "冬"
+      }
+    },
+    "fuYiRules": {
+      "description": "扶抑法取用规则",
+      "prosperous": {
+        "description": "日主旺时取食伤(我生) + 财(我克)为用，官杀次之",
+        "priority": ["食伤", "财", "官杀"],
+        "reasonTemplate": "日主{wuxing}偏旺，按文档优先级取{food}（食伤泄秀，最温和）→ {wealth}（财星耗身）→ {officer}（官杀克身，最烈）抑之"
+      },
+      "weak": {
+        "description": "日主弱时取印(生我) + 比劫(同我)为用",
+        "priority": ["印", "比劫"],
+        "reasonTemplate": "日主{wuxing}偏弱，按文档优先级取{seal}（印星生身，兼护身）+ {same}（比劫助身）扶之"
+      }
+    },
+    "tongGuanRules": {
+      "description": "通关法规则",
+      "threshold": {
+        "minPercent": 30,
+        "description": "前两强五行皆 ≥ 30% 视为对峙"
+      },
+      "reasonTemplate": "{stronger}({strongerPercent}%)与{weaker}({weakerPercent}%)交战，取{tongGuan}通关（{stronger}生{tongGuan}、{tongGuan}生{weaker}）"
+    },
+    "zhuWangRules": {
+      "description": "专旺格规则（命理分析方法论 §3.3.2）",
+      "threshold": {
+        "minPercent": 50,
+        "description": "日主同五行 ≥ 50% 且日主极旺时按专旺格取用"
+      },
+      "reasonTemplate": "日主{wuxing}极旺成一方之势（{percent}% ≥ 50%），按文档 §3.3.2 专旺格取用：顺其旺势，主用神={wuxing}（同我）+{seal}（印生），忌克泄。"
+    },
+    "methodPriority": {
+      "description": "取用神方法优先级",
+      "order": ["调候", "扶抑", "通关"],
+      "description": "调候用神优先级高于扶抑用神"
+    },
+    "primarySelectionRules": {
+      "description": "主用神选取规则",
+      "rules": [
+        {
+          "id": "tiaoHouMustPrimary",
+          "description": "调候法适用时，其 use 必入 primary（不可降级）",
+          "condition": "tiaoHou.applies === true",
+          "action": "tiaoHou.use → primary"
+        },
+        {
+          "id": "multiMethodConvergence",
+          "description": "被 ≥2 法共认的五行 → 必入 primary（多法同断置信度最高）",
+          "condition": "voteCount[wuxing] >= 2",
+          "action": "wuxing → primary"
+        },
+        {
+          "id": "fallbackToDominant",
+          "description": "若 primary 为空，将单法（扶抑/通关）的 use 升为 primary",
+          "condition": "primary.length === 0 && (fuYi.applies || tongGuan.applies)",
+          "action": "fallback.use → primary"
+        }
+      ]
+    },
+    "jiSelectionRules": {
+      "description": "忌神选取规则",
+      "rules": [
+        {
+          "id": "keYongShen",
+          "description": "克主用神者 → 忌神",
+          "action": "SHENG_KE[primary].keMe → ji"
+        },
+        {
+          "id": "shengFuWang",
+          "description": "日主旺时，生扶日主的五行（同我+生我）助长旺势 → 忌神",
+          "condition": "tier === '旺'",
+          "action": "dayWx + SHENG_KE[dayWx].shengMe → ji"
+        },
+        {
+          "id": "keXieRuo",
+          "description": "日主弱时，克泄日主的五行（我生+我克+克我） → 忌神",
+          "condition": "tier === '弱'",
+          "action": "SHENG_KE[dayWx].sheng + SHENG_KE[dayWx].ke + SHENG_KE[dayWx].keMe → ji"
+        },
+        {
+          "id": "yongShenPriority",
+          "description": "用神优先：主/次用神从忌神中剔除",
+          "action": "primary + secondary → remove from ji"
+        }
+      ]
+    },
+    "convergenceRules": {
+      "description": "多法同断识别规则",
+      "threshold": {
+        "minMethodCount": 2,
+        "minVoteCount": 2,
+        "description": "至少 2 法适用，且至少 1 个五行被 ≥2 法选中"
+      },
+      "methodLabels": {
+        "扶抑": "扶抑法（旺则克泄、弱则扶生）",
+        "调候": "调候法（寒暖燥湿平衡）",
+        "通关": "通关法（化解相克对峙）"
+      },
+      "consumerNoteTemplate": "\"该多接触{primary}\"这件事，是从{methodCount}种不同的取用神思路都得出的结论——不是单一推断，请放心相信。"
+    }
+  }
+}

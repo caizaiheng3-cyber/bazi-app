@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>八字排盘系统 · 核心架构图</title>
+<style>
+  :root {
+    --paper: #F5EFE0;
+    --paper-deep: #EBE3D0;
+    --paper-card: #FBF6E9;
+    --cinnabar: #C5392F;
+    --cinnabar-light: #D9594F;
+    --ink: #2C2A28;
+    --ink-light: #5A5651;
+    --gold: #B8860B;
+    --gold-light: #D4A52A;
+    --celadon: #7A8C7E;
+    --border: #C9BFA8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans SC', 'PingFang SC', system-ui, sans-serif;
+    background-color: var(--paper);
+    background-image:
+      radial-gradient(circle at 15% 10%, rgba(184, 134, 11, 0.05) 0, transparent 40%),
+      radial-gradient(circle at 85% 85%, rgba(197, 57, 47, 0.05) 0, transparent 40%);
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 40px 20px;
+    line-height: 1.6;
+  }
+
+  .font-classic {
+    font-family: 'Noto Serif SC', 'Songti SC', STSong, serif;
+    letter-spacing: 0.05em;
+  }
+
+  /* ===== 顶部标题 ===== */
+  .header {
+    max-width: 1400px;
+    margin: 0 auto 40px;
+    text-align: center;
+    position: relative;
+  }
+
+  .seal-circle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border: 2px solid var(--cinnabar);
+    background-color: rgba(197, 57, 47, 0.05);
+    color: var(--cinnabar);
+    border-radius: 50%;
+    font-family: 'Noto Serif SC', serif;
+    font-weight: 700;
+    font-size: 22px;
+    margin-bottom: 16px;
+  }
+
+  .header h1 {
+    font-family: 'Noto Serif SC', 'Songti SC', serif;
+    font-size: 36px;
+    color: var(--ink);
+    letter-spacing: 0.3em;
+    margin-bottom: 8px;
+  }
+
+  .header .subtitle {
+    color: var(--ink-light);
+    font-size: 14px;
+    letter-spacing: 0.4em;
+  }
+
+  /* ===== 主体网格 ===== */
+  .main {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  /* ===== 通用层卡片 ===== */
+  .layer {
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px 28px;
+    box-shadow: 0 2px 12px rgba(44, 42, 40, 0.06);
+    position: relative;
+  }
+
+  .layer-title {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 20px;
+    color: var(--ink);
+    padding-left: 12px;
+    border-left: 4px solid var(--cinnabar);
+    margin-bottom: 4px;
+    letter-spacing: 0.1em;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .layer-subtitle {
+    color: var(--ink-light);
+    font-size: 13px;
+    margin-left: 16px;
+    margin-bottom: 18px;
+  }
+
+  .seal-tag {
+    display: inline-block;
+    background-color: var(--cinnabar);
+    color: #fff7e6;
+    padding: 2px 10px;
+    font-family: 'Noto Serif SC', serif;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    border-radius: 2px;
+  }
+
+  /* ===== 节点卡片 ===== */
+  .nodes {
+    display: grid;
+    gap: 12px;
+  }
+
+  .node {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    transition: all 0.2s;
+    position: relative;
+  }
+
+  .node:hover {
+    border-color: var(--cinnabar);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(44, 42, 40, 0.1);
+  }
+
+  .node-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .node-title {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 15px;
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .node-tag {
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 3px;
+    background: rgba(184, 134, 11, 0.15);
+    color: var(--gold);
+    font-weight: 500;
+  }
+
+  .node-tag.done { background: rgba(107, 142, 35, 0.15); color: #6B8E23; }
+  .node-tag.pending { background: rgba(90, 86, 81, 0.15); color: var(--ink-light); }
+  .node-tag.mock { background: rgba(184, 134, 11, 0.18); color: var(--gold); }
+
+  .node-desc {
+    font-size: 12px;
+    color: var(--ink-light);
+    line-height: 1.6;
+  }
+
+  .node-list {
+    margin-top: 6px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 8px;
+  }
+
+  .node-list span {
+    font-size: 11px;
+    color: var(--ink-light);
+    padding: 1px 6px;
+    background: var(--paper-deep);
+    border-radius: 3px;
+  }
+
+  /* ===== 三层主架构（业务/数据/UI） ===== */
+  .three-layer {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+  }
+
+  /* ===== 双视角输出（专业/消费者） ===== */
+  .dual-view {
+    display: grid;
+    grid-template-columns: 1fr 80px 1fr;
+    align-items: center;
+    gap: 0;
+    margin-top: 8px;
+  }
+
+  .view-card {
+    background: var(--paper);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 18px;
+    position: relative;
+  }
+
+  .view-card.pro { border-left: 4px solid var(--cinnabar); }
+  .view-card.consumer { border-left: 4px solid var(--celadon); }
+
+  .view-card .view-title {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 17px;
+    color: var(--ink);
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .view-card .view-icon {
+    font-size: 20px;
+  }
+
+  .view-card .view-meta {
+    font-size: 12px;
+    color: var(--ink-light);
+    margin-bottom: 12px;
+  }
+
+  .view-sections {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+
+  .view-sections .item {
+    font-size: 12px;
+    color: var(--ink);
+    padding: 5px 8px;
+    background: var(--paper-deep);
+    border-radius: 3px;
+    text-align: center;
+  }
+
+  .switch-arrow {
+    text-align: center;
+    color: var(--gold);
+    font-size: 24px;
+    font-family: serif;
+  }
+
+  .switch-arrow .label {
+    display: block;
+    font-size: 10px;
+    color: var(--ink-light);
+    margin-top: 4px;
+    letter-spacing: 0.2em;
+  }
+
+  /* ===== 数据流 ===== */
+  .flow {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    align-items: center;
+    margin-top: 8px;
+  }
+
+  .flow-step {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 8px;
+    text-align: center;
+    position: relative;
+  }
+
+  .flow-arrow {
+    text-align: center;
+    color: var(--cinnabar);
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  .flow-step .icon { font-size: 22px; margin-bottom: 4px; }
+  .flow-step .step-title {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 13px;
+    color: var(--ink);
+    margin-bottom: 2px;
+  }
+  .flow-step .step-desc {
+    font-size: 10px;
+    color: var(--ink-light);
+  }
+
+  /* ===== 进度条 ===== */
+  .progress-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 8px;
+  }
+
+  .progress-item {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px;
+  }
+
+  .progress-item .stage {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 13px;
+    color: var(--ink);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .progress-item .bar {
+    height: 6px;
+    background: var(--paper-deep);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .progress-item .bar-fill {
+    height: 100%;
+    border-radius: 3px;
+  }
+
+  .bar-fill.full { background: linear-gradient(90deg, #6B8E23, #8FAE3F); }
+  .bar-fill.mock { background: linear-gradient(90deg, var(--gold), var(--gold-light)); }
+  .bar-fill.zero { background: var(--ink-light); }
+
+  .progress-item .desc {
+    font-size: 11px;
+    color: var(--ink-light);
+    margin-top: 6px;
+  }
+
+  /* ===== 核心原则 ===== */
+  .principles {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  .principle {
+    background: linear-gradient(135deg, rgba(197,57,47,0.04), rgba(184,134,11,0.04));
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--gold);
+    border-radius: 6px;
+    padding: 14px;
+  }
+
+  .principle .p-title {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 13px;
+    color: var(--cinnabar);
+    margin-bottom: 4px;
+  }
+
+  .principle .p-desc {
+    font-size: 11px;
+    color: var(--ink-light);
+    line-height: 1.6;
+  }
+
+  /* ===== 分隔线 ===== */
+  .divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--border), transparent);
+    margin: 36px 0 24px;
+    position: relative;
+  }
+  .divider::after {
+    content: '✦';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--paper);
+    padding: 0 12px;
+    color: var(--gold);
+    font-size: 12px;
+  }
+
+  /* 底部 */
+  .footer {
+    max-width: 1400px;
+    margin: 40px auto 0;
+    text-align: center;
+    color: var(--ink-light);
+    font-size: 12px;
+    letter-spacing: 0.2em;
+  }
+
+  /* 响应式 */
+  @media (max-width: 900px) {
+    .three-layer { grid-template-columns: 1fr; }
+    .dual-view { grid-template-columns: 1fr; }
+    .switch-arrow { transform: rotate(90deg); padding: 12px 0; }
+    .flow { grid-template-columns: 1fr; gap: 8px; }
+    .flow-arrow { transform: rotate(90deg); }
+    .progress-grid, .principles { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ==================== 顶部标题 ==================== -->
+<div class="header">
+  <div class="seal-circle">命</div>
+  <h1>八 字 排 盘 系 统</h1>
+  <div class="subtitle">· 核心架构总览 · ARCHITECTURE OVERVIEW ·</div>
+</div>
+
+<div class="main">
+
+  <!-- ==================== ① 产品定位 ==================== -->
+  <div class="layer">
+    <div class="layer-title">
+      <span>① 产品定位</span>
+      <span class="seal-tag">壹</span>
+    </div>
+    <div class="layer-subtitle">一句话定义 · 唯一核心价值</div>
+    <div style="background:var(--paper); padding:18px; border-radius:6px; border-left:4px solid var(--cinnabar);">
+      <div class="font-classic" style="font-size:18px; color:var(--cinnabar); margin-bottom:8px; letter-spacing:0.1em;">
+        帮命理师一键生成高质量消费者报告的双边八字排盘工具
+      </div>
+      <div style="font-size:13px; color:var(--ink-light); line-height:1.8;">
+        排盘工具解决"算"的问题已是红海 ——
+        <strong style="color:var(--ink);">本产品解决的是「算完之后，怎么高效地把结果变成客户买单的报告」</strong>。
+        从专业推断到通俗表达的翻译，是核心竞争力。
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== ② 业务工作流 ==================== -->
+  <div class="layer">
+    <div class="layer-title">
+      <span>② 业务工作流</span>
+      <span class="seal-tag">贰</span>
+    </div>
+    <div class="layer-subtitle">用户输入 → 自动排盘 → 双版本生成 → 命理师审核 → 推送消费者</div>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="icon">📝</div>
+        <div class="step-title">输入信息</div>
+        <div class="step-desc">出生时间 + 关心领域</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="icon">⚙️</div>
+        <div class="step-title">自动排盘</div>
+        <div class="step-desc">四柱 + 大运 + 分析</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="icon">📊</div>
+        <div class="step-title">双版本输出</div>
+        <div class="step-desc">专业版 + 消费者版</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== ③ 双视角输出（核心差异化） ==================== -->
+  <div class="layer">
+    <div class="layer-title">
+      <span>③ 双视角输出（核心差异化）</span>
+      <span class="seal-tag">叁</span>
+    </div>
+    <div class="layer-subtitle">同一份八字数据 · 两种深度视图 · 顶部一键切换</div>
+    <div class="dual-view">
+      <!-- 专业模式 -->
+      <div class="view-card pro">
+        <div class="view-title">
+          <span class="view-icon">🔍</span>
+          <span>专业模式</span>
+          <span class="node-tag" style="margin-left:auto;">命理师视角</span>
+        </div>
+        <div class="view-meta">完整推断数据 · 逻辑链可追溯 · 红黄绿标注</div>
+        <div class="view-sections">
+          <div class="item">基础信息</div>
+          <div class="item">四柱排盘</div>
+          <div class="item">五行分布</div>
+          <div class="item">旺衰推断链</div>
+          <div class="item">用神 · 格局</div>
+          <div class="item">神煞速查</div>
+          <div class="item">大运时间轴</div>
+          <div class="item">关键发现</div>
+        </div>
+      </div>
+
+      <!-- 切换箭头 -->
+      <div class="switch-arrow">
+        ⇋
+        <span class="label">视 角 切 换</span>
+      </div>
+
+      <!-- 消费者模式 -->
+      <div class="view-card consumer">
+        <div class="view-title">
+          <span class="view-icon">📖</span>
+          <span>消费者模式</span>
+          <span class="node-tag" style="margin-left:auto; background:rgba(122,140,126,0.15); color:var(--celadon);">用户视角</span>
+        </div>
+        <div class="view-meta">共情 → 解释 → 出路 · 命格意象 · 天命感</div>
+        <div class="view-sections">
+          <div class="item">命格意象</div>
+          <div class="item">共情段落</div>
+          <div class="item">解释段落</div>
+          <div class="item">出路指引</div>
+          <div class="item">时间节奏</div>
+          <div class="item">开运指南</div>
+          <div class="item">领域速览</div>
+          <div class="item">温暖结语</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:16px; padding:12px 16px; background:rgba(184,134,11,0.06); border-radius:4px; font-size:12px; color:var(--ink-light); line-height:1.7;">
+      <strong style="color:var(--gold);">💡 消费者报告的五个命理特质</strong>（区别于普通心理分析报告）：
+      <span style="color:var(--ink);">命格意象</span> ·
+      <span style="color:var(--ink);">时间节奏</span> ·
+      <span style="color:var(--ink);">术语点缀（约10%）</span> ·
+      <span style="color:var(--ink);">天命感措辞</span> ·
+      <span style="color:var(--ink);">具体指引（颜色/方位/数字/贵人）</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ==================== ④ 三层技术架构 ==================== -->
+  <div class="layer">
+    <div class="layer-title">
+      <span>④ 三层技术架构</span>
+      <span class="seal-tag">肆</span>
+    </div>
+    <div class="layer-subtitle">UI 层（React 组件） · 状态层（Zustand） · 引擎层（Core 纯逻辑）</div>
+
+    <div class="three-layer">
+      <!-- UI 层 -->
+      <div>
+        <div style="text-align:center; margin-bottom:10px;">
+          <span style="font-family:'Noto Serif SC',serif; font-size:16px; color:var(--cinnabar);">🎨 UI 层</span>
+          <div style="font-size:11px; color:var(--ink-light); margin-top:2px;">React Components</div>
+        </div>
+        <div class="nodes">
+          <div class="node">
+            <div class="node-header">
+              <span class="node-title">pages/</span>
+              <span class="node-tag done">已完成</span>
+            </div>
+            <div class="node-desc">HomePage · ResultPage</div>
+          </div>
+          <div class="node">
+            <div class="node-header">
+              <span class="node-title">InputForm</span>
+              <span class="node-tag done">已完成</span>
+            </div>
+            <div class="node-desc">出生信息 + 关心领域 + 高级选项</div>
+          </div>
+          <div class="node">
+            <div class="node-header">
+              <span class="node-title">ProfessionalView</span>
+              <span class="node-tag done">已完成</span>
+            </div>
+            <div class="node-desc">8 个分区卡片</div>
+            <div class="node-list">
+              <span>PillarsTable</span>
+              <span>WuxingChart</span>
+              <span>WangShuaiChain</span>
+              <span>DayunTimeline</span>
+            </div>
+          </div>
+          <div class="node">
+            <div class="node-header">
+              <span class="node-title">ConsumerView</span>
+              <span class="node-tag done">已完成</span>
+            </div>
+            <div class="node-desc">8 段叙事报告</div>
+          </div>
+          <div class="node">
+            <div class="node-header">
+              <span class="node-title">common/</span>
+              <span class="node-tag done">已完成</span>
+            </div>
+            <div class="node-desc">古典风通用组件</div>
+            <div class="node-list">
+              <span>ClassicCard</span>
+              <span>SectionTitle</span>
+              <span>wuxing.ts</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 状态层 -->
+      <div>
+        <div style="text-align:center; margin-bottom:10px;">
+          <span style="font-family:'Noto Serif SC',serif; font-size:16px; color:var(--gold);">💾 状态层</span>
+          <div style="font-size:11px; color:var(--ink-light); margin-top:2px;">Zustand Store</div>
+        </div>
+        <div class="nodes">
+          <div class="node">
+            <div class="node-header">
+              <span class="node-title">useBaziStore</span>
+              <span class="node-tag done">已完成</span>
+            </div>
+            <div class="node-desc">全局状态管理</div>
+            <div class="node-list">
+              <span>📥 inputData</span>
+              <span>📊 baziChart</span>
+              <span>📖 consumerReport</span>
+              <span>🎚 viewMode</span>
+            </div>
+          </div>
+          <div class="node">
+            <div class="node-header">
+              <span class="node-title">types/bazi.ts</span>
+              <span class="node-tag done">已完成</span>
+            </div>
+            <div class="node-desc">完整 TS 类型定义</div>
+            <div class="node-list">
+              <span>Pillar</span>
+              <span>WangShuai</span>
+              <span>YongShen</span>
+              <span>BaziChart</span>
+              <span>ConsumerReport</span>
+            </div>
+          </div>
+          <div class="node">
+            <div class="node-header">
+              <span class="node-title">mock/baziChart</span>
+              <span class="node-tag mock">Mock 阶段</span>
+            </div>
+            <div class="node-desc">原型阶段使用 · 张三案例</div>
+            <div style="font-size:11px; color:var(--gold); margin-top:6px;">
+              ⏳ M1 完成后将替换为 core/ 真实引擎
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 引擎层 -->
+      <div>
+        <div style="text-align:center; margin-bottom:10px;">
+          <span style="font-family:'Noto Serif SC',serif; font-size:16px; color:var(--celadon);">⚙️ 引擎层</span>
+          <div style="font-size:11px; color:var(--ink-light); margin-top:2px;">Core (纯逻辑)</div>
+        </div>
+        <div class="nodes">
+          <div class="node">
+            <div class="node-header">
+              <span class="node-title">core/calendar/</span>
+              <span class="node-tag pending">M1 待开发</span>
+            </div>
+            <div class="node-desc">公历↔农历 · 节气 · 真太阳时</div>
+          </div>
+          <div class="node">
+            <div class="node-header">
+              <span class="node-title">core/paipan/</span>
+              <span class="node-tag pending">M1 待开发</span>
+            </div>
+            <div class="node-desc">四柱排盘 + 大运排盘</div>
+          </div>
+          <div class="node">
+            <div class="node-header">
+              <span class="node-title">core/analysis/</span>
+              <span class="node-tag pending">M2 待开发</span>
+            </div>
+            <div class="node-desc">五行/十神/旺衰/用神/格局/神煞</div>
+          </div>
+          <div class="node">
+            <div class="node-header">
+              <span class="node-title">core/report/</span>
+              <span class="node-tag pending">M4 待开发</span>
+            </div>
+            <div class="node-desc">报告生成引擎 · 模板化</div>
+          </div>
+          <div class="node">
+            <div class="node-header">
+              <span class="node-title">core/data/</span>
+              <span class="node-tag pending">M1 待开发</span>
+            </div>
+            <div class="node-desc">静态对照表（规则数据化）</div>
+            <div class="node-list">
+              <span>藏干表</span>
+              <span>纳音表</span>
+              <span>十神表</span>
+              <span>神煞表</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== ⑤ 数据流向 ==================== -->
+  <div class="layer">
+    <div class="layer-title">
+      <span>⑤ 运行时数据流</span>
+      <span class="seal-tag">伍</span>
+    </div>
+    <div class="layer-subtitle">用户输入 → Store → 视图渲染（双向切换）</div>
+
+    <div class="flow">
+      <div class="flow-step">
+        <div class="icon">👤</div>
+        <div class="step-title">用户填表</div>
+        <div class="step-desc">InputForm</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step" style="background:rgba(184,134,11,0.06);">
+        <div class="icon">💾</div>
+        <div class="step-title">Store 接收</div>
+        <div class="step-desc">submit(data)</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step" style="background:rgba(197,57,47,0.06);">
+        <div class="icon">📺</div>
+        <div class="step-title">ResultPage 路由</div>
+        <div class="step-desc">读取 viewMode</div>
+      </div>
+    </div>
+
+    <div style="margin-top:16px; display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+      <div style="padding:14px; background:rgba(197,57,47,0.05); border-left:3px solid var(--cinnabar); border-radius:4px;">
+        <div class="font-classic" style="font-size:14px; color:var(--cinnabar); margin-bottom:6px;">🔍 viewMode = 'professional'</div>
+        <div style="font-size:12px; color:var(--ink-light);">
+          → ProfessionalView 组件订阅 <code style="background:var(--paper-deep); padding:1px 4px; border-radius:2px;">baziChart</code> → 渲染 8 个数据分区
+        </div>
+      </div>
+      <div style="padding:14px; background:rgba(122,140,126,0.08); border-left:3px solid var(--celadon); border-radius:4px;">
+        <div class="font-classic" style="font-size:14px; color:var(--celadon); margin-bottom:6px;">📖 viewMode = 'consumer'</div>
+        <div style="font-size:12px; color:var(--ink-light);">
+          → ConsumerView 组件订阅 <code style="background:var(--paper-deep); padding:1px 4px; border-radius:2px;">consumerReport</code> → 渲染 8 段叙事
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== ⑥ 演进路径 ==================== -->
+  <div class="layer">
+    <div class="layer-title">
+      <span>⑥ 架构演进路径</span>
+      <span class="seal-tag">陆</span>
+    </div>
+    <div class="layer-subtitle">原型阶段 → 真实引擎 · UI 层零改动</div>
+
+    <div style="display:grid; grid-template-columns:1fr 80px 1fr; align-items:center; gap:0; margin-top:8px;">
+      <!-- 当前 -->
+      <div style="background:rgba(184,134,11,0.06); border:1.5px dashed var(--gold); border-radius:8px; padding:18px;">
+        <div style="font-family:'Noto Serif SC',serif; font-size:15px; color:var(--gold); margin-bottom:10px;">
+          🎭 当前：原型阶段
+        </div>
+        <div style="font-size:12px; color:var(--ink-light); line-height:1.8;">
+          UI 全套就绪 · 数据来自 <code style="background:var(--paper-deep); padding:1px 4px; border-radius:2px;">mock/baziChart.ts</code><br>
+          硬编码张三案例（1990-08-15 男 杭州）<br>
+          可演示完整产品体验，但所有八字都显示同一份数据
+        </div>
+      </div>
+
+      <div class="switch-arrow" style="color:var(--cinnabar);">
+        →
+        <span class="label" style="color:var(--cinnabar);">M1 → M4</span>
+      </div>
+
+      <div style="background:rgba(107,142,35,0.06); border:1.5px solid var(--celadon); border-radius:8px; padding:18px;">
+        <div style="font-family:'Noto Serif SC',serif; font-size:15px; color:var(--celadon); margin-bottom:10px;">
+          🚀 目标：真实引擎
+        </div>
+        <div style="font-size:12px; color:var(--ink-light); line-height:1.8;">
+          替换 store 中的 mock 数据 → 调用 <code style="background:var(--paper-deep); padding:1px 4px; border-radius:2px;">core/</code> 真实排盘引擎<br>
+          UI 层完全不动 · 所有 TS 类型保持一致<br>
+          支持任意八字 · 真实命理推断
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== ⑦ 核心设计原则 ==================== -->
+  <div class="layer">
+    <div class="layer-title">
+      <span>⑦ 核心设计原则</span>
+      <span class="seal-tag">柒</span>
+    </div>
+    <div class="layer-subtitle">指导后续所有开发的四条准则</div>
+    <div class="principles">
+      <div class="principle">
+        <div class="p-title">🎯 引擎与 UI 解耦</div>
+        <div class="p-desc">core/ 是纯逻辑代码，无 React 依赖，可独立单元测试，可替换为不同算法实现</div>
+      </div>
+      <div class="principle">
+        <div class="p-title">📚 规则数据化</div>
+        <div class="p-desc">所有命理规则以数据表形式存储在 core/data/，修改规则不需要改代码</div>
+      </div>
+      <div class="principle">
+        <div class="p-title">📝 报告模板化</div>
+        <div class="p-desc">消费者报告文案模板独立管理，支持复用和定制</div>
+      </div>
+      <div class="principle">
+        <div class="p-title">🔍 推断链可追溯</div>
+        <div class="p-desc">每一步分析结果保存推断依据，专业模式可展示「为什么得出这个结论」</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== ⑧ 当前进度 ==================== -->
+  <div class="layer">
+    <div class="layer-title">
+      <span>⑧ 当前进度速览</span>
+      <span class="seal-tag">捌</span>
+    </div>
+    <div class="layer-subtitle">截至 2026-04-26</div>
+    <div class="progress-grid">
+      <div class="progress-item">
+        <div class="stage">📚 文档体系 <span style="color:#6B8E23;">100%</span></div>
+        <div class="bar"><div class="bar-fill full" style="width:100%;"></div></div>
+        <div class="desc">6 份核心文档齐全（含 CONTEXT 速查）</div>
+      </div>
+      <div class="progress-item">
+        <div class="stage">🎨 UI 原型 <span style="color:#6B8E23;">100%</span></div>
+        <div class="bar"><div class="bar-fill full" style="width:100%;"></div></div>
+        <div class="desc">中式古典风 + 双视角切换 + Mock 数据</div>
+      </div>
+      <div class="progress-item">
+        <div class="stage">💾 数据层 <span style="color:var(--gold);">Mock</span></div>
+        <div class="bar"><div class="bar-fill mock" style="width:30%;"></div></div>
+        <div class="desc">硬编码案例，待 M1 替换为真实引擎</div>
+      </div>
+      <div class="progress-item">
+        <div class="stage">⚙️ M1 排盘引擎 <span style="color:var(--ink-light);">0%</span></div>
+        <div class="bar"><div class="bar-fill zero" style="width:2%;"></div></div>
+        <div class="desc">公历转农历 + 四柱 + 大运（下一步）</div>
+      </div>
+      <div class="progress-item">
+        <div class="stage">🧮 M2 分析引擎 <span style="color:var(--ink-light);">0%</span></div>
+        <div class="bar"><div class="bar-fill zero" style="width:2%;"></div></div>
+        <div class="desc">五行/十神/旺衰/用神/格局/神煞</div>
+      </div>
+      <div class="progress-item">
+        <div class="stage">📖 M4 报告引擎 <span style="color:var(--ink-light);">0%</span></div>
+        <div class="bar"><div class="bar-fill zero" style="width:2%;"></div></div>
+        <div class="desc">消费者报告自动生成</div>
+      </div>
+      <div class="progress-item">
+        <div class="stage">💬 M7 每日对话 <span style="color:var(--ink-light);">0%</span></div>
+        <div class="bar"><div class="bar-fill zero" style="width:2%;"></div></div>
+        <div class="desc">高频化升级 · "先生"人设对话</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== ⑨ 高频化升级（M7 核心） ==================== -->
+  <div class="layer" style="border:2px solid var(--cinnabar); background:linear-gradient(135deg, rgba(197,57,47,0.04), rgba(184,134,11,0.04));">
+    <div class="layer-title">
+      <span style="color:var(--cinnabar);">⑨ 高频化升级 · 每日命理对话（M7 核心）</span>
+      <span class="seal-tag">玖</span>
+    </div>
+    <div class="layer-subtitle">把八字从「一次性算命」转化为「每日决策伴侣」 · 留存与粘性的关键</div>
+
+    <!-- 频次对比 -->
+    <div style="display:grid; grid-template-columns:1fr 80px 1fr; align-items:center; gap:0; margin-bottom:20px;">
+      <div style="background:rgba(122,140,126,0.08); border:1.5px dashed var(--celadon); border-radius:8px; padding:18px; text-align:center;">
+        <div style="font-size:11px; color:rgba(90,86,81,0.7); letter-spacing:0.3em; margin-bottom:6px;">现状 · 工具型</div>
+        <div style="font-family:'Noto Serif SC',serif; font-size:18px; color:var(--celadon); margin-bottom:6px;">📜 整体报告（一次性）</div>
+        <div style="font-size:12px; color:var(--ink-light); line-height:1.7;">
+          算一次 → 看完 → 关 App<br>
+          <strong style="color:var(--cinnabar);">3 个月才回来一次</strong>
+        </div>
+      </div>
+      <div style="text-align:center; color:var(--cinnabar); font-size:24px; font-weight:bold;">
+        →
+        <div style="font-size:10px; color:var(--cinnabar); letter-spacing:0.2em; margin-top:4px;">高频化</div>
+      </div>
+      <div style="background:rgba(197,57,47,0.06); border:1.5px solid var(--cinnabar); border-radius:8px; padding:18px; text-align:center;">
+        <div style="font-size:11px; color:rgba(197,57,47,0.7); letter-spacing:0.3em; margin-bottom:6px;">升级 · 陪伴型</div>
+        <div style="font-family:'Noto Serif SC',serif; font-size:18px; color:var(--cinnabar); margin-bottom:6px;">💬 每日对话（高频）</div>
+        <div style="font-size:12px; color:var(--ink-light); line-height:1.7;">
+          每天打开 → 提问 → 师傅回话<br>
+          <strong style="color:var(--cinnabar);">日活 + 用户资产沉淀</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 类提问场景 + 命理依据 -->
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+      <!-- 左：4 类场景 -->
+      <div>
+        <div style="font-family:'Noto Serif SC',serif; font-size:14px; color:var(--cinnabar); margin-bottom:10px;">
+          🎯 4 类提问场景
+        </div>
+        <div class="nodes" style="gap:8px;">
+          <div class="node" style="padding:10px 12px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-family:'Noto Serif SC',serif; font-size:13px; color:var(--ink);">决策建议</span>
+              <span style="font-size:11px; color:var(--ink-light);">"今天该不该面试？"</span>
+            </div>
+          </div>
+          <div class="node" style="padding:10px 12px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-family:'Noto Serif SC',serif; font-size:13px; color:var(--ink);">时机择吉</span>
+              <span style="font-size:11px; color:var(--ink-light);">"什么时间签合同？"</span>
+            </div>
+          </div>
+          <div class="node" style="padding:10px 12px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-family:'Noto Serif SC',serif; font-size:13px; color:var(--ink);">每日宜忌</span>
+              <span style="font-size:11px; color:var(--ink-light);">"今天宜做什么？"</span>
+            </div>
+          </div>
+          <div class="node" style="padding:10px 12px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-family:'Noto Serif SC',serif; font-size:13px; color:var(--ink);">开放问答</span>
+              <span style="font-size:11px; color:var(--ink-light);">任意问题</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 右：命理师人设 + 三段式 -->
+      <div>
+        <div style="font-family:'Noto Serif SC',serif; font-size:14px; color:var(--cinnabar); margin-bottom:10px;">
+          🎭 "先生"人设回答
+        </div>
+        <div style="background:var(--paper); border:1px solid var(--border); border-left:4px solid var(--gold); border-radius:6px; padding:14px;">
+          <div style="font-family:'Noto Serif SC',serif; font-size:12px; color:var(--gold); margin-bottom:8px; letter-spacing:0.2em;">
+            三段式结构
+          </div>
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <div style="font-size:12px; padding:8px 10px; background:rgba(197,57,47,0.06); border-radius:4px;">
+              <span style="font-family:'Noto Serif SC',serif; color:var(--cinnabar); font-weight:600;">① 共情</span>
+              <span style="color:var(--ink-light); margin-left:6px;">理解你的处境与情绪</span>
+            </div>
+            <div style="font-size:12px; padding:8px 10px; background:rgba(184,134,11,0.06); border-radius:4px;">
+              <span style="font-family:'Noto Serif SC',serif; color:var(--gold); font-weight:600;">② 解释</span>
+              <span style="color:var(--ink-light); margin-left:6px;">命理上为什么是这样（10% 术语）</span>
+            </div>
+            <div style="font-size:12px; padding:8px 10px; background:rgba(122,140,126,0.10); border-radius:4px;">
+              <span style="font-family:'Noto Serif SC',serif; color:var(--celadon); font-weight:600;">③ 建议</span>
+              <span style="color:var(--ink-light); margin-left:6px;">具体怎么做 + 吉时 + 宜忌</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 命理依据强调 -->
+    <div style="margin-top:18px; padding:14px 18px; background:rgba(232,75,63,0.04); border:1px dashed var(--cinnabar); border-radius:6px;">
+      <div style="font-family:'Noto Serif SC',serif; font-size:13px; color:var(--cinnabar); margin-bottom:6px;">
+        ⚠️ 设计铁律：每个回答必须有可追溯的命理依据
+      </div>
+      <div style="font-size:12px; color:var(--ink-light); line-height:1.8;">
+        ✅ <strong style="color:var(--ink);">流年 / 流月 / 流日</strong> 当下时间能量　·　
+        ✅ <strong style="color:var(--ink);">原局用神 vs 当日五行</strong>　·　
+        ✅ <strong style="color:var(--ink);">当前大运</strong> 的 10 年趋势　·　
+        ✅ <strong style="color:var(--ink);">关心领域映射</strong>（事业看官星 / 感情看夫妻宫）<br>
+        ❌ 禁止伪科学评分　·　❌ 禁止恐吓措辞　·　❌ 禁止脱离命盘的泛泛建议　·　❌ 禁止鸡汤化
+      </div>
+    </div>
+
+    <!-- M7 子模块拆解（M7.1 - M7.6） -->
+    <div style="margin-top:22px;">
+      <div style="font-family:'Noto Serif SC',serif; font-size:14px; color:var(--cinnabar); margin-bottom:10px;">
+        🧩 M7 子模块拆解（3 周 · 6 个交付物）
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:10px;">
+        <div class="node" style="padding:10px 12px; border-left:3px solid var(--celadon);">
+          <div style="font-family:'Noto Serif SC',serif; font-size:13px; color:var(--ink);">M7.1 流年流日推算</div>
+          <div style="font-size:11px; color:var(--ink-light); margin-top:4px;">core/calendar/dailyGanzhi.ts</div>
+        </div>
+        <div class="node" style="padding:10px 12px; border-left:3px solid var(--celadon);">
+          <div style="font-family:'Noto Serif SC',serif; font-size:13px; color:var(--ink);">M7.2 提问意图解析</div>
+          <div style="font-size:11px; color:var(--ink-light); margin-top:4px;">core/dialog/intentParser.ts</div>
+        </div>
+        <div class="node" style="padding:10px 12px; border-left:3px solid var(--gold);">
+          <div style="font-family:'Noto Serif SC',serif; font-size:13px; color:var(--ink);">M7.3 每日宜忌生成</div>
+          <div style="font-size:11px; color:var(--ink-light); margin-top:4px;">core/dialog/dailyAdvice.ts · 30+ 规则库</div>
+        </div>
+        <div class="node" style="padding:10px 12px; border-left:3px solid var(--cinnabar);">
+          <div style="font-family:'Noto Serif SC',serif; font-size:13px; color:var(--ink);">M7.4 "先生"对话引擎 ★</div>
+          <div style="font-size:11px; color:var(--ink-light); margin-top:4px;">core/dialog/masterReply.ts · 核心难点</div>
+        </div>
+        <div class="node" style="padding:10px 12px; border-left:3px solid var(--gold);">
+          <div style="font-family:'Noto Serif SC',serif; font-size:13px; color:var(--ink);">M7.5 命理日记</div>
+          <div style="font-size:11px; color:var(--ink-light); margin-top:4px;">core/dialog/journal.ts · 用户资产</div>
+        </div>
+        <div class="node" style="padding:10px 12px; border-left:3px solid var(--celadon);">
+          <div style="font-family:'Noto Serif SC',serif; font-size:13px; color:var(--ink);">M7.6 UI 实现</div>
+          <div style="font-size:11px; color:var(--ink-light); margin-top:4px;">Dashboard / Ask / Answer / Journal</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 设计禁区硬拦截 + 健康法律免责 -->
+    <div style="margin-top:18px; display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+      <!-- 左：违禁词硬拦截 -->
+      <div style="padding:14px 18px; background:rgba(44,42,40,0.04); border:1px solid var(--ink); border-radius:6px;">
+        <div style="font-family:'Noto Serif SC',serif; font-size:13px; color:var(--ink); margin-bottom:8px;">
+          🚫 设计禁区 · 硬性拦截（引擎层）
+        </div>
+        <div style="font-size:11px; color:var(--ink-light); line-height:1.9;">
+          违禁词命中即拦截，<strong style="color:var(--cinnabar);">零通过</strong>：<br>
+          <code style="background:rgba(197,57,47,0.08); padding:1px 6px; border-radius:3px; color:var(--cinnabar);">大凶</code>
+          <code style="background:rgba(197,57,47,0.08); padding:1px 6px; border-radius:3px; color:var(--cinnabar);">灾祸</code>
+          <code style="background:rgba(197,57,47,0.08); padding:1px 6px; border-radius:3px; color:var(--cinnabar);">血光</code>
+          <code style="background:rgba(197,57,47,0.08); padding:1px 6px; border-radius:3px; color:var(--cinnabar);">100 分</code>
+          <code style="background:rgba(197,57,47,0.08); padding:1px 6px; border-radius:3px; color:var(--cinnabar);">满分</code>
+          <code style="background:rgba(197,57,47,0.08); padding:1px 6px; border-radius:3px; color:var(--cinnabar);">运势评分</code>
+          <br>
+          术语占比自动校验：<strong style="color:var(--ink);">5%-15%</strong> 区间合格
+        </div>
+      </div>
+      <!-- 右：健康/法律免责自动注入 -->
+      <div style="padding:14px 18px; background:rgba(184,134,11,0.04); border:1px solid var(--gold); border-radius:6px;">
+        <div style="font-family:'Noto Serif SC',serif; font-size:13px; color:var(--gold); margin-bottom:8px;">
+          ⚖️ 健康 / 法律 / 重大投资 · 免责自动注入
+        </div>
+        <div style="font-size:11px; color:var(--ink-light); line-height:1.9;">
+          关键词触发后，回话末尾追加：<br>
+          <span style="display:block; margin-top:6px; padding:8px 10px; background:var(--paper); border-left:3px solid var(--gold); font-family:'Noto Serif SC',serif; color:var(--ink); font-size:12px;">
+            "命理是参照，不是替代。请结合专业意见。"
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 命理日记结构 -->
+    <div style="margin-top:18px; padding:14px 18px; background:rgba(122,140,126,0.06); border:1px solid var(--celadon); border-radius:6px;">
+      <div style="font-family:'Noto Serif SC',serif; font-size:13px; color:var(--celadon); margin-bottom:10px;">
+        📚 命理日记 · 用户资产沉淀（增加迁移成本）
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; font-size:11px;">
+        <div>
+          <div style="color:var(--ink); font-weight:600; margin-bottom:4px;">数据结构（每条）</div>
+          <div style="color:var(--ink-light); line-height:1.8;">
+            id · scene · domain<br>
+            question · reply<br>
+            basis · starred · feedback
+          </div>
+        </div>
+        <div>
+          <div style="color:var(--ink); font-weight:600; margin-bottom:4px;">容量策略</div>
+          <div style="color:var(--ink-light); line-height:1.8;">
+            localStorage 上限 200 条<br>
+            按时间倒序淘汰<br>
+            <strong style="color:var(--cinnabar);">收藏的不淘汰</strong>
+          </div>
+        </div>
+        <div>
+          <div style="color:var(--ink); font-weight:600; margin-bottom:4px;">回看价值</div>
+          <div style="color:var(--ink-light); line-height:1.8;">
+            实际反馈回填<br>
+            "先生当时怎么说" vs "实际怎么样"<br>
+            月度问答集导出
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ==================== 底部 ==================== -->
+<div class="footer">
+  · 子 平 命 鉴 · 八 字 排 盘 系 统 · ARCHITECTURE OVERVIEW ·
+</div>
+
+</body>
+</html>
