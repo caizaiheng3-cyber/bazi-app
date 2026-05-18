@@ -167,9 +167,14 @@ def clean_repetitive_chars(text: str) -> str:
     return text
 
 
-def validate_report_quality(master_report: str, wechat_report: str) -> list:
+def validate_report_quality(master_report: str, wechat_report: str,
+                            rules_data: dict = None) -> list:
     """
-    报告质量校验（P4）：检测占位文本是否泄漏到用户可见报告中。
+    报告质量校验（P4+P5）：
+    - 检测占位文本泄漏
+    - 检测事实矛盾（透干vs藏干、旺衰矛盾）
+    - 检测用忌表达冲突
+    - 检测时间线矛盾
 
     返回质量问题列表，空列表表示通过。
     """
@@ -185,6 +190,54 @@ def validate_report_quality(master_report: str, wechat_report: str) -> list:
         if wechat_report and pattern in wechat_report:
             count = wechat_report.count(pattern)
             issues.append(f"微信版含'{pattern}' x{count}")
+
+    # P5: 一致性审查
+    all_reports = (master_report or "") + "\n" + (wechat_report or "")
+
+    if rules_data:
+        wangshuai = rules_data.get("旺衰", {})
+        ws_jielun = wangshuai.get("结论", "")
+
+        # 旺衰矛盾检测：报告说"身旺"但引擎说"身弱"，或反之
+        if ws_jielun == "身弱":
+            if "身旺" in all_reports and "身弱" not in all_reports:
+                issues.append("一致性：引擎判定身弱，但报告中出现'身旺'且无'身弱'")
+            if "过旺" in all_reports:
+                issues.append("一致性：引擎判定身弱，但报告中出现'过旺'")
+        elif ws_jielun == "身旺":
+            if "身弱" in all_reports and "身旺" not in all_reports:
+                issues.append("一致性：引擎判定身旺，但报告中出现'身弱'且无'身旺'")
+
+        # 透藏矛盾检测：检查"财星透出"但实际无财星透干
+        yongshen = rules_data.get("用神忌神", {})
+        shishen_dist = rules_data.get("十神分布", {}).get("分布", {})
+
+        # 检查财星是否透干
+        zhengcai_tou = shishen_dist.get("正财", {}).get("透干", [])
+        piancai_tou = shishen_dist.get("偏财", {}).get("透干", [])
+        if not zhengcai_tou and not piancai_tou:
+            if "财星透出" in all_reports or "财透" in all_reports:
+                issues.append("事实矛盾：报告写'财星透出'，但引擎数据显示财星无透干")
+
+        # 检查正官是否透干
+        zhengguan_tou = shishen_dist.get("正官", {}).get("透干", [])
+        zhengguan_li = shishen_dist.get("正官", {}).get("力量", 0)
+        if not zhengguan_tou:
+            if "正官透出" in all_reports or "夫星透出" in all_reports:
+                issues.append("事实矛盾：报告写'正官/夫星透出'，但引擎数据显示正官无透干")
+        if zhengguan_li <= 5:
+            if "夫星有力" in all_reports or "正官有力" in all_reports:
+                issues.append(f"事实矛盾：报告写'夫星/正官有力'，但引擎数据力量仅{zhengguan_li}")
+
+    # 用忌未解释矛盾检测
+    wuxing_list = ["木", "火", "土", "金", "水"]
+    for wx in wuxing_list:
+        is_yongshen_claim = f"{wx}是用神" in all_reports or f"{wx}为用神" in all_reports
+        is_jishen_claim = f"{wx}是忌神" in all_reports or f"{wx}为忌神" in all_reports
+        has_condition = ("条件" in all_reports and wx in all_reports) or f"{wx}可用但" in all_reports
+        if is_yongshen_claim and is_jishen_claim and not has_condition:
+            issues.append(f"用忌矛盾：{wx}同时被称为用神和忌神，但无条件解释")
+
     return issues
 
 
@@ -269,6 +322,31 @@ def extract_engine_summary(paipan_data: dict, rules_data: dict, name: str, gende
         top3 = [f"{k}(力量{v})" for k, v in sorted_ss[:3]]
         strongest = "、".join(top3)
 
+    # 日常策略（引擎仲裁后的最终结论）
+    daily_strategy = yongshen.get("日常策略", {})
+    main_strategy = daily_strategy.get("主策略", "")
+    wuxing_guide = daily_strategy.get("五行指导", {})
+    strategy_lines = ""
+    if wuxing_guide:
+        strategy_lines = "\n### 日常五行策略（引擎最终裁决，报告必须与此一致）\n\n"
+        strategy_lines += f"**主策略**：{main_strategy}\n"
+        for wx, info in wuxing_guide.items():
+            strategy_lines += f"- **{wx}**（{info.get('十神', '')}）：{info['定性']} → {info['策略']}\n"
+        strategy_lines += (
+            "\n**铁律**：报告中提及五行用忌时，必须与以上策略一致。"
+            "同一五行既是用神又是忌神时，必须输出条件解释，"
+            "严禁出现'X是忌神'和'X是用神'的未解释矛盾。\n"
+        )
+
+    # 事实约束：透干vs藏干
+    sizhu_facts = ""
+    for pos in ["年柱", "月柱", "日柱", "时柱"]:
+        tiangan = sizhu[pos]["天干"]
+        tiangan_shishen = sizhu[pos].get("天干十神", "")
+        canggan = sizhu[pos].get("藏干", [])
+        canggan_str = "/".join(f"{c['天干']}({c['十神']})" for c in canggan)
+        sizhu_facts += f"- {pos}：天干{tiangan}({tiangan_shishen})透出，藏干={canggan_str}\n"
+
     return (
         f"## 已确定的核心事实（后续章节必须与以下事实保持一致，不得矛盾）\n\n"
         f"- 命主：{name}，{gender}，{birth_year}年生，当前虚岁{current_age}\n"
@@ -280,7 +358,12 @@ def extract_engine_summary(paipan_data: dict, rules_data: dict, name: str, gende
         f"- 用神：{yongshen_list}\n"
         f"- 忌神：{jishen_list}\n"
         f"- 十神力量TOP3：{strongest}\n"
-        f"- 当前大运：{current_dayun}\n"
+        f"- 当前大运：{current_dayun}\n\n"
+        f"### 四柱透藏事实（严禁混淆透干与藏干）\n\n"
+        f"{sizhu_facts}\n"
+        f"**铁律**：只有天干才叫'透出'，藏干不能说'透出'。"
+        f"'有力'需看力量值，力量≤5为微弱，≤10为较弱。\n"
+        f"{strategy_lines}"
     )
 
 
@@ -737,11 +820,11 @@ async def generate_reports(
         judge_prompt, skeletons["wechat"], master_report, on_progress
     )
 
-    # Phase 7: 报告质量校验（P4：禁止占位文本进入用户可见报告）
+    # Phase 7: 报告质量校验（P4+P5：占位文本 + 一致性审查）
     progress("质量校验中")
-    quality_issues = validate_report_quality(master_report, wechat_report)
+    quality_issues = validate_report_quality(master_report, wechat_report, rules_data=rules_data)
     if quality_issues:
-        progress(f"⚠️ 质量阻断：{len(quality_issues)}处占位文本未替换 → 报告标记为需人工审核")
+        progress(f"⚠️ 质量问题：{len(quality_issues)}处 → {'; '.join(quality_issues[:3])}")
 
     progress("报告生成完成")
     return {

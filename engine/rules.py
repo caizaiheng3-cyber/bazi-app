@@ -2473,12 +2473,82 @@ def arbitrate_yongshen(yongshen_result: dict) -> dict:
         if conditional_yongshen:
             zonglun += f"，{'、'.join(item['五行'] for item in conditional_yongshen)}为条件用神"
 
+    # ============================================================
+    # 生成"日常五行策略"（面向用户的最终结论，收敛冲突）
+    # ============================================================
+    dm_wuxing = yongshen_result.get("日主五行", "") or yongshen_result.get("调候", {}).get("日主五行", "")
+    wuxing_strategy = {}
+    all_wuxing = ["木", "火", "土", "金", "水"]
+
+    for wx in all_wuxing:
+        # 判断该五行的最终定性
+        is_main_ys = any(item.get("五行") == wx for item in main_yongshen)
+        is_cond_ys = any(item.get("五行") == wx for item in conditional_yongshen)
+        is_jishen = any(item.get("五行") == wx for item in jishen_list)
+        conflict_info = next((c for c in conflicts if c["五行"] == wx), None)
+
+        # 该五行对应的十神类型
+        shishen_type = _wuxing_to_shishen_type(wx, dm_wuxing) if dm_wuxing else ""
+
+        if is_main_ys and not is_jishen:
+            # 纯用神：日常优先
+            wuxing_strategy[wx] = {
+                "定性": "日常优先",
+                "十神": shishen_type,
+                "策略": f"日常多接触{wx}相关事物，是核心助力",
+            }
+        elif conflict_info:
+            # 有冲突：输出条件策略
+            final_role = conflict_info["最终归属"]
+            if final_role == "条件用神":
+                wuxing_strategy[wx] = {
+                    "定性": "可用但有条件",
+                    "十神": shishen_type,
+                    "策略": f"{wx}是财富/机会通道，可用但不能贪多，须身能承载时再用",
+                    "条件": conflict_info["仲裁结论"],
+                }
+            else:  # 条件忌神
+                wuxing_strategy[wx] = {
+                    "定性": "总体回避·特定条件可用",
+                    "十神": shishen_type,
+                    "策略": f"{wx}总体需回避（会增加负担），但特定场景下可短期借用",
+                    "条件": conflict_info["仲裁结论"],
+                }
+        elif is_jishen and not is_main_ys and not is_cond_ys:
+            # 纯忌神：日常回避
+            wuxing_strategy[wx] = {
+                "定性": "日常回避",
+                "十神": shishen_type,
+                "策略": f"日常减少{wx}相关事物，是主要消耗/压力源",
+            }
+        else:
+            # 中性
+            wuxing_strategy[wx] = {
+                "定性": "中性",
+                "十神": shishen_type,
+                "策略": f"{wx}对命局影响较小，不必刻意趋避",
+            }
+
+    # 生成主策略一句话
+    main_wx = [item["五行"] for item in main_yongshen[:2]]
+    wangshuai_jielun = yongshen_result.get("旺衰结论", "")
+    if wangshuai_jielun and "弱" in wangshuai_jielun:
+        main_strategy = f"先补身蓄力，再图变现。日常优先：{'、'.join(main_wx)}。"
+    elif wangshuai_jielun and "旺" in wangshuai_jielun:
+        main_strategy = f"身强宜泄秀生财。日常优先：{'、'.join(main_wx)}。"
+    else:
+        main_strategy = f"日常优先：{'、'.join(main_wx)}。"
+
     # 合并输出
     result = dict(yongshen_result)
     result["冲突解释"] = conflicts
     result["取用总论"] = zonglun
     result["主用神"] = main_yongshen
     result["条件用神"] = conditional_yongshen
+    result["日常策略"] = {
+        "主策略": main_strategy,
+        "五行指导": wuxing_strategy,
+    }
     return result
 
 
@@ -5045,6 +5115,10 @@ def full_analysis(paipan_data: dict, gender: str = "男") -> dict:
     shishen = analyze_shishen(paipan_data)
     relationships = analyze_relationships(paipan_data)
     yongshen_raw = judge_yongshen(paipan_data, wangshuai, geju)
+    # 注入日主五行和旺衰结论，供仲裁层生成日常策略使用
+    dm_wuxing = paipan_data.get("日主", {}).get("五行", "")
+    yongshen_raw["日主五行"] = dm_wuxing
+    yongshen_raw["旺衰结论"] = wangshuai.get("结论", "")
     yongshen = arbitrate_yongshen(yongshen_raw)
     shenshas = analyze_shenshas(paipan_data)
 
