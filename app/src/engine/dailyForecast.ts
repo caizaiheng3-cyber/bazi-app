@@ -1,3 +1,8 @@
+/**
+ * @deprecated 本文件为旧版前端 TS 引擎，已废弃。
+ * 主计算引擎已切换到 Python 后端 API（web/backend/app/api/engine.py）。
+ * 当前仅作为 fallback 保留，请勿新增逻辑。
+ */
 // 流年/流月/流日推算引擎（M7.1）
 //
 // 输入：日主天干 + 公历日期

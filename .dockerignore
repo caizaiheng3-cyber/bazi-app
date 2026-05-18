@@ -1,0 +1,13 @@
+.git
+.venv
+__pycache__
+node_modules
+*.pyc
+.DS_Store
+命理案例
+/app
+web/frontend/node_modules
+web/frontend/dist
+web/backend/data
+web/backend/__pycache__
+deploy/.env

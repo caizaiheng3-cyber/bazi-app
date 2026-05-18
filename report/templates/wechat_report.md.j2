@@ -1,0 +1,18 @@
+{# 微信版报告模板 - Jinja2 #}
+{# 用途：一段话风格，直接通过微信/短信发给命主 #}
+{# 设计原则：口语化、有温度、命理术语点到为止+立刻翻译 #}
+{# 所有事实必须与命理师版一致，不能无中生有 #}
+
+{# ===== 数据摘要（供AI判读时参考，不输出到正文） ===== #}
+{# 
+命主: {{ name }} · {{ gender }}
+四柱: {{ paipan.四柱.年柱.天干 }}{{ paipan.四柱.年柱.地支 }}/{{ paipan.四柱.月柱.天干 }}{{ paipan.四柱.月柱.地支 }}/{{ paipan.四柱.日柱.天干 }}{{ paipan.四柱.日柱.地支 }}/{{ paipan.四柱.时柱.天干 }}{{ paipan.四柱.时柱.地支 }}
+日主: {{ paipan.日主.天干 }}{{ paipan.日主.五行 }}（{{ paipan.日主.阴阳 }}）
+旺衰: {{ rules.旺衰.结论 }} {{ rules.旺衰.程度 }}（总分{{ rules.旺衰.总分 }}）
+格局: {{ rules.格局.格局 }}
+用神: {% for ys in rules.用神忌神.用神 %}{{ ys.五行 }}({{ ys.十神 }}){% if not loop.last %} > {% endif %}{% endfor %}
+忌神: {% for js in rules.用神忌神.忌神 %}{{ js.五行 }}({{ js.十神 }}){% if not loop.last %} > {% endif %}{% endfor %}
+缺失十神: {{ rules.十神分布.缺失十神 | join('、') }}
+#}
+
+{{ AI_JUDGE.wechat_summary }}

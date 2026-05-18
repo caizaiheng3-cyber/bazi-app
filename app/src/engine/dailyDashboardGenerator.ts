@@ -1,3 +1,8 @@
+/**
+ * @deprecated 本文件为旧版前端 TS 引擎，已废弃。
+ * 主计算引擎已切换到 Python 后端 API（web/backend/app/api/engine.py）。
+ * 当前仅作为 fallback 保留，请勿新增逻辑。
+ */
 // Dashboard 整合生成器（M7.3 + M7.4）
 //
 // 输入：BaziChart + 锚点日期（默认今日）+ 历史日记记录

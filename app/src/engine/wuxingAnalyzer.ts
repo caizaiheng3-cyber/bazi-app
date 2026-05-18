@@ -1,22 +1,22 @@
-// M2.1 五行统计引擎
+/**
+ * @deprecated 本文件为旧版前端 TS 引擎，已废弃。
+ * 主计算引擎已切换到 Python 后端 API（web/backend/app/api/engine.py）。
+ * 当前仅作为 fallback 保留，请勿新增逻辑。
+ */
+// M2.1 五行统计引擎（带权重版）
 //
-// 口径（严格对齐 mock/baziChart.ts 中蔡蔡命局的统计方式）：
-//   - tianGanCount = 4 个天干本气的计数
-//   - diZhiCount   = 4 个地支本气的计数（地支本气 = 该地支藏干列表的第一项）
-//   - cangGanCount = 所有藏干（含本气 + 中气 + 余气）的计数
-//   - total = tianGan + diZhi + cangGan
+// 口径：全部计入 + 带权重
+//   - 天干：权重 1.2（显露在外，力量最大）
+//   - 地支本气（藏干第 1 个）：权重 1.0（当令之气）
+//   - 地支中气（藏干第 2 个）：权重 0.6（次要之气）
+//   - 地支余气（藏干第 3 个）：权重 0.3（残余微弱之气）
 //
-// 这意味着地支本气在 diZhi 和 cangGan 中各计一次，total 会重复算一次本气，
-// 这是 mock 文件已确立的口径，UI（WuxingChart 与五行条形图）已按此渲染。
-// 详见 mock/baziChart.ts 第 67-75 行注释——口径定义权威来源。
+// 每个五行的 total 为加权分数之和（非简单计数），percent 基于加权分数计算。
+// tianGanCount / diZhiCount / cangGanCount 保留为原始计数（不加权），
+// 供 UI 展示"有几个天干/地支/藏干属于该五行"。
 //
-// 校验基线（蔡蔡 1993-12-07 06:00 男）：
-//   壬日 / 癸亥月 / 癸酉年 / 癸卯时
-//   天干：癸癸壬癸（全水）          → tianGanCount: 水4
-//   地支本气：酉(金) 亥(水) 戌(土) 卯(木) → diZhiCount: 金1 水1 土1 木1
-//   全部藏干：辛 / 壬甲 / 戊辛丁 / 乙   → cangGanCount: 金2(辛×2) 水1(壬) 木2(甲乙) 土1(戊) 火1(丁)
-//   合计：金 0+1+2=3 / 木 0+1+2=3 / 水 4+1+1=6 / 火 0+0+1=1 / 土 0+1+1=2 = 15
-//   百分比：水 40 / 金 20 / 木 20 / 土 13 / 火 7（与 mock 100% 一致）
+// 权重参考：子平真诠常用体系，天干透出力量最大，
+// 地支藏干按本气 > 中气 > 余气递减。
 
 import type { Pillar, TianGan, WuXing, WuXingStat } from '../types/bazi';
 
@@ -32,6 +32,13 @@ const TIAN_GAN_TO_WUXING: Record<TianGan, WuXing> = {
 
 const WUXING_ORDER: WuXing[] = ['金', '木', '水', '火', '土'];
 
+// ===== 权重常量 =====
+
+/** 天干权重：显露在外，力量最大 */
+const WEIGHT_TIAN_GAN = 1.2;
+/** 藏干权重：按本气/中气/余气递减 */
+const WEIGHT_CANG_GAN: readonly number[] = [1.0, 0.6, 0.3];
+
 // ===== 工具 =====
 
 function ganToWuxing(gan: string): WuXing {
@@ -40,27 +47,25 @@ function ganToWuxing(gan: string): WuXing {
   return wx;
 }
 
-/** 中间计数容器 */
-interface RawCount {
-  tianGan: number;
-  diZhi: number;
-  cangGan: number;
+/** 中间统计容器 */
+interface RawAccum {
+  /** 原始计数（不加权） */
+  tianGanCount: number;
+  diZhiCount: number;
+  cangGanCount: number;
+  /** 加权分数 */
+  weightedScore: number;
 }
 
 // ===== 主入口 =====
 
 /**
- * 五行统计：按 mock 既定口径计数（地支本气在 diZhi 和 cangGan 各计一次）
+ * 五行统计（带权重版）：天干 1.2、地支本气 1.0、中气 0.6、余气 0.3
  *
- * @param pillars 必须严格是 4 柱（年月日时），命理学不存在其他数量
- * @throws 当 pillars 长度 ≠ 4 或任一柱缺少藏干时抛错（编程错误，应在调用方修正）
- *
- * @example
- *   const stats = analyzeWuxing(pillars);
- *   stats.find(s => s.wuxing === '水').percent; // 蔡蔡：40
+ * @param pillars 必须严格是 4 柱（年月日时）
+ * @throws 当 pillars 长度 ≠ 4 或任一柱缺少藏干时抛错
  */
 export function analyzeWuxing(pillars: readonly Pillar[]): WuXingStat[] {
-  // 输入合法性断言：四柱在命理学上是固定的概念，少于/多于 4 柱都是编程错误
   if (pillars.length !== 4) {
     throw new Error(`[wuxingAnalyzer] 必须传入恰好 4 柱（年月日时），实际收到 ${pillars.length} 柱`);
   }
@@ -71,48 +76,54 @@ export function analyzeWuxing(pillars: readonly Pillar[]): WuXingStat[] {
   }
 
   // 初始化 5 行容器
-  const counts = new Map<WuXing, RawCount>();
+  const accums = new Map<WuXing, RawAccum>();
   WUXING_ORDER.forEach((wx) => {
-    counts.set(wx, { tianGan: 0, diZhi: 0, cangGan: 0 });
+    accums.set(wx, { tianGanCount: 0, diZhiCount: 0, cangGanCount: 0, weightedScore: 0 });
   });
 
   for (const p of pillars) {
-    // 1) 天干本气计数
-    counts.get(ganToWuxing(p.tianGan))!.tianGan += 1;
+    // 1) 天干：权重 1.2
+    const tianGanWx = ganToWuxing(p.tianGan);
+    const tianGanAccum = accums.get(tianGanWx)!;
+    tianGanAccum.tianGanCount += 1;
+    tianGanAccum.weightedScore += WEIGHT_TIAN_GAN;
 
-    // 2) 地支本气计数（藏干列表的第一项；前置断言已保证 length ≥ 1）
-    counts.get(ganToWuxing(p.cangGan[0].gan))!.diZhi += 1;
+    // 2) 地支本气计数（用于 diZhiCount 展示）
+    const benQiWx = ganToWuxing(p.cangGan[0].gan);
+    accums.get(benQiWx)!.diZhiCount += 1;
 
-    // 3) 所有藏干计数（含本气、中气、余气）
-    for (const cg of p.cangGan) {
-      counts.get(ganToWuxing(cg.gan))!.cangGan += 1;
+    // 3) 所有藏干：按位置给不同权重（本气 1.0 / 中气 0.6 / 余气 0.3）
+    for (let i = 0; i < p.cangGan.length; i++) {
+      const cangGanWx = ganToWuxing(p.cangGan[i].gan);
+      const weight = WEIGHT_CANG_GAN[Math.min(i, WEIGHT_CANG_GAN.length - 1)];
+      const cangAccum = accums.get(cangGanWx)!;
+      cangAccum.cangGanCount += 1;
+      cangAccum.weightedScore += weight;
     }
   }
 
-  // 计算总数
-  // 数学上保证 ≥ 12：4 天干 + 4 地支本气 + 至少 4 藏干（每柱 cangGan 已断言 ≥ 1）
-  // 上界 ≤ 20：每柱藏干最多 3 个（如寅=甲丙戊），故藏干总计 ≤ 12 → 总计 ≤ 20
-  const grandTotal = WUXING_ORDER.reduce((sum, wx) => {
-    const c = counts.get(wx)!;
-    return sum + c.tianGan + c.diZhi + c.cangGan;
-  }, 0);
+  // 加权总分
+  const grandWeightedTotal = WUXING_ORDER.reduce(
+    (sum, wx) => sum + accums.get(wx)!.weightedScore, 0,
+  );
 
-  // 输出按固定顺序 [金 木 水 火 土]，与 mock 顺序一致
+  // 输出按固定顺序 [金 木 水 火 土]
   const stats: WuXingStat[] = WUXING_ORDER.map((wx) => {
-    const c = counts.get(wx)!;
-    const total = c.tianGan + c.diZhi + c.cangGan;
+    const acc = accums.get(wx)!;
     return {
       wuxing: wx,
-      tianGanCount: c.tianGan,
-      diZhiCount: c.diZhi,
-      cangGanCount: c.cangGan,
-      total,
-      percent: Math.round((total / grandTotal) * 100),
+      tianGanCount: acc.tianGanCount,
+      diZhiCount: acc.diZhiCount,
+      cangGanCount: acc.cangGanCount,
+      // total 使用加权分数（保留 1 位小数后取整，供下游百分比和排序使用）
+      total: Math.round(acc.weightedScore * 10) / 10,
+      percent: grandWeightedTotal > 0
+        ? Math.round((acc.weightedScore / grandWeightedTotal) * 100)
+        : 0,
     };
   });
 
-  // 修正百分比舍入误差：保证总和 = 100（差额补给 total 最大的那一项）
-  // 例：5 项各 14.28% 四舍五入后为 [14,14,14,14,14] 总和 70，差 30 全部补给最大项
+  // 修正百分比舍入误差：保证总和 = 100
   const percentSum = stats.reduce((s, x) => s + x.percent, 0);
   if (percentSum !== 100) {
     const diff = 100 - percentSum;

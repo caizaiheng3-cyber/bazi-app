@@ -1,0 +1,396 @@
+{
+  "$schema": "化解方案库 - 基于命局问题驱动的化解方案集合",
+  "$version": "1.0.0",
+  "$description": "为消费者报告中的负面预警提供「问题 → 化解方案」配对。每个 problemKey 对应命局的一个具体问题（神煞/格局缺陷/十神冲突），包含触发条件、用户感知问题、命理依据和具体行动方案。",
+  "$usage": "在 consumerReportEnhancer.ts 中：根据 chart.shenShas / chart.geJu / chart.keyFindings 匹配 triggerCondition，命中后从 remedies 中挑选 2-4 条展示给用户。",
+  "$updateGuide": "新增问题时遵循 schema：problemKey → { title, triggerCondition, userFacingProblem, severity, relatedDomain, coreReason, remedies[] }。",
+
+  "problems": {
+    "yinYangChaCuo": {
+      "title": "阴阳差错（婚姻波折之象）",
+      "triggerCondition": {
+        "type": "shenSha",
+        "match": "shenShas.some(s => s.name === '阴阳差错')"
+      },
+      "userFacingProblem": "你和伴侣比一般人更容易出现莫名的张力 —— 因为小事冷战、双方家庭立场不同、孩子教育理念冲突",
+      "severity": "high",
+      "relatedDomain": "婚姻",
+      "coreReason": "你的日柱（壬戌/丁丑/丙子/丁未/辛卯/戊寅 之一）天生带「阴阳错位」的标记，再加上日支戌土对水的牵制，命格里就有一股「拉扯」的能量",
+      "reassurance": "这不是说你会离婚 —— 中国超过 60% 命带阴阳差错的人婚姻是稳定的，只要懂得化解",
+      "remedies": [
+        {
+          "action": "卧室西北角不要放重物（柜子、箱子、健身器材）",
+          "reason": "西北属金，金能通关化解你和伴侣之间的张力；放重物会压住这股化解的能量",
+          "timing": "立即执行，长期保持"
+        },
+        {
+          "action": "婚姻周年纪念固定一个仪式，每年都做",
+          "reason": "重复性仪式能稳定关系的能量场，对抗「阴阳差错」带来的不稳定",
+          "timing": "结婚纪念日、领证日，二选一"
+        },
+        {
+          "action": "重大决定（搬家、生育、换工作）选 5、6 月或 11、12 月做",
+          "reason": "这些月份你命格的能量最稳，决策不容易引发后续矛盾",
+          "timing": "需要做重大决定时"
+        },
+        {
+          "action": "和伴侣共同的兴趣选「水/金」系：游泳、泡温泉、品茶、收藏",
+          "reason": "水是你的命格主气，金能生水 —— 这两类活动天然让你们的能量同频",
+          "timing": "每月至少 2-3 次共同进行"
+        },
+        {
+          "action": "争吵后不当天复盘，第二天早上 7-9 点再聊",
+          "reason": "辰时（7-9 点）是天地能量平衡的时段，复盘最不容易二次激化",
+          "timing": "每次冲突后"
+        },
+        {
+          "action": "卧室床头朝向选北方或西方",
+          "reason": "北方属水（同你日主气）、西方属金（生水），睡眠时能量场最稳",
+          "timing": "搬家或换床时"
+        }
+      ]
+    },
+
+    "biJieDuoCai": {
+      "title": "比劫夺财（合伙破财之象）",
+      "triggerCondition": {
+        "type": "keyFinding",
+        "match": "keyFindings.some(kf => kf.title.includes('比劫成群') || kf.title.includes('比劫夺财'))"
+      },
+      "userFacingProblem": "你只要和别人合伙分钱，那个「别人」就会拿走比你想象中多的部分；朋友找你借钱大概率收不回",
+      "severity": "high",
+      "relatedDomain": "财富",
+      "coreReason": "你的命局里「分饭」的能量特别强 —— 好比 5 个人围着一锅饭，多一个人就少一勺",
+      "reassurance": "这不是说你会一直穷 —— 是说你独立掌财时反而越来越富",
+      "remedies": [
+        {
+          "action": "所有金融账户、房产、投资都登记在自己名下",
+          "reason": "登记权 = 命理上的「财权归一」，能直接对抗比劫夺财",
+          "timing": "立即整理"
+        },
+        {
+          "action": "不和兄弟、大学同学、闺蜜合伙创业或合买房",
+          "reason": "命格里「同辈相争」的能量最强，越熟越伤财",
+          "timing": "终身原则"
+        },
+        {
+          "action": "如果必须借钱给朋友，提前心里把它当成「送出去的」",
+          "reason": "你命中借出去的钱本来就难回，预设送出去反而能保住关系",
+          "timing": "每次被借钱时"
+        },
+        {
+          "action": "理财选「自己一个人能搞定的」：基金、债券、自住房",
+          "reason": "凡是需要「合作、合伙、共同决策」的财路对你都不利",
+          "timing": "做财务规划时"
+        },
+        {
+          "action": "钱包/手机壳选黑色或深蓝色",
+          "reason": "深色属水，是你的命格主气 —— 能强化你「守财」的气场",
+          "timing": "下次换的时候"
+        }
+      ]
+    },
+
+    "shangGuanJianGuan": {
+      "title": "伤官见官（顶撞权威之象）",
+      "triggerCondition": {
+        "type": "shiShen",
+        "match": "shiShenCounts['伤官'] >= 1 && shiShenCounts['正官'] >= 1"
+      },
+      "userFacingProblem": "你天生就容易和老板、领导、规则起冲突 —— 你觉得你只是说了实话，对方却觉得你在挑战他",
+      "severity": "medium",
+      "relatedDomain": "事业",
+      "coreReason": "你命格里同时有「我要表达」和「规则压我」两股力量，它们天然对冲",
+      "reassurance": "这不是说你做不好打工 —— 是说你需要找对地方、用对方法",
+      "remedies": [
+        {
+          "action": "选「结果导向、不看过程」的老板",
+          "reason": "你的伤官气质适合 KPI 制，最不适合「事事请示」的管理风格",
+          "timing": "找工作面试时多问"
+        },
+        {
+          "action": "和领导有不同意见时，先认同 1 句再表达",
+          "reason": "「认同 → 表达」的顺序能让你的伤官能量被官星接收，而不是被压制",
+          "timing": "每次工作沟通"
+        },
+        {
+          "action": "做「能输出作品」的工作 —— 写、讲、设计、咨询",
+          "reason": "输出型工作让你的伤官能量有正向出口，不会反噬到人际关系上",
+          "timing": "职业方向选择时"
+        },
+        {
+          "action": "在公司里找一个「印星」型的师父：年长、儒雅、说话慢",
+          "reason": "印能克伤、化解你和官的冲突 —— 这种人就是你的命理「调节器」",
+          "timing": "入职新公司后 3 个月内"
+        }
+      ]
+    },
+
+    "yinKeShiShang": {
+      "title": "印克食伤（才华被压制之象）",
+      "triggerCondition": {
+        "type": "manifestation",
+        "match": "manifestation.some(m => (m.shiShen === '食神' || m.shiShen === '伤官') && m.level === 'manifest-weak')"
+      },
+      "userFacingProblem": "你心里有满满的话和才华，但有股「再忍忍、再藏藏」的力量压着你不让出来 —— 想说的意见到嘴边又咽回去",
+      "severity": "medium",
+      "relatedDomain": "事业",
+      "coreReason": "你命格里印星太重压住了食伤，导致你的表达能量被自我审查掉了",
+      "reassurance": "这是可以训练的 —— 你的才华是真实的，只是出口被堵住了",
+      "remedies": [
+        {
+          "action": "每周固定时间做「输出」：写公众号 / 拍短视频 / 给朋友讲一个观点",
+          "reason": "强迫给食伤一个出口，时间长了印星就压不住了",
+          "timing": "每周固定 2-3 小时"
+        },
+        {
+          "action": "把「我觉得这个不对」改成「我有一个观察可以分享」",
+          "reason": "措辞软化能让食伤穿过印星的「自我审查」",
+          "timing": "每次想表达时"
+        },
+        {
+          "action": "远离喜欢「教育你」的人，靠近喜欢「问你看法」的人",
+          "reason": "前者会强化你的印星压制，后者会激活你的食伤出口",
+          "timing": "长期社交筛选"
+        },
+        {
+          "action": "工位上放一杯水（透明杯，每天换）",
+          "reason": "水主流通，能让你「被压住」的能量缓慢流动起来",
+          "timing": "立即"
+        }
+      ]
+    },
+
+    "shuiTaiWang": {
+      "title": "水气过旺（深沉到自我消耗之象）",
+      "triggerCondition": {
+        "type": "wuxingPercent",
+        "match": "wuxingStats.find(s => s.wuxing === '水').percent >= 50 && pillars[2].tianGan in ['壬', '癸']"
+      },
+      "userFacingProblem": "你想得太多、藏得太深，经常一个人内耗到失眠；明明可以表达却选择沉默",
+      "severity": "medium",
+      "relatedDomain": "健康",
+      "coreReason": "水主智、主深 —— 但水太多就会泛滥、阴寒、压抑情绪",
+      "reassurance": "你的「深」是优势，只需要给它找个出口，而不是一直憋在心里",
+      "remedies": [
+        {
+          "action": "每天接触 30 分钟「火」的能量：晒太阳、泡热水、做有温度的运动",
+          "reason": "火能温水、水火既济 —— 直接对治水太多的阴寒",
+          "timing": "每天上午或下午"
+        },
+        {
+          "action": "添置一件红色或橙色的小物（手机壳、围巾、笔）",
+          "reason": "暖色属火，是你水气最需要的「调节剂」",
+          "timing": "下次换的时候"
+        },
+        {
+          "action": "卧室避免大面积的蓝色、黑色装饰",
+          "reason": "你的命格水已经够多了，再加深色会让能量更阴沉",
+          "timing": "下次装修或换软装时"
+        },
+        {
+          "action": "每周和「火型人」（外向、热情、爱笑）一起吃一次饭",
+          "reason": "火型人能直接调动你被压住的情绪能量",
+          "timing": "每周固定"
+        },
+        {
+          "action": "失眠/胡思乱想时，起来喝一杯姜茶",
+          "reason": "姜性温属火，能从生理层面打断水气的循环",
+          "timing": "需要时"
+        }
+      ]
+    },
+
+    "guChenGuaSu": {
+      "title": "孤辰寡宿（人际孤独之象）",
+      "triggerCondition": {
+        "type": "shenSha",
+        "match": "shenShas.some(s => s.name === '孤辰' || s.name === '寡宿')"
+      },
+      "userFacingProblem": "你朋友看似不少，能交心的没几个；常常感觉「被人围着但还是孤独」",
+      "severity": "low",
+      "relatedDomain": "人际",
+      "coreReason": "命格里「孤」的能量天生强，主动靠近人时反而容易被回避",
+      "reassurance": "你的孤独是命格里写好的「深度」—— 不是缺陷，是少数人才有的天赋",
+      "remedies": [
+        {
+          "action": "不追求「朋友数量」，专注 3-5 个能讲心里话的人",
+          "reason": "你的命格本来就走「深而少」路线，强求多反而消耗你",
+          "timing": "长期社交策略"
+        },
+        {
+          "action": "主动找比你年长 5-10 岁的人做朋友",
+          "reason": "你和同龄人易孤，和长辈反而能建立深交",
+          "timing": "工作中刻意维护"
+        },
+        {
+          "action": "养一只猫或狗",
+          "reason": "宠物是你「孤辰」最好的伴侣 —— 它们不会让你觉得被消耗",
+          "timing": "条件允许时"
+        }
+      ]
+    },
+
+    "yangRen": {
+      "title": "羊刃临身（性烈易冲动之象）",
+      "triggerCondition": {
+        "type": "shenSha",
+        "match": "shenShas.some(s => s.name === '羊刃')"
+      },
+      "userFacingProblem": "你平时压着情绪，但一旦爆发就刹不住车；做决定容易在 5 分钟内做出后悔半年的事",
+      "severity": "medium",
+      "relatedDomain": "事业",
+      "coreReason": "羊刃是命格里的「锋刃」，平时不显，一旦动就特别快、特别烈",
+      "reassurance": "这股力量用对了就是「魄力」，用错了就是「冲动」",
+      "remedies": [
+        {
+          "action": "重大决定前强制等 24 小时再做",
+          "reason": "羊刃的爆发期通常 24 小时内会过 —— 等过去再决定就稳了",
+          "timing": "每次想立刻拍板时"
+        },
+        {
+          "action": "工作选「需要决断力」的角色：销售总监、项目负责人、外科医生",
+          "reason": "给羊刃正向出口，避免它在生活里乱发",
+          "timing": "职业方向选择时"
+        },
+        {
+          "action": "学一门器械型运动（拳击、剑道、射箭）",
+          "reason": "用身体消耗羊刃的爆发力，比心理调节更有效",
+          "timing": "长期培养"
+        }
+      ]
+    },
+
+    "wangShenJieSha": {
+      "title": "亡神劫煞（防小人破财之象）",
+      "triggerCondition": {
+        "type": "shenSha",
+        "match": "shenShas.some(s => s.name === '亡神' || s.name === '劫煞')"
+      },
+      "userFacingProblem": "你身边偶尔会出现「看似帮你实则坑你」的人，财物意外损失的概率比一般人高",
+      "severity": "medium",
+      "relatedDomain": "人际",
+      "coreReason": "命格里有「被偷被骗」的能量信号，需要主动防范",
+      "reassurance": "你不会真的破大财 —— 只要对「过于热情的陌生人」多留一份心",
+      "remedies": [
+        {
+          "action": "陌生人的「内部消息」「稳赚机会」一律不参与",
+          "reason": "命格里这类人专门向你来，越热情越要警惕",
+          "timing": "终身原则"
+        },
+        {
+          "action": "重要证件、印章、银行卡分开存放",
+          "reason": "降低单点失窃带来的损失",
+          "timing": "立即整理"
+        },
+        {
+          "action": "每年体检 + 定期备份重要数据",
+          "reason": "亡神也主「失去」—— 健康和数据都是要防的",
+          "timing": "每年固定"
+        }
+      ]
+    },
+
+    "diZhiChongRiZhi": {
+      "title": "地支冲日支（婚姻或居所动荡之象）",
+      "triggerCondition": {
+        "type": "relation",
+        "match": "relations.zhiChong.some(c => (c.posA === 2 || c.posB === 2) && !c.resolvedByHe)"
+      },
+      "userFacingProblem": "你的婚姻或居住环境会经历比一般人更多的变动 —— 搬家、分居、长期出差等",
+      "severity": "medium",
+      "relatedDomain": "婚姻",
+      "coreReason": "你的日支（代表配偶宫和自己内心）和其他柱有「冲」的关系，造成内在不稳",
+      "reassurance": "「冲」也是「动」—— 用对了就是新机遇，用错了才是动荡",
+      "remedies": [
+        {
+          "action": "结婚前和伴侣一起住至少 6 个月",
+          "reason": "提前暴露生活摩擦点，比婚后才发现更稳",
+          "timing": "婚前"
+        },
+        {
+          "action": "每年规划 1-2 次远途旅行",
+          "reason": "主动「动」反而能化解被动「冲」",
+          "timing": "每年规划"
+        },
+        {
+          "action": "换房选「左右对称」格局，避免缺角户型",
+          "reason": "对称格局能稳定日支被冲带来的能量起伏",
+          "timing": "买房或租房时"
+        }
+      ]
+    },
+
+    "huoQueDiaoHou": {
+      "title": "冬令缺火（情感不易升温之象）",
+      "triggerCondition": {
+        "type": "wuxingPercent",
+        "match": "['亥','子','丑'].includes(monthZhi) && wuxingStats.find(s => s.wuxing === '火').percent <= 10"
+      },
+      "userFacingProblem": "你内心常感觉「冷」—— 情感不容易升温、容易陷入理性的自省、对生活提不起劲",
+      "severity": "medium",
+      "relatedDomain": "健康",
+      "coreReason": "你出生在冬季又缺少火的能量，命格里没有「暖」这个调节器",
+      "reassurance": "这不是抑郁，是命格本身偏冷 —— 主动补暖就能调节",
+      "remedies": [
+        {
+          "action": "每天晨起喝一杯温水或姜茶",
+          "reason": "用温热饮品启动一天的暖能量",
+          "timing": "每天早上"
+        },
+        {
+          "action": "卧室朝南或东南，争取日照",
+          "reason": "南方属火，长期日照能补命格的火",
+          "timing": "下次换房时考虑"
+        },
+        {
+          "action": "靠近「火型人」：外向、爱笑、热情、爱热闹",
+          "reason": "对方的火气能直接温暖你的命格",
+          "timing": "刻意维护这类朋友"
+        },
+        {
+          "action": "饮食多加红色、橙色、辣的食物（红枣、辣椒、牛肉）",
+          "reason": "暖色和辛辣食物属火，从身体补",
+          "timing": "日常饮食"
+        }
+      ]
+    },
+
+    "jiaZhuanWang": {
+      "title": "假专旺格（顺势走但有破格隐患）",
+      "triggerCondition": {
+        "type": "yongShen",
+        "match": "yongShen.method === '假专旺'"
+      },
+      "userFacingProblem": "你的命格走「顺势」路线最稳 —— 越是逆势挑战自己越容易失败；要避开命中那个「破格」的方向",
+      "severity": "medium",
+      "relatedDomain": "事业",
+      "coreReason": "你命局里同类力量虽然占主导（≥55%），但有其他力量混杂着，没有形成完全的「一气」",
+      "reassurance": "这反而是优势 —— 你比纯专旺的人多了一份灵活，关键是知道哪些事「顺」哪些事「逆」",
+      "remedies": [
+        {
+          "action": "顺势选「能强化你日主能量」的工作环境",
+          "reason": "假专旺最怕的是「环境对抗你的命格主气」",
+          "timing": "选工作时"
+        },
+        {
+          "action": "避开命中破格的五行方向（财、官杀）相关行业",
+          "reason": "这些方向是你命格里的「破格隐患」放大器",
+          "timing": "终身策略"
+        },
+        {
+          "action": "走运到「同类/印星」流年时大胆进取，到「破格五行」流年时收敛",
+          "reason": "顺周期发力，逆周期保守",
+          "timing": "每年初规划时"
+        }
+      ]
+    }
+  },
+
+  "$conventions": {
+    "severity": "high=用户必须看到 + 必须给方案；medium=值得提示 + 给2-3个方案；low=简短提及即可",
+    "relatedDomain": "婚姻 / 财富 / 事业 / 健康 / 人际 —— 用于按用户 concerns 过滤",
+    "remedies.timing": "立即 / 长期保持 / 需要时 / 选择时机 —— 让用户知道什么时候做",
+    "reassurance": "缓解焦虑用，必填 —— 避免用户看到预警就崩溃"
+  }
+}

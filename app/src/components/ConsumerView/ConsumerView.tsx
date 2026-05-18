@@ -1,8 +1,9 @@
-import React from 'react';
-import type { ConsumerReport } from '../../types/bazi';
+import React, { useMemo } from 'react';
+import type { BaziChart, ConsumerReport } from '../../types/bazi';
 import { ClassicCard } from '../common/ClassicCard';
 import { SectionTitle } from '../common/SectionTitle';
-import { ClassicDivider } from '../common/ClassicDivider';
+import { EnhancedWarningsSection } from './EnhancedWarningsSection';
+import { buildEnhancedWarnings } from '../../engine/consumerReportEnhancer/warningEnhancer';
 
 const TYPE_STYLE = {
   good:    { color: '#6B8E23', bg: 'rgba(107,142,35,0.10)', label: '机遇期' },
@@ -10,8 +11,28 @@ const TYPE_STYLE = {
   turning: { color: '#B8860B', bg: 'rgba(184,134,11,0.12)', label: '转折点' },
 } as const;
 
-export const ConsumerView: React.FC<{ report: ConsumerReport }> = ({ report }) => {
+interface ConsumerViewProps {
+  report: ConsumerReport;
+  /** 可选：传入排盘结果以启用「带依据折叠」的预警增强段。
+   *  不传则保持原有 7 段渲染，完全向后兼容。 */
+  chart?: BaziChart;
+}
+
+export const ConsumerView: React.FC<ConsumerViewProps> = ({ report, chart }) => {
   const { imagery, empathy, explanation, guidance, timeline, luckyGuide, closing, otherAreas } = report;
+
+  // 计算带依据的预警列表（仅在 chart 存在时计算）
+  // 防御性 try/catch：旧版 localStorage chart 可能缺少新引擎需要的字段，
+  // 任何匹配/翻译异常都不能影响主页面渲染，只是不显示警示段。
+  const enhancedWarnings = useMemo(() => {
+    if (!chart) return [];
+    try {
+      return buildEnhancedWarnings(chart, { maxWarnings: 6 });
+    } catch (err) {
+      console.error('[ConsumerView] buildEnhancedWarnings failed:', err);
+      return [];
+    }
+  }, [chart]);
 
   return (
     <div className="space-y-6">
@@ -22,113 +43,150 @@ export const ConsumerView: React.FC<{ report: ConsumerReport }> = ({ report }) =
         <span className="cloud-mark">☁</span>
       </div>
 
-      {/* 1. 命格意象（开篇）— 横向布局：左侧文案 + 右侧山水插图 */}
+      {/* 1. 命格意象（开篇）— 上方文案 + 下方大海水插画（对标设计稿 02b） */}
       <ClassicCard
         style={{
           background:
             'linear-gradient(135deg, rgba(251,243,223,0.95) 0%, rgba(248,238,212,0.92) 100%)',
-          padding: 28,
+          padding: '28px 28px 0',
+          overflow: 'hidden',
         }}
       >
-        <div className="flex items-start gap-6 flex-wrap">
-          <div className="flex-1 min-w-[260px]">
-            <div className="flex items-center gap-3 mb-2">
-              <span className="zhuan-seal" style={{ width: 32, height: 32, fontSize: 14 }}>
-                纳音
-              </span>
-              <h1
-                className="font-classic m-0"
-                style={{
-                  fontSize: 44,
-                  color: 'var(--color-ink)',
-                  letterSpacing: '0.15em',
-                  lineHeight: 1.15,
-                }}
-              >
-                {imagery.title}
-              </h1>
-            </div>
-            <div
-              className="font-classic mt-3"
-              style={{
-                color: 'var(--color-ink-light)',
-                letterSpacing: '0.2em',
-                fontSize: 14,
-              }}
-            >
-              {imagery.subtitle}
-            </div>
-            <div className="flex flex-wrap gap-2 mt-4">
-              {imagery.keywords.map((k) => (
-                <span
-                  key={k}
-                  className="font-classic"
-                  style={{
-                    padding: '4px 14px',
-                    fontSize: 13,
-                    color: 'var(--color-cinnabar)',
-                    background: 'rgba(184, 55, 47, 0.06)',
-                    border: '1px solid rgba(184, 55, 47, 0.25)',
-                    borderRadius: 999,
-                    letterSpacing: '0.1em',
-                  }}
-                >
-                  {k}
-                </span>
-              ))}
-            </div>
-            <p
-              className="leading-relaxed mt-5 mb-0"
-              style={{
-                fontSize: 15,
-                color: 'var(--color-ink)',
-                fontFamily: '"Noto Serif SC", "Songti SC", serif',
-              }}
-            >
-              {imagery.description}
-            </p>
-          </div>
-          {/* 右侧：意象装饰区（水墨山水抽象色块） */}
-          <div
-            className="flex-shrink-0 hidden md:flex items-center justify-center"
+        {/* 纳音 + 大标题 */}
+        <div className="flex items-center gap-3 mb-2">
+          <span
+            className="zhuan-seal"
+            style={{ width: 36, height: 36, fontSize: 14 }}
+          >
+            纳音
+          </span>
+          <h1
+            className="font-classic m-0"
             style={{
-              width: 200,
-              height: 160,
-              borderRadius: 8,
-              background:
-                'radial-gradient(ellipse at 30% 70%, rgba(30, 96, 145, 0.14) 0%, transparent 55%),' +
-                'radial-gradient(ellipse at 70% 30%, rgba(184, 134, 11, 0.16) 0%, transparent 55%),' +
-                'linear-gradient(135deg, rgba(58, 47, 36, 0.05) 0%, rgba(58, 47, 36, 0.02) 100%)',
-              fontSize: 56,
-              opacity: 0.6,
+              fontSize: 48,
+              color: 'var(--color-ink)',
+              letterSpacing: '0.15em',
+              lineHeight: 1.15,
             }}
           >
-            🏔️
-          </div>
+            {imagery.title}
+          </h1>
+        </div>
+
+        {/* 副标题 */}
+        <div
+          className="font-classic mt-3"
+          style={{
+            color: 'var(--color-ink-light)',
+            letterSpacing: '0.2em',
+            fontSize: 15,
+          }}
+        >
+          {imagery.subtitle}
+        </div>
+
+        {/* 关键词标签 */}
+        <div className="flex flex-wrap gap-2 mt-4">
+          {imagery.keywords.map((k) => (
+            <span
+              key={k}
+              className="font-classic"
+              style={{
+                padding: '5px 16px',
+                fontSize: 14,
+                color: 'var(--color-cinnabar)',
+                background: 'rgba(184, 55, 47, 0.06)',
+                border: '1px solid rgba(184, 55, 47, 0.25)',
+                borderRadius: 999,
+                letterSpacing: '0.1em',
+              }}
+            >
+              {k}
+            </span>
+          ))}
+        </div>
+
+        {/* 描述文字 */}
+        <p
+          className="leading-relaxed mt-5 mb-0"
+          style={{
+            fontSize: 15,
+            color: 'var(--color-ink)',
+            fontFamily: '"Noto Serif SC", "Songti SC", serif',
+            paddingBottom: 20,
+          }}
+        >
+          {imagery.description}
+        </p>
+
+        {/* 大海水插画（宽幅） */}
+        <div style={{ margin: '0 -28px' }}>
+          <img
+            src="/images/consumer-sea.png"
+            alt="命格意象"
+            style={{
+              width: '100%',
+              display: 'block',
+              borderRadius: '0 0 8px 8px',
+            }}
+          />
         </div>
       </ClassicCard>
 
-      {/* 居中云纹标题：性格画像 */}
+      {/* ⚠️ 必须告诉你的事（仅在 chart 存在且有命中时渲染） */}
+      {enhancedWarnings.length > 0 && (
+        <EnhancedWarningsSection warnings={enhancedWarnings} />
+      )}
+
+      {/* 居中云纹标题：性格画像（对标设计稿的装饰线分隔） */}
       <div className="classic-cloud-title">
         <span className="cloud-mark">☁</span>
         <span>{empathy.title}</span>
         <span className="cloud-mark">☁</span>
       </div>
 
-      {/* 2. 共情段落 */}
-      <ClassicCard>
-        {empathy.paragraphs.map((p, i) => (
-          <p
-            key={i}
-            className="text-base leading-loose mb-3 last:mb-0 indent-8"
+      {/* 2. 共情段落（左侧水墨装饰） */}
+      <ClassicCard style={{ position: 'relative', overflow: 'hidden' }}>
+        {/* 左上角水墨装饰 */}
+        <div
+          style={{
+            position: 'absolute',
+            top: -10,
+            left: -10,
+            width: 80,
+            opacity: 0.15,
+            pointerEvents: 'none',
+          }}
+        >
+          <img src="/images/mountain-header.png" alt="" style={{ width: '100%' }} />
+        </div>
+        <div style={{ position: 'relative' }}>
+          {empathy.paragraphs.map((p, i) => (
+            <p
+              key={i}
+              className="text-base leading-loose mb-4 last:mb-0 indent-8"
+              style={{
+                color: 'var(--color-ink)',
+                fontFamily: '"Noto Serif SC", "Songti SC", serif',
+                fontSize: 16,
+              }}
+            >
+              {p}
+            </p>
+          ))}
+          {/* 朱砂色祝福语（设计稿中的红色斜体结语） */}
+          <div
+            className="text-center font-classic mt-4"
             style={{
-              color: 'var(--color-ink)',
-              fontFamily: '"Noto Serif SC", "Songti SC", serif',
+              color: 'var(--color-cinnabar)',
+              fontSize: 15,
+              letterSpacing: '0.1em',
+              fontStyle: 'italic',
             }}
           >
-            {p}
-          </p>
-        ))}
+            愿你心怀大海，乘风破浪，活出自在从容的人生。
+          </div>
+        </div>
       </ClassicCard>
 
       {/* 3. 解释段落 */}
@@ -280,34 +338,52 @@ export const ConsumerView: React.FC<{ report: ConsumerReport }> = ({ report }) =
         </div>
       </ClassicCard>
 
-      {/* 8. 温暖结语 */}
-      <ClassicCard className="text-center">
+      {/* 8. 温暖结语（对标设计稿底部祝福语+印章） */}
+      <div
+        className="text-center py-6"
+        style={{ position: 'relative' }}
+      >
         <div
-          className="font-classic mb-4"
-          style={{ color: 'var(--color-gold)', letterSpacing: '0.4em', fontSize: 13 }}
+          className="font-classic mb-2"
+          style={{
+            color: 'var(--color-cinnabar)',
+            fontSize: 12,
+            letterSpacing: '0.3em',
+          }}
         >
-          — 结 语 —
+          ☁ ☁ ☁
         </div>
         {closing.paragraphs.map((p, i) => (
           <p
             key={i}
             className="font-classic leading-loose mb-3 last:mb-0 max-w-2xl mx-auto"
-            style={{ color: 'var(--color-ink)', fontSize: 16, letterSpacing: '0.05em' }}
+            style={{ color: 'var(--color-ink)', fontSize: 15, letterSpacing: '0.05em' }}
           >
             {p}
           </p>
         ))}
-        <ClassicDivider />
+        {/* 底部红色方印 */}
         <div
-          className="zhuan-seal mx-auto"
-          style={{ width: 38, height: 38, fontSize: 18 }}
+          className="mx-auto mt-5"
+          style={{
+            width: 42,
+            height: 42,
+            background: '#b8372f',
+            color: '#fff7e6',
+            fontFamily: '"Noto Serif SC", "Songti SC", serif',
+            fontSize: 20,
+            fontWeight: 700,
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: 4,
+            boxShadow:
+              'inset 0 0 0 2px rgba(255, 247, 230, 0.3), 0 2px 8px rgba(184, 55, 47, 0.25)',
+          }}
         >
           命
         </div>
-        <div className="text-xs mt-3" style={{ color: 'var(--color-ink-light)', letterSpacing: '0.2em' }}>
-          愿 你 识 命 知 命 · 顺 势 而 为
-        </div>
-      </ClassicCard>
+      </div>
     </div>
   );
 };

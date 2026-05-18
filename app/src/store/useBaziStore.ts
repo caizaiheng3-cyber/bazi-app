@@ -15,10 +15,11 @@ import { generateConsumerReport } from '../engine/consumerReportGenerator';
 import { mockDailyDashboard } from '../mock/dailyDashboard';
 import { mockJournalRecords } from '../mock/journalRecords';
 import { matchShifuReply } from '../mock/replyMatcher';
-import { buildChartWithFallback } from '../engine/baziEngine';
+import { enhanceExistingChartWithLLM } from '../engine/baziEngine';
 import { generateDailyDashboard } from '../engine/dailyDashboardGenerator';
 import { generateShifuReply } from '../engine/shifuEngine';
-import { mockBaziChart } from '../mock/baziChart';
+import { fetchPaipan } from '../engine/apiClient';
+import { adaptEngineResponse } from '../engine/apiAdapter';
 
 /** 输入表单数据 */
 export interface InputData {
@@ -56,9 +57,53 @@ function safeParse<T>(raw: string | null): T | null {
   }
 }
 
+/**
+ * 校验 localStorage 里的 chart 数据是否符合"当前引擎"需要的最低字段。
+ * 老版本可能缺新加的字段（persona / relations / lifeTimeline / marriage / wealth /
+ * career / health / relatives 等），直接渲染会白屏。
+ *
+ * 缺字段时返回 false，调用方应作废该缓存让用户重新排盘。
+ */
+function isChartSchemaCompatible(data: PersistedChart | null): data is PersistedChart {
+  if (!data || !data.baziChart) return false;
+  const c = data.baziChart as unknown as Record<string, unknown>;
+  // 关键字段：渲染各 ConsumerView / ProfessionalView 子组件必读
+  const requiredKeys = [
+    'basicInfo',
+    'pillars',
+    'wuxingStats',
+    'wangShuai',
+    'yongShen',
+    'geJu',
+    'shenShas',
+    'daYuns',
+    'keyFindings',
+    'persona',
+    'relations',
+    'lifeTimeline',
+    'marriage',
+    'wealth',
+    'career',
+    'health',
+    'relatives',
+  ];
+  return requiredKeys.every((k) => c[k] !== undefined && c[k] !== null);
+}
+
 function loadChartFromLS(): PersistedChart | null {
   if (typeof window === 'undefined') return null;
-  return safeParse<PersistedChart>(window.localStorage.getItem(LS_CHART));
+  const data = safeParse<PersistedChart>(window.localStorage.getItem(LS_CHART));
+  if (data && !isChartSchemaCompatible(data)) {
+    // 旧 schema 数据，自动清除避免白屏
+    console.warn('[useBaziStore] localStorage 中的 chart 数据缺少新字段，已自动清除。请重新排盘。');
+    try {
+      window.localStorage.removeItem(LS_CHART);
+    } catch {
+      /* ignore */
+    }
+    return null;
+  }
+  return data;
 }
 
 function saveChartToLS(data: PersistedChart | null) {
@@ -132,9 +177,19 @@ interface BaziState {
 
   // —— Actions：命盘 ——
   setInputData: (data: InputData) => void;
-  submit: (data: InputData) => void;
+  submit: (data: InputData) => Promise<void>;
   setViewMode: (mode: ViewMode) => void;
   reset: () => void;
+  /** P6.1 LLM 增强：用 DeepSeek 重写 mainTheme + oneLiner + narrative，替换当前 chart */
+  enhanceWithLLM: () => Promise<{ ok: boolean; reason?: string }>;
+
+  // —— LLM 增强状态 ——
+  /** LLM 是否正在调用 */
+  llmEnhancing: boolean;
+  /** 当前 chart 是否已经被 LLM 增强过 */
+  llmEnhanced: boolean;
+  /** 上一次 LLM 调用错误信息（成功时清空） */
+  llmError: string | null;
 
   // —— Actions：每日对话 ——
   loadTodayDashboard: () => void;
@@ -168,29 +223,42 @@ export const useBaziStore = create<BaziState>((set, get) => ({
   journalRecords: initialJournal,
   currentScene: '决策',
 
+  // P6.1 LLM 增强初始状态
+  llmEnhancing: false,
+  llmEnhanced: false,
+  llmError: null,
+
   // ===== 命盘 =====
 
   setInputData: (data) => set({ inputData: data }),
 
-  submit: (data) => {
+  submit: async (data) => {
     let baziChart: BaziChart;
     let consumerReport: ReturnType<typeof generateConsumerReport> | null = null;
+
     try {
-      // M1-M2.6：排盘 + 全量分析，所有字段由引擎真实计算
-      baziChart = buildChartWithFallback(data);
-      // M3：消费者报告由引擎基于 BaziChart 全字段自动生成
-      consumerReport = generateConsumerReport(baziChart);
-    } catch (engineError) {
-      console.warn('[submit] 引擎计算出错，回退到 mock 数据:', engineError);
-      // 回退到 mock 数据
-      baziChart = mockBaziChart;
-      try {
-        consumerReport = generateConsumerReport(baziChart);
-      } catch {
-        consumerReport = null;
-      }
+      // Python 引擎 API = 唯一真理源，不设 fallback
+      const engineResponse = await fetchPaipan({
+        name: data.name,
+        gender: data.gender,
+        birth_date: data.birthDate,
+        birth_time: data.birthTime,
+        birth_city: data.birthPlace,
+      });
+      baziChart = adaptEngineResponse(engineResponse, data);
+      console.log('[submit] Python 引擎 API 计算成功:', data.name, data.birthDate, data.birthTime);
+    } catch (apiError) {
+      console.error('[submit] Python 引擎 API 调用失败:', apiError);
+      throw new Error('排盘服务不可用，请确认后端已启动（python3 -m uvicorn main:app）');
     }
-    // M7.6：命盘提交后立即刷新今日 Dashboard，使其与新命主绑定
+
+    try {
+      consumerReport = generateConsumerReport(baziChart);
+    } catch {
+      consumerReport = null;
+    }
+
+    // 命盘提交后立即刷新今日 Dashboard
     let todayDashboard;
     try {
       todayDashboard = generateDailyDashboard(baziChart, {
@@ -200,8 +268,62 @@ export const useBaziStore = create<BaziState>((set, get) => ({
     } catch {
       todayDashboard = mockDailyDashboard;
     }
-    set({ inputData: data, baziChart, consumerReport, todayDashboard });
+
+    set({
+      inputData: data,
+      baziChart,
+      consumerReport,
+      todayDashboard,
+      llmEnhanced: false,
+      llmError: null,
+    });
     saveChartToLS({ inputData: data, baziChart, consumerReport });
+  },
+
+  // ===== P6.1 LLM 增强（按需调用，不影响主流程速度） =====
+  enhanceWithLLM: async () => {
+    const { inputData, baziChart, llmEnhancing } = get();
+    if (!inputData || !baziChart) {
+      return { ok: false, reason: '请先排盘' };
+    }
+    if (llmEnhancing) {
+      return { ok: false, reason: '正在增强中，请稍候' };
+    }
+
+    // API key 优先级：env 变量 > localStorage > 不可用
+    const envKey = (import.meta as unknown as { env?: Record<string, string> }).env?.VITE_DEEPSEEK_API_KEY;
+    const lsKey = typeof window !== 'undefined' ? window.localStorage.getItem('deepseek_api_key') : null;
+    const apiKey = envKey || lsKey || undefined;
+    if (!apiKey) {
+      return { ok: false, reason: '未配置 API key（请设置 VITE_DEEPSEEK_API_KEY 或在浏览器 localStorage 设置 deepseek_api_key）' };
+    }
+
+    set({ llmEnhancing: true, llmError: null });
+    try {
+      // 基于已有的 baziChart（Python API 排盘结果）做 LLM 增强，不重新排盘
+      const enhancedChart = await enhanceExistingChartWithLLM(baziChart, { llmApiKey: apiKey });
+      let nextConsumerReport = get().consumerReport;
+      try {
+        nextConsumerReport = generateConsumerReport(enhancedChart);
+      } catch {
+        /* 兜底：保留旧 report */
+      }
+      const realEnhanced = enhancedChart.commandFactors.mainTheme !== baziChart.commandFactors.mainTheme;
+      set({
+        baziChart: enhancedChart,
+        consumerReport: nextConsumerReport,
+        llmEnhancing: false,
+        llmEnhanced: realEnhanced,
+      });
+      saveChartToLS({ inputData, baziChart: enhancedChart, consumerReport: nextConsumerReport });
+      return realEnhanced
+        ? { ok: true }
+        : { ok: false, reason: 'LLM 调用未生效（可能网络超时或 key 失效，已保留原版）' };
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      set({ llmEnhancing: false, llmError: msg });
+      return { ok: false, reason: msg };
+    }
   },
 
   setViewMode: (mode) => set({ viewMode: mode }),

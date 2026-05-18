@@ -1,0 +1,3577 @@
+{
+  "basicInfo": {
+    "name": "蔡",
+    "gender": "男",
+    "solarDate": "1993年12月7日 06:00",
+    "lunarDate": "一九九三年 十月廿四 卯时",
+    "jieQiMonth": "大雪后（已入亥月）",
+    "trueSolarTime": "06:00（未修正）"
+  },
+  "pillars": [
+    {
+      "name": "年柱",
+      "tianGan": "癸",
+      "diZhi": "酉",
+      "cangGan": [
+        {
+          "gan": "辛",
+          "type": "本气",
+          "shiShen": "正印"
+        }
+      ],
+      "naYin": "剑锋金",
+      "ganShiShen": "劫财",
+      "diShiShen": [
+        "正印"
+      ]
+    },
+    {
+      "name": "月柱",
+      "tianGan": "癸",
+      "diZhi": "亥",
+      "cangGan": [
+        {
+          "gan": "壬",
+          "type": "本气",
+          "shiShen": "比肩"
+        },
+        {
+          "gan": "甲",
+          "type": "中气",
+          "shiShen": "食神"
+        }
+      ],
+      "naYin": "大海水",
+      "ganShiShen": "劫财",
+      "diShiShen": [
+        "比肩",
+        "食神"
+      ]
+    },
+    {
+      "name": "日柱",
+      "tianGan": "壬",
+      "diZhi": "戌",
+      "cangGan": [
+        {
+          "gan": "戊",
+          "type": "本气",
+          "shiShen": "七杀"
+        },
+        {
+          "gan": "辛",
+          "type": "中气",
+          "shiShen": "正印"
+        },
+        {
+          "gan": "丁",
+          "type": "余气",
+          "shiShen": "正财"
+        }
+      ],
+      "naYin": "大海水",
+      "ganShiShen": "日主",
+      "diShiShen": [
+        "七杀",
+        "正印",
+        "正财"
+      ]
+    },
+    {
+      "name": "时柱",
+      "tianGan": "癸",
+      "diZhi": "卯",
+      "cangGan": [
+        {
+          "gan": "乙",
+          "type": "本气",
+          "shiShen": "伤官"
+        }
+      ],
+      "naYin": "金箔金",
+      "ganShiShen": "劫财",
+      "diShiShen": [
+        "伤官"
+      ]
+    }
+  ],
+  "daYuns": [
+    {
+      "index": 1,
+      "ganZhi": "壬戌",
+      "startAge": 11,
+      "startYear": 2003,
+      "endYear": 2012,
+      "shiShen": "比肩",
+      "brief": "比肩坐运，自立独行之时",
+      "flowAnalysis": {
+        "wuxingRole": "忌神",
+        "score": 2,
+        "wuxing": "水",
+        "shiShenLabel": "比肩",
+        "relations": [
+          {
+            "kind": "大运伏吟",
+            "withPos": 2,
+            "strength": "strong",
+            "description": "大运地支戌与日支戌伏吟：自身伏吟，命主此运多有\"重复旧事/旧痛复发/老问题再现\"之象"
+          },
+          {
+            "kind": "大运地支六合",
+            "withPos": 3,
+            "hua": "火",
+            "strength": "medium",
+            "description": "大运地支戌与时支卯六合化火：合住该柱，火气暗增"
+          }
+        ],
+        "fillsXunKong": [],
+        "keyLiuNian": [
+          {
+            "year": 2012,
+            "ganZhi": "壬辰",
+            "age": 20,
+            "eventType": "反吟",
+            "tendency": "inauspicious",
+            "description": "2012年壬辰冲日支戌：婚姻波动/搬迁出行/健康受冲，需主动求变以化冲"
+          },
+          {
+            "year": 2008,
+            "ganZhi": "戊子",
+            "age": 16,
+            "eventType": "填实空亡",
+            "tendency": "auspicious",
+            "description": "2008年戊子填实原局空亡（子）：原本虚位之神在此年实现，事业/感情/财运可有实质收获"
+          },
+          {
+            "year": 2009,
+            "ganZhi": "己丑",
+            "age": 17,
+            "eventType": "填实空亡",
+            "tendency": "auspicious",
+            "description": "2009年己丑填实原局空亡（丑）：原本虚位之神在此年实现，事业/感情/财运可有实质收获"
+          },
+          {
+            "year": 2011,
+            "ganZhi": "辛卯",
+            "age": 19,
+            "eventType": "流年合日支",
+            "tendency": "auspicious",
+            "description": "2011年辛卯合日支戌化火：感情/合作机缘明显，未婚者主婚配信号、已婚者主合作贵人"
+          },
+          {
+            "year": 2004,
+            "ganZhi": "甲申",
+            "age": 12,
+            "eventType": "忌神年",
+            "tendency": "inauspicious",
+            "description": "2004年甲申流年五行金为忌神：此年不顺，宜守不宜攻"
+          }
+        ],
+        "summary": "2003-2012 共 10 年（11-20虚岁） · 【忌神运·★★（不利）】 · ↻ 伏吟（旧事重提） · 总体此运不利，宜守不宜攻"
+      }
+    },
+    {
+      "index": 2,
+      "ganZhi": "辛酉",
+      "startAge": 21,
+      "startYear": 2013,
+      "endYear": 2022,
+      "shiShen": "正印",
+      "brief": "正印护身，长辈/平台之助",
+      "flowAnalysis": {
+        "wuxingRole": "忌神",
+        "score": 1,
+        "wuxing": "金",
+        "shiShenLabel": "正印",
+        "relations": [
+          {
+            "kind": "大运伏吟",
+            "withPos": 0,
+            "strength": "weak",
+            "description": "大运地支酉与年支酉伏吟：年柱之事重复出现"
+          },
+          {
+            "kind": "大运地支六冲",
+            "withPos": 3,
+            "strength": "medium",
+            "description": "大运地支酉冲时支卯：冲击时柱之神，激活该位事件"
+          }
+        ],
+        "fillsXunKong": [],
+        "keyLiuNian": [
+          {
+            "year": 2020,
+            "ganZhi": "庚子",
+            "age": 28,
+            "eventType": "填实空亡",
+            "tendency": "auspicious",
+            "description": "2020年庚子填实原局空亡（子）：原本虚位之神在此年实现，事业/感情/财运可有实质收获"
+          },
+          {
+            "year": 2021,
+            "ganZhi": "辛丑",
+            "age": 29,
+            "eventType": "填实空亡",
+            "tendency": "auspicious",
+            "description": "2021年辛丑填实原局空亡（丑）：原本虚位之神在此年实现，事业/感情/财运可有实质收获"
+          },
+          {
+            "year": 2016,
+            "ganZhi": "丙申",
+            "age": 24,
+            "eventType": "忌神年",
+            "tendency": "inauspicious",
+            "description": "2016年丙申流年五行金为忌神：此年不顺，宜守不宜攻"
+          },
+          {
+            "year": 2017,
+            "ganZhi": "丁酉",
+            "age": 25,
+            "eventType": "忌神年",
+            "tendency": "inauspicious",
+            "description": "2017年丁酉流年五行金为忌神：此年不顺，宜守不宜攻"
+          },
+          {
+            "year": 2019,
+            "ganZhi": "己亥",
+            "age": 27,
+            "eventType": "忌神年",
+            "tendency": "inauspicious",
+            "description": "2019年己亥流年五行水为忌神：此年不顺，宜守不宜攻"
+          }
+        ],
+        "summary": "2013-2022 共 10 年（21-30虚岁） · 【忌神运·★（凶）】 · ↻ 伏吟（旧事重提） · 总体此运凶，需谨慎避险"
+      }
+    },
+    {
+      "index": 3,
+      "ganZhi": "庚申",
+      "startAge": 31,
+      "startYear": 2023,
+      "endYear": 2032,
+      "shiShen": "偏印",
+      "brief": "偏印生身，思虑深沉之时",
+      "flowAnalysis": {
+        "wuxingRole": "忌神",
+        "score": 1,
+        "wuxing": "金",
+        "shiShenLabel": "偏印",
+        "relations": [
+          {
+            "kind": "大运地支暗合",
+            "withPos": 3,
+            "hua": "金",
+            "strength": "medium",
+            "description": "大运地支申与时支卯暗合（乙庚合）：时柱有暗中变化"
+          }
+        ],
+        "fillsXunKong": [],
+        "keyLiuNian": [
+          {
+            "year": 2024,
+            "ganZhi": "甲辰",
+            "age": 32,
+            "eventType": "反吟",
+            "tendency": "inauspicious",
+            "description": "2024年甲辰冲日支戌：婚姻波动/搬迁出行/健康受冲，需主动求变以化冲"
+          },
+          {
+            "year": 2032,
+            "ganZhi": "壬子",
+            "age": 40,
+            "eventType": "填实空亡",
+            "tendency": "auspicious",
+            "description": "2032年壬子填实原局空亡（子）：原本虚位之神在此年实现，事业/感情/财运可有实质收获"
+          },
+          {
+            "year": 2023,
+            "ganZhi": "癸卯",
+            "age": 31,
+            "eventType": "流年合日支",
+            "tendency": "auspicious",
+            "description": "2023年癸卯合日支戌化火：感情/合作机缘明显，未婚者主婚配信号、已婚者主合作贵人"
+          },
+          {
+            "year": 2025,
+            "ganZhi": "乙巳",
+            "age": 33,
+            "eventType": "流年合大运",
+            "tendency": "inauspicious",
+            "description": "2025年乙巳与大运庚申地支六合化水：流年与大运联动，忌神局成势，全年阻碍"
+          },
+          {
+            "year": 2028,
+            "ganZhi": "戊申",
+            "age": 36,
+            "eventType": "忌神年",
+            "tendency": "inauspicious",
+            "description": "2028年戊申流年五行金为忌神：此年不顺，宜守不宜攻"
+          }
+        ],
+        "summary": "2023-2032 共 10 年（31-40虚岁） · 【忌神运·★（凶）】 · 总体此运凶，需谨慎避险"
+      }
+    },
+    {
+      "index": 4,
+      "ganZhi": "己未",
+      "startAge": 41,
+      "startYear": 2033,
+      "endYear": 2042,
+      "shiShen": "正官",
+      "brief": "正官当令，事业贵气之运",
+      "flowAnalysis": {
+        "wuxingRole": "用神",
+        "score": 4,
+        "wuxing": "土",
+        "shiShenLabel": "正官",
+        "relations": [
+          {
+            "kind": "大运地支三合",
+            "withPos": 0,
+            "hua": "木",
+            "strength": "strong",
+            "description": "大运地支未补全原局亥、卯 → 三合木局成势：此运木气压倒全盘，命局格局可能临时改变"
+          },
+          {
+            "kind": "大运地支三合",
+            "withPos": 1,
+            "hua": "木",
+            "strength": "strong",
+            "description": "大运地支未补全原局亥、卯 → 三合木局成势：此运木气压倒全盘，命局格局可能临时改变"
+          },
+          {
+            "kind": "大运地支三合",
+            "withPos": 2,
+            "hua": "木",
+            "strength": "strong",
+            "description": "大运地支未补全原局亥、卯 → 三合木局成势：此运木气压倒全盘，命局格局可能临时改变"
+          },
+          {
+            "kind": "大运地支三刑",
+            "withPos": 2,
+            "strength": "strong",
+            "description": "大运地支未与日支戌构成丑戌未恃势之刑：刑事/官非/手术/纠纷信号"
+          },
+          {
+            "kind": "大运地支半三合",
+            "withPos": 3,
+            "hua": "木",
+            "strength": "medium",
+            "description": "大运地支未与时支卯半合木局：木气大增，影响命局力量平衡"
+          },
+          {
+            "kind": "大运地支三合",
+            "withPos": 3,
+            "hua": "木",
+            "strength": "strong",
+            "description": "大运地支未补全原局亥、卯 → 三合木局成势：此运木气压倒全盘，命局格局可能临时改变"
+          }
+        ],
+        "fillsXunKong": [],
+        "keyLiuNian": [
+          {
+            "year": 2039,
+            "ganZhi": "己未",
+            "age": 47,
+            "eventType": "岁运并临",
+            "tendency": "inauspicious",
+            "description": "2039年己未岁运并临：流年与大运完全相同，吉凶倍增（如本运为忌神运则祸事尤烈），命理学列为高危年"
+          },
+          {
+            "year": 2042,
+            "ganZhi": "壬戌",
+            "age": 50,
+            "eventType": "伏吟",
+            "tendency": "inauspicious",
+            "description": "2042年壬戌伏吟日柱：自身重大变动、旧事重提、健康复发，命理\"伏吟泪不干\""
+          },
+          {
+            "year": 2036,
+            "ganZhi": "丙辰",
+            "age": 44,
+            "eventType": "反吟",
+            "tendency": "inauspicious",
+            "description": "2036年丙辰冲日支戌：婚姻波动/搬迁出行/健康受冲，需主动求变以化冲"
+          },
+          {
+            "year": 2033,
+            "ganZhi": "癸丑",
+            "age": 41,
+            "eventType": "填实空亡",
+            "tendency": "auspicious",
+            "description": "2033年癸丑填实原局空亡（丑）：原本虚位之神在此年实现，事业/感情/财运可有实质收获"
+          },
+          {
+            "year": 2035,
+            "ganZhi": "乙卯",
+            "age": 43,
+            "eventType": "流年合日支",
+            "tendency": "auspicious",
+            "description": "2035年乙卯合日支戌化火：感情/合作机缘明显，未婚者主婚配信号、已婚者主合作贵人"
+          }
+        ],
+        "summary": "2033-2042 共 10 年（41-50虚岁） · 【用神运·★★★★（吉）】 · ⚠ 三刑见动（防官非纠纷） · 总体此运吉，宜大胆进取"
+      }
+    },
+    {
+      "index": 5,
+      "ganZhi": "戊午",
+      "startAge": 51,
+      "startYear": 2043,
+      "endYear": 2052,
+      "shiShen": "七杀",
+      "brief": "七杀临身，压力与机遇并存",
+      "flowAnalysis": {
+        "wuxingRole": "用神",
+        "score": 5,
+        "wuxing": "土",
+        "shiShenLabel": "七杀",
+        "relations": [
+          {
+            "kind": "大运合而不化",
+            "withPos": 0,
+            "hua": "火",
+            "strength": "weak",
+            "description": "大运天干戊与年干癸相合（化火不成：大运与年干非紧贴、化神火在原局无根、月令亥不支持化火）：合住该柱之神，影响该位人事"
+          },
+          {
+            "kind": "大运合而不化",
+            "withPos": 1,
+            "hua": "火",
+            "strength": "medium",
+            "description": "大运天干戊与月干癸相合（化火不成：化神火在原局无根、月令亥不支持化火）：合住该柱之神，影响该位人事"
+          },
+          {
+            "kind": "大运合而不化",
+            "withPos": 3,
+            "hua": "火",
+            "strength": "medium",
+            "description": "大运天干戊与时干癸相合（化火不成：大运与时干非紧贴、化神火在原局无根、月令亥不支持化火）：合住该柱之神，影响该位人事"
+          },
+          {
+            "kind": "大运地支暗合",
+            "withPos": 1,
+            "hua": "木",
+            "strength": "medium",
+            "description": "大运地支午与月支亥暗合（丁壬合）：月柱有暗中变化"
+          },
+          {
+            "kind": "大运地支半三合",
+            "withPos": 2,
+            "hua": "火",
+            "strength": "strong",
+            "description": "大运地支午与日支戌半合火局：火气大增，影响命局力量平衡"
+          }
+        ],
+        "fillsXunKong": [],
+        "keyLiuNian": [
+          {
+            "year": 2048,
+            "ganZhi": "戊辰",
+            "age": 56,
+            "eventType": "反吟",
+            "tendency": "inauspicious",
+            "description": "2048年戊辰冲日支戌：婚姻波动/搬迁出行/健康受冲，需主动求变以化冲"
+          },
+          {
+            "year": 2044,
+            "ganZhi": "甲子",
+            "age": 52,
+            "eventType": "填实空亡",
+            "tendency": "auspicious",
+            "description": "2044年甲子填实原局空亡（子）：原本虚位之神在此年实现，事业/感情/财运可有实质收获"
+          },
+          {
+            "year": 2045,
+            "ganZhi": "乙丑",
+            "age": 53,
+            "eventType": "填实空亡",
+            "tendency": "auspicious",
+            "description": "2045年乙丑填实原局空亡（丑）：原本虚位之神在此年实现，事业/感情/财运可有实质收获"
+          },
+          {
+            "year": 2047,
+            "ganZhi": "丁卯",
+            "age": 55,
+            "eventType": "流年合日支",
+            "tendency": "auspicious",
+            "description": "2047年丁卯合日支戌化火：感情/合作机缘明显，未婚者主婚配信号、已婚者主合作贵人"
+          },
+          {
+            "year": 2051,
+            "ganZhi": "辛未",
+            "age": 59,
+            "eventType": "流年合大运",
+            "tendency": "auspicious",
+            "description": "2051年辛未与大运戊午地支六合化火：流年与大运联动，用神局成势，全年顺遂"
+          }
+        ],
+        "summary": "2043-2052 共 10 年（51-60虚岁） · 【用神运·★★★★★（黄金）】 · ⊕ 用神局成势（事业/财运实质突破） · 总体此运吉，宜大胆进取"
+      }
+    },
+    {
+      "index": 6,
+      "ganZhi": "丁巳",
+      "startAge": 61,
+      "startYear": 2053,
+      "endYear": 2062,
+      "shiShen": "正财",
+      "brief": "正财得地，务实稳健之运",
+      "flowAnalysis": {
+        "wuxingRole": "用神",
+        "score": 4,
+        "wuxing": "火",
+        "shiShenLabel": "正财",
+        "relations": [
+          {
+            "kind": "大运天干相冲",
+            "withPos": 0,
+            "strength": "weak",
+            "description": "大运天干丁冲年干癸：冲击该柱之神，影响该位人事"
+          },
+          {
+            "kind": "大运天干相冲",
+            "withPos": 1,
+            "strength": "medium",
+            "description": "大运天干丁冲月干癸：冲击该柱之神，影响该位人事"
+          },
+          {
+            "kind": "大运合化",
+            "withPos": 2,
+            "hua": "木",
+            "strength": "strong",
+            "description": "大运天干丁与日干壬合化木成功（月令亥得令、木有根）：日主此运临时改性为木，整个十年的人生气质和事业方向发生根本转向"
+          },
+          {
+            "kind": "大运天干相冲",
+            "withPos": 3,
+            "strength": "medium",
+            "description": "大运天干丁冲时干癸：冲击该柱之神，影响该位人事"
+          },
+          {
+            "kind": "大运地支半三合",
+            "withPos": 0,
+            "hua": "金",
+            "strength": "weak",
+            "description": "大运地支巳与年支酉半合金局：金气大增，影响命局力量平衡"
+          },
+          {
+            "kind": "大运地支暗合",
+            "withPos": 0,
+            "hua": "水",
+            "strength": "weak",
+            "description": "大运地支巳与年支酉暗合（丙辛合）：年柱有暗中变化"
+          },
+          {
+            "kind": "大运地支六冲",
+            "withPos": 1,
+            "strength": "medium",
+            "description": "大运地支巳冲月支亥：冲击月柱之神，激活该位事件"
+          }
+        ],
+        "fillsXunKong": [],
+        "keyLiuNian": [
+          {
+            "year": 2060,
+            "ganZhi": "庚辰",
+            "age": 68,
+            "eventType": "反吟",
+            "tendency": "inauspicious",
+            "description": "2060年庚辰冲日支戌：婚姻波动/搬迁出行/健康受冲，需主动求变以化冲"
+          },
+          {
+            "year": 2056,
+            "ganZhi": "丙子",
+            "age": 64,
+            "eventType": "填实空亡",
+            "tendency": "auspicious",
+            "description": "2056年丙子填实原局空亡（子）：原本虚位之神在此年实现，事业/感情/财运可有实质收获"
+          },
+          {
+            "year": 2057,
+            "ganZhi": "丁丑",
+            "age": 65,
+            "eventType": "填实空亡",
+            "tendency": "auspicious",
+            "description": "2057年丁丑填实原局空亡（丑）：原本虚位之神在此年实现，事业/感情/财运可有实质收获"
+          },
+          {
+            "year": 2059,
+            "ganZhi": "己卯",
+            "age": 67,
+            "eventType": "流年合日支",
+            "tendency": "auspicious",
+            "description": "2059年己卯合日支戌化火：感情/合作机缘明显，未婚者主婚配信号、已婚者主合作贵人"
+          },
+          {
+            "year": 2053,
+            "ganZhi": "癸酉",
+            "age": 61,
+            "eventType": "忌神年",
+            "tendency": "inauspicious",
+            "description": "2053年癸酉流年五行金为忌神：此年不顺，宜守不宜攻"
+          }
+        ],
+        "summary": "2053-2062 共 10 年（61-70虚岁） · 【用神运·★★★★（吉）】 · 总体此运吉，宜大胆进取"
+      }
+    },
+    {
+      "index": 7,
+      "ganZhi": "丙辰",
+      "startAge": 71,
+      "startYear": 2063,
+      "endYear": 2072,
+      "shiShen": "偏财",
+      "brief": "偏财大运，机缘横财并至",
+      "flowAnalysis": {
+        "wuxingRole": "用神",
+        "score": 3,
+        "wuxing": "火",
+        "shiShenLabel": "偏财",
+        "relations": [
+          {
+            "kind": "大运天干相冲",
+            "withPos": 2,
+            "strength": "strong",
+            "description": "大运天干丙冲日干壬：直接冲击日主，此运易有重大变动、健康/事业波动"
+          },
+          {
+            "kind": "大运地支六合",
+            "withPos": 0,
+            "hua": "金",
+            "strength": "weak",
+            "description": "大运地支辰与年支酉六合化金：合住该柱，金气暗增"
+          },
+          {
+            "kind": "大运反吟",
+            "withPos": 2,
+            "strength": "strong",
+            "description": "大运地支辰冲日支戌（反吟）：冲动配偶宫，此运婚姻易有大变动、迁移搬迁、健康波动；命理学谓\"反吟伏吟，泪流不止\""
+          }
+        ],
+        "fillsXunKong": [],
+        "keyLiuNian": [
+          {
+            "year": 2072,
+            "ganZhi": "壬辰",
+            "age": 80,
+            "eventType": "反吟",
+            "tendency": "inauspicious",
+            "description": "2072年壬辰冲日支戌：婚姻波动/搬迁出行/健康受冲，需主动求变以化冲"
+          },
+          {
+            "year": 2068,
+            "ganZhi": "戊子",
+            "age": 76,
+            "eventType": "填实空亡",
+            "tendency": "auspicious",
+            "description": "2068年戊子填实原局空亡（子）：原本虚位之神在此年实现，事业/感情/财运可有实质收获"
+          },
+          {
+            "year": 2069,
+            "ganZhi": "己丑",
+            "age": 77,
+            "eventType": "填实空亡",
+            "tendency": "auspicious",
+            "description": "2069年己丑填实原局空亡（丑）：原本虚位之神在此年实现，事业/感情/财运可有实质收获"
+          },
+          {
+            "year": 2071,
+            "ganZhi": "辛卯",
+            "age": 79,
+            "eventType": "流年合日支",
+            "tendency": "auspicious",
+            "description": "2071年辛卯合日支戌化火：感情/合作机缘明显，未婚者主婚配信号、已婚者主合作贵人"
+          },
+          {
+            "year": 2065,
+            "ganZhi": "乙酉",
+            "age": 73,
+            "eventType": "流年合大运",
+            "tendency": "inauspicious",
+            "description": "2065年乙酉与大运丙辰地支六合化金：流年与大运联动，忌神局成势，全年阻碍"
+          }
+        ],
+        "summary": "2063-2072 共 10 年（71-80虚岁） · 【用神运·★★★（中和）】 · ⚡ 冲日支（婚姻/健康/迁移波动） · 总体此运中和，平稳为主"
+      }
+    },
+    {
+      "index": 8,
+      "ganZhi": "乙卯",
+      "startAge": 81,
+      "startYear": 2073,
+      "endYear": 2082,
+      "shiShen": "伤官",
+      "brief": "伤官泄秀，才华显露之时",
+      "flowAnalysis": {
+        "wuxingRole": "喜神",
+        "score": 5,
+        "wuxing": "木",
+        "shiShenLabel": "伤官",
+        "relations": [
+          {
+            "kind": "大运地支六冲",
+            "withPos": 0,
+            "strength": "weak",
+            "description": "大运地支卯冲年支酉：冲击年柱之神，激活该位事件"
+          },
+          {
+            "kind": "大运地支半三合",
+            "withPos": 1,
+            "hua": "木",
+            "strength": "medium",
+            "description": "大运地支卯与月支亥半合木局：木气大增，影响命局力量平衡"
+          },
+          {
+            "kind": "大运地支六合",
+            "withPos": 2,
+            "hua": "火",
+            "strength": "strong",
+            "description": "大运地支卯与日支戌六合化火：合配偶宫，此运感情升温/婚姻信号显著（已婚者需防外遇桃花）"
+          },
+          {
+            "kind": "大运伏吟",
+            "withPos": 3,
+            "strength": "medium",
+            "description": "大运地支卯与时支卯伏吟：时柱之事重复出现"
+          }
+        ],
+        "fillsXunKong": [],
+        "keyLiuNian": [
+          {
+            "year": 2080,
+            "ganZhi": "庚子",
+            "age": 88,
+            "eventType": "填实空亡",
+            "tendency": "auspicious",
+            "description": "2080年庚子填实原局空亡（子）：原本虚位之神在此年实现，事业/感情/财运可有实质收获"
+          },
+          {
+            "year": 2081,
+            "ganZhi": "辛丑",
+            "age": 89,
+            "eventType": "填实空亡",
+            "tendency": "auspicious",
+            "description": "2081年辛丑填实原局空亡（丑）：原本虚位之神在此年实现，事业/感情/财运可有实质收获"
+          },
+          {
+            "year": 2078,
+            "ganZhi": "戊戌",
+            "age": 86,
+            "eventType": "流年合大运",
+            "tendency": "auspicious",
+            "description": "2078年戊戌与大运乙卯地支六合化火：流年与大运联动，用神局成势，全年顺遂"
+          },
+          {
+            "year": 2076,
+            "ganZhi": "丙申",
+            "age": 84,
+            "eventType": "忌神年",
+            "tendency": "inauspicious",
+            "description": "2076年丙申流年五行金为忌神：此年不顺，宜守不宜攻"
+          },
+          {
+            "year": 2077,
+            "ganZhi": "丁酉",
+            "age": 85,
+            "eventType": "忌神年",
+            "tendency": "inauspicious",
+            "description": "2077年丁酉流年五行金为忌神：此年不顺，宜守不宜攻"
+          }
+        ],
+        "summary": "2073-2082 共 10 年（81-90虚岁） · 【喜神运·★★★★★（黄金）】 · ♥ 合日支（感情/合作机缘） · ↻ 伏吟（旧事重提） · 总体此运吉，宜大胆进取"
+      }
+    }
+  ],
+  "startAge": "11 岁起运（精确为出生后 9 年 10 个月 0 天，即 2003-10-07 交脱）",
+  "qiYunDirection": "逆行",
+  "wuxingStats": [
+    {
+      "wuxing": "金",
+      "tianGanCount": 0,
+      "diZhiCount": 1,
+      "cangGanCount": 2,
+      "total": 1.6,
+      "percent": 15,
+      "originalTotal": 1.6,
+      "originalPercent": 16,
+      "adjustments": []
+    },
+    {
+      "wuxing": "木",
+      "tianGanCount": 0,
+      "diZhiCount": 1,
+      "cangGanCount": 2,
+      "total": 1.9,
+      "percent": 17,
+      "originalTotal": 1.6,
+      "originalPercent": 16,
+      "adjustments": [
+        {
+          "source": "地支半三合",
+          "description": "亥+卯生旺半合木局（隔位） → 木 +0.3",
+          "delta": 0.3,
+          "source_doc": "《命理分析方法论》§1.4.4 半三合"
+        }
+      ]
+    },
+    {
+      "wuxing": "水",
+      "tianGanCount": 4,
+      "diZhiCount": 1,
+      "cangGanCount": 1,
+      "total": 5.8,
+      "percent": 53,
+      "originalTotal": 5.8,
+      "originalPercent": 55,
+      "adjustments": []
+    },
+    {
+      "wuxing": "火",
+      "tianGanCount": 0,
+      "diZhiCount": 0,
+      "cangGanCount": 1,
+      "total": 0.7,
+      "percent": 6,
+      "originalTotal": 0.3,
+      "originalPercent": 3,
+      "adjustments": [
+        {
+          "source": "地支六合",
+          "description": "戌卯六合化火（紧贴强） → 火 +0.4",
+          "delta": 0.4,
+          "source_doc": "《命理分析方法论》§1.4.3 地支六合"
+        }
+      ]
+    },
+    {
+      "wuxing": "土",
+      "tianGanCount": 0,
+      "diZhiCount": 1,
+      "cangGanCount": 1,
+      "total": 1,
+      "percent": 9,
+      "originalTotal": 1,
+      "originalPercent": 10,
+      "adjustments": []
+    }
+  ],
+  "wangShuai": {
+    "steps": [
+      {
+        "step": "得令",
+        "title": "第一步：得令判断（月令权重最大）",
+        "details": [
+          "日主壬水，生于亥月（当令五行：水）",
+          "水在亥月处「旺」之地 → ✅ 得令"
+        ],
+        "result": "positive",
+        "score": 1
+      },
+      {
+        "step": "得地",
+        "title": "第二步：得地判断（地支藏干通根透印）",
+        "details": [
+          "年柱酉藏辛（正印/本气），生身有印",
+          "月柱亥藏壬（比肩/本气），同水通根",
+          "综合：✅ 得地（有根/有印）"
+        ],
+        "result": "positive",
+        "score": 1
+      },
+      {
+        "step": "得生",
+        "title": "第三步：得生/受克判断（天干助力 vs 克泄力）",
+        "details": [
+          "助力（3）：年柱干癸（劫财）助身；月柱干癸（劫财）助身；时柱干癸（劫财）助身",
+          "克泄（0）：天干无食伤财官",
+          "助力 3 ≥ 克泄 0 → ✅ 得生"
+        ],
+        "result": "positive",
+        "score": 1
+      },
+      {
+        "step": "综合",
+        "title": "综合判断（命理方法论 §3.1.1 投票表）",
+        "details": [
+          "得令✅ + 得地✅ + 得生✅",
+          "→ 投票结论：极旺"
+        ],
+        "result": "positive",
+        "score": 3
+      }
+    ],
+    "conclusion": "日主极旺（水势汪洋，易成专旺）",
+    "confidence": 5,
+    "convergence": {
+      "methods": [
+        "得令法（月令旺相）",
+        "得地法（地支通根透印）",
+        "得生法（天干助力 ≥ 克泄）"
+      ],
+      "conclusion": "日主水极旺",
+      "consumerNote": "\"水气极旺\"这个判断，是从月令、根气、天干三个独立角度都印证的，可信度最高。"
+    },
+    "relationAdjustment": {
+      "rawConclusion": "日主极旺（静态四步法判定）",
+      "items": [
+        {
+          "relation": "戌卯六合化火",
+          "effect": "克泄",
+          "strength": "中",
+          "description": "戌卯六合化火（中）→ 火气增 → 财星耗身（克泄）"
+        },
+        {
+          "relation": "亥+卯生旺半合木局",
+          "effect": "克泄",
+          "strength": "弱",
+          "description": "亥+卯生旺半合木局（弱）→ 木气增 → 食伤泄秀（克泄）"
+        }
+      ],
+      "changedConclusion": false,
+      "summary": "动态关系净效应为「克泄」（克泄力量 3 > 助身 0）：原局通过合化/三合等关系增强了对日主水的牵制，旺衰倾向于「极旺」减弱方向，但未足以改变档位，结论维持。"
+    }
+  },
+  "yongShen": {
+    "primary": [
+      "火",
+      "土"
+    ],
+    "secondary": [
+      "木"
+    ],
+    "ji": [
+      "水",
+      "金"
+    ],
+    "reason": "日主极旺。【扶抑】日主水偏旺，按文档优先级取木（食伤泄秀，最温和）→ 火（财星耗身）→ 土（官杀克身，最烈）抑之。【调候】水日主生冬季（亥月）：冬月水气泛滥成灾（《穷通宝鉴·论壬水》亥月壬水，专用戊土制水为堤防，配以丙火暖局），必取火暖局 + 土制水为堤防，缺火则寒水无情，取火、土调候。综合：主用神=火+土，次用神=木，忌神=水+金。",
+    "method": "调候",
+    "convergence": {
+      "methods": [
+        "扶抑法（旺则克泄、弱则扶生）",
+        "调候法（寒暖燥湿平衡）"
+      ],
+      "conclusion": "火+土为用神（水日主之喜）",
+      "consumerNote": "\"该多接触火+土\"这件事，是从2种不同的取用神思路都得出的结论——不是单一推断，请放心相信。"
+    }
+  },
+  "geJu": {
+    "name": "比劫格（从旺倾向）",
+    "type": "偏格",
+    "status": "半成",
+    "level": "中",
+    "description": "月令亥藏干透日干壬（比肩），日主水气53%极旺。按文档 §3.3.1 比劫不立正格之规，本可论「润下格」（水专旺），但木气混杂未成纯一方势，故归「比劫格（从旺倾向）」偏格。喜用神参见用神章节，忌再见生扶旺势之五行。若大运行食伤泄秀或财耗之地，格局可由「半成」转「成」。"
+  },
+  "shenShas": [
+    {
+      "name": "天乙贵人",
+      "category": "吉神",
+      "source": "时支卯（日干壬查天乙=卯或巳）",
+      "description": "逢难呈祥，逢凶化吉，主一生贵人扶持，多得长辈、上司、师长之助。"
+    },
+    {
+      "name": "禄神",
+      "category": "吉神",
+      "source": "月支见亥（日干壬查禄神=亥）",
+      "description": "主衣食无忧、自立之命，得禄位之助，事业有立足之地。"
+    },
+    {
+      "name": "华盖",
+      "category": "吉神",
+      "source": "日支见戌（日支戌属寅午戌组）",
+      "description": "主聪明孤高、有宗教艺术缘，利学术、玄学、艺术、独立钻研；忌孤僻寡合。"
+    },
+    {
+      "name": "将星",
+      "category": "吉神",
+      "source": "年支见酉（年支酉属巳酉丑组，将星=酉）",
+      "description": "主有领导才能、统御之气，得用则掌权、得贵气，多见于将相之命。"
+    },
+    {
+      "name": "驿马",
+      "category": "中性",
+      "source": "月支见亥（年支酉属巳酉丑组）",
+      "description": "主变动、迁移、出差、奔波，得用则远行获利，逢冲则颠沛流离。"
+    },
+    {
+      "name": "桃花（咸池）",
+      "category": "中性",
+      "source": "时支见卯（日支戌属寅午戌组）",
+      "description": "主异性缘、个人魅力、风流之气；得用主受异性帮扶，逢凶则因色生灾。"
+    },
+    {
+      "name": "魁罡",
+      "category": "中性",
+      "source": "日柱壬戌（魁罡四日：庚辰、庚戌、壬辰、壬戌）",
+      "description": "主性格刚毅、聪敏果决，男命掌权得位、女命独立强势，但易孤傲，需柔和处事。"
+    },
+    {
+      "name": "孤辰",
+      "category": "凶神",
+      "source": "月支见亥（年支酉查孤辰=亥）",
+      "description": "主男命孤独、婚姻迟缓、与亲族缘薄，需主动经营人际关系。"
+    },
+    {
+      "name": "阴阳差错",
+      "category": "凶神",
+      "source": "日柱壬戌（阴阳差错六日：壬戌、丁丑、丙子、丁未、辛卯、戊寅）",
+      "description": "主婚姻易有波折、与配偶亲族缘薄，需以平常心对待感情，重者影响家庭和睦。"
+    }
+  ],
+  "keyFindings": [
+    {
+      "level": "red",
+      "title": "日主极旺（水势汪洋，易成专旺），水势汪洋",
+      "description": "壬水生亥月得令，日主极旺（水势汪洋，易成专旺）。水气占全局53%，最忌再行金水之地。命运关键在于如何疏导和平衡这股水势。",
+      "convergence": {
+        "methods": [
+          "旺衰判定法：日主极旺（水势汪洋，易成专旺）（得令/得地/得生三步综合）",
+          "五行占比法：水占53%，远超均值20%",
+          "格局法：比劫格（从旺倾向），日主旺势构成格局基础",
+          "调候法：冬水当令，旺势更显"
+        ],
+        "conclusion": "4种独立方法皆指向\"日主极旺（水势汪洋，易成专旺）\"",
+        "consumerNote": "\"你的命格水气极旺\"这一判断，先生从4个完全不同的角度都看到了同样的结果。"
+      }
+    },
+    {
+      "level": "yellow",
+      "title": "冬水寒凝，缺火调候",
+      "description": "全局火气仅6%，冬水无火则寒。内心常感\"冷\"——情感不易升温、易陷入理性自省。需要主动寻找让自己\"暖\"的人和事。",
+      "convergence": {
+        "methods": [
+          "调候法：亥月冬令寒凝，必以火暖",
+          "五行占比法：火气仅6%，远低于均值20%",
+          "十神关联法：火对应水日主的财星，该十神力量薄弱"
+        ],
+        "conclusion": "3种独立方法皆指向\"必须主动补火\"",
+        "consumerNote": "\"你需要主动让自己温暖起来\"这件事，先生从多方面看，都是同一个建议。"
+      }
+    },
+    {
+      "level": "yellow",
+      "title": "比劫成群，财易破耗",
+      "description": "天干3个比劫夺财，命中财星（火）力薄。遇兄弟朋友合作易破财，建议财务独立、避免合伙、警惕\"为情/为义\"出资。",
+      "convergence": {
+        "methods": [
+          "比劫旺度法：天干3个比劫透出，比劫力量极强",
+          "财星弱度法：火（财星）仅6%，力薄受制",
+          "五行生克法：水多直接克火（财星），克力直接"
+        ],
+        "conclusion": "3种独立方法皆指向\"命中财星易被夺\"",
+        "consumerNote": "\"和朋友/合伙容易破财\"这一规律，从命中多个层面看都是吻合的，是命格特征而非偶然。"
+      }
+    },
+    {
+      "level": "yellow",
+      "title": "命带阴阳差错，需注意化解",
+      "description": "阴阳差错：主婚姻易有波折、与配偶亲族缘薄，需以平常心对待感情，重者影响家庭和睦。"
+    },
+    {
+      "level": "green",
+      "title": "木食伤泄秀，是命中天赋",
+      "description": "月柱亥藏甲（食神）、时柱卯藏乙（伤官）——主才华、表达、创造力。这是命里闪光的一笔，建议把\"输出表达\"作为人生主线。",
+      "convergence": {
+        "methods": [
+          "用神契合法：木（食伤）正合用神方向，泄秀为用",
+          "调候配合法：木能调和命局"
+        ],
+        "conclusion": "2种独立方法皆指向\"木食伤是核心天赋点\"",
+        "consumerNote": "\"你天生有才华、要靠表达吃饭\"这一点，是先生从多方面共同看到的天命。"
+      }
+    },
+    {
+      "level": "green",
+      "title": "命带天乙贵人、禄神、将星、魁罡",
+      "description": "天乙贵人（时支卯）；禄神（月支见亥）；将星（年支见酉）；魁罡（日柱壬戌）。天乙贵人主一生贵人扶持；将星主领导才能；魁罡主刚毅聪敏；禄神主衣食无忧。"
+    },
+    {
+      "level": "green",
+      "title": "2033年起进入正官大运",
+      "description": "41岁起入己未大运（正官），土正合用神方向。正官当令，事业贵气之运",
+      "convergence": {
+        "methods": [
+          "大运五行法：己未天干己属土，正合用神方向",
+          "十神契合法：正官临命，事业格局得正星，利权位"
+        ],
+        "conclusion": "2种独立方法皆指向\"2033年是重要运势转折\"",
+        "consumerNote": "\"41岁是重要转折点\"这个时间，是先生从大运五行、十神等方面共同看到的窗口期。"
+      }
+    }
+  ],
+  "commandFactors": {
+    "mainTheme": "壬水汪洋，亥月成势，专旺之局。调候缺火，寒湿为病。用神火土为药，运入东南则发。",
+    "topRisks": [
+      {
+        "source": "日主旺衰",
+        "polarity": "negative",
+        "weight": 90,
+        "title": "日主水极旺成势",
+        "detail": "日主水占比 53%，已成一方之势。命理学：\"强者宜抑、宜泄、宜制\"——人生主基调是\"如何驾驭过盛的自我能量\"，影响行业、城市、伴侣的所有选择。",
+        "actionableAdvice": "避免去北方城市发展，避免水产/物流/酒水/航运/旅游相关行业，配偶不宜冬天生的人。需要一辈子有意识地\"减法\"——少做、慢做、克制。"
+      },
+      {
+        "source": "关键发现",
+        "polarity": "negative",
+        "weight": 80,
+        "title": "日主极旺（水势汪洋，易成专旺），水势汪洋",
+        "detail": "壬水生亥月得令，日主极旺（水势汪洋，易成专旺）。水气占全局53%，最忌再行金水之地。命运关键在于如何疏导和平衡这股水势。",
+        "actionableAdvice": "这是引擎多维度共同识别出的命局隐患，需要长期意识 + 主动化解。详细参考\"日主极旺（水势汪洋，易成专旺），水势汪洋\"对应模块。"
+      },
+      {
+        "source": "用神调候缺位",
+        "polarity": "negative",
+        "weight": 75,
+        "title": "调候缺火（仅 6%）",
+        "detail": "命理学口径：\"调候用神优先级高于扶抑\"——原局调候用神火占比仅 6%，意味着寒暖燥湿失衡的核心矛盾贯穿一生。水日主生冬季（亥月）：冬月水气泛滥成灾（《穷通宝鉴·论壬水》亥月壬水，专用戊土制水为堤防，配以丙火暖局），必取火暖局 + 土制水为堤防，缺火则寒水无情，取火、土调候",
+        "actionableAdvice": "居住宜南方城市（火旺地）；居所采光好、装修暖色调、配偶宜夏天生；事业方向可往能源/餐饮/影视/广告靠拢。这是一辈子需要主动追求的\"补缺\"动作。"
+      }
+    ],
+    "topAdvantages": [
+      {
+        "source": "大运用神段",
+        "polarity": "positive",
+        "weight": 80,
+        "title": "41-90岁用神大运50年",
+        "detail": "连续 50 年（共 5 步大运）走用神/喜神运，是命中最重要的人生黄金期。命理学：\"用神得运，富贵可期\"。",
+        "actionableAdvice": "这段时间是事业起飞、财富积累、关系建立的关键窗口期，应主动出击、加大投入、扩张资源。错过这段窗口，黄金期不再。"
+      },
+      {
+        "source": "关键发现",
+        "polarity": "positive",
+        "weight": 50,
+        "title": "木食伤泄秀，是命中天赋",
+        "detail": "月柱亥藏甲（食神）、时柱卯藏乙（伤官）——主才华、表达、创造力。这是命里闪光的一笔，建议把\"输出表达\"作为人生主线。",
+        "actionableAdvice": "这是引擎多维度共同识别出的命局优势，应该有意识地放大、强化、利用。"
+      },
+      {
+        "source": "关键发现",
+        "polarity": "positive",
+        "weight": 50,
+        "title": "2033年起进入正官大运",
+        "detail": "41岁起入己未大运（正官），土正合用神方向。正官当令，事业贵气之运",
+        "actionableAdvice": "这是引擎多维度共同识别出的命局优势，应该有意识地放大、强化、利用。"
+      }
+    ],
+    "allFactors": [
+      {
+        "source": "日主旺衰",
+        "polarity": "negative",
+        "weight": 90,
+        "title": "日主水极旺成势",
+        "detail": "日主水占比 53%，已成一方之势。命理学：\"强者宜抑、宜泄、宜制\"——人生主基调是\"如何驾驭过盛的自我能量\"，影响行业、城市、伴侣的所有选择。",
+        "actionableAdvice": "避免去北方城市发展，避免水产/物流/酒水/航运/旅游相关行业，配偶不宜冬天生的人。需要一辈子有意识地\"减法\"——少做、慢做、克制。"
+      },
+      {
+        "source": "大运用神段",
+        "polarity": "positive",
+        "weight": 80,
+        "title": "41-90岁用神大运50年",
+        "detail": "连续 50 年（共 5 步大运）走用神/喜神运，是命中最重要的人生黄金期。命理学：\"用神得运，富贵可期\"。",
+        "actionableAdvice": "这段时间是事业起飞、财富积累、关系建立的关键窗口期，应主动出击、加大投入、扩张资源。错过这段窗口，黄金期不再。"
+      },
+      {
+        "source": "关键发现",
+        "polarity": "negative",
+        "weight": 80,
+        "title": "日主极旺（水势汪洋，易成专旺），水势汪洋",
+        "detail": "壬水生亥月得令，日主极旺（水势汪洋，易成专旺）。水气占全局53%，最忌再行金水之地。命运关键在于如何疏导和平衡这股水势。",
+        "actionableAdvice": "这是引擎多维度共同识别出的命局隐患，需要长期意识 + 主动化解。详细参考\"日主极旺（水势汪洋，易成专旺），水势汪洋\"对应模块。"
+      },
+      {
+        "source": "用神调候缺位",
+        "polarity": "negative",
+        "weight": 75,
+        "title": "调候缺火（仅 6%）",
+        "detail": "命理学口径：\"调候用神优先级高于扶抑\"——原局调候用神火占比仅 6%，意味着寒暖燥湿失衡的核心矛盾贯穿一生。水日主生冬季（亥月）：冬月水气泛滥成灾（《穷通宝鉴·论壬水》亥月壬水，专用戊土制水为堤防，配以丙火暖局），必取火暖局 + 土制水为堤防，缺火则寒水无情，取火、土调候",
+        "actionableAdvice": "居住宜南方城市（火旺地）；居所采光好、装修暖色调、配偶宜夏天生；事业方向可往能源/餐饮/影视/广告靠拢。这是一辈子需要主动追求的\"补缺\"动作。"
+      },
+      {
+        "source": "大运用神段",
+        "polarity": "negative",
+        "weight": 75,
+        "title": "11-40岁忌神大运30年",
+        "detail": "连续 30 年（共 3 步大运）走忌神运，是命中最需要谨慎的\"守业期\"。命理学：\"忌神当道，守为上策\"。",
+        "actionableAdvice": "这段时间不要轻易扩张、投资、跳槽、创业。\"以静制动、以守代攻\"。重大决策推迟到下一段用神运再做。"
+      },
+      {
+        "source": "关键发现",
+        "polarity": "negative",
+        "weight": 60,
+        "title": "冬水寒凝，缺火调候",
+        "detail": "全局火气仅6%，冬水无火则寒。内心常感\"冷\"——情感不易升温、易陷入理性自省。需要主动寻找让自己\"暖\"的人和事。",
+        "actionableAdvice": "这是引擎多维度共同识别出的命局隐患，需要长期意识 + 主动化解。详细参考\"冬水寒凝，缺火调候\"对应模块。"
+      },
+      {
+        "source": "关键发现",
+        "polarity": "negative",
+        "weight": 60,
+        "title": "比劫成群，财易破耗",
+        "detail": "天干3个比劫夺财，命中财星（火）力薄。遇兄弟朋友合作易破财，建议财务独立、避免合伙、警惕\"为情/为义\"出资。",
+        "actionableAdvice": "这是引擎多维度共同识别出的命局隐患，需要长期意识 + 主动化解。详细参考\"比劫成群，财易破耗\"对应模块。"
+      },
+      {
+        "source": "关键发现",
+        "polarity": "negative",
+        "weight": 50,
+        "title": "命带阴阳差错，需注意化解",
+        "detail": "阴阳差错：主婚姻易有波折、与配偶亲族缘薄，需以平常心对待感情，重者影响家庭和睦。",
+        "actionableAdvice": "这是引擎多维度共同识别出的命局隐患，需要长期意识 + 主动化解。详细参考\"命带阴阳差错，需注意化解\"对应模块。"
+      },
+      {
+        "source": "关键发现",
+        "polarity": "positive",
+        "weight": 50,
+        "title": "木食伤泄秀，是命中天赋",
+        "detail": "月柱亥藏甲（食神）、时柱卯藏乙（伤官）——主才华、表达、创造力。这是命里闪光的一笔，建议把\"输出表达\"作为人生主线。",
+        "actionableAdvice": "这是引擎多维度共同识别出的命局优势，应该有意识地放大、强化、利用。"
+      },
+      {
+        "source": "关键发现",
+        "polarity": "positive",
+        "weight": 50,
+        "title": "2033年起进入正官大运",
+        "detail": "41岁起入己未大运（正官），土正合用神方向。正官当令，事业贵气之运",
+        "actionableAdvice": "这是引擎多维度共同识别出的命局优势，应该有意识地放大、强化、利用。"
+      },
+      {
+        "source": "关键发现",
+        "polarity": "positive",
+        "weight": 40,
+        "title": "命带天乙贵人、禄神、将星、魁罡",
+        "detail": "天乙贵人（时支卯）；禄神（月支见亥）；将星（年支见酉）；魁罡（日柱壬戌）。天乙贵人主一生贵人扶持；将星主领导才能；魁罡主刚毅聪敏；禄神主衣食无忧。",
+        "actionableAdvice": "这是引擎多维度共同识别出的命局优势，应该有意识地放大、强化、利用。"
+      }
+    ],
+    "llmNarrative": "命局壬水生于亥月，水势滔天，日主极旺，有从旺之象。然冬水寒凝，调候为急，原局仅一戌中藏丁，火弱土虚，寒湿之气弥漫全局。此命之要，在于以火暖局、以土制水，方能激发生机。月时木气泄秀，食伤透清，主聪明才辩，艺术或技术天赋过人，然木浮于水，若无火引，终是虚花。\n\n运途之机，中年方显。41岁后入己未、戊午大运，火土齐来，正官正印用神得力，如寒谷逢春，事业贵气蒸腾。此前早运金水，难免志大难伸，宜潜心蓄力，待时而动。晚年丁巳、丙辰运，火土更炽，可成一方之业。\n\n一生大忌再行金水，若遇申酉亥子，恐水势泛濫，反成灾咎。宜择南方火地，从事能源、文化、传媒等火土属性行业。以才华输出为舟，以火土为舵，方能驾驭汪洋之势，化暴戾为祥和。"
+  },
+  "persona": {
+    "oneLiner": "江海奔流之性，才华横溢之士。一生需借火土之力，以成其功。",
+    "baseTone": {
+      "dimension": "旺衰基底",
+      "tag": "专旺刚强",
+      "description": "日主极旺（水势汪洋，易成专旺）。日主一气独旺，自我意志极强、独立性高，宜顺其势而非逆之；忌他人压制，易刚愎自用。",
+      "source": "《滴天髓·论旺衰》《子平真诠·论用神成败》"
+    },
+    "innerNature": {
+      "dimension": "日主气质",
+      "tag": "壬水 · 江河汪洋",
+      "description": "日主壬水如江河汪洋：智慧奔放、胸怀宽广，喜变化、不羁；过旺则桀骜难驯、漂泊不定。（主智，性聪，喜变通）",
+      "source": "《滴天髓·论十干》"
+    },
+    "lifeTheme": {
+      "dimension": "用神主旋律",
+      "tag": "用火、土、木·忌水、金",
+      "description": "一生需借火、土、木之气化解命局失衡（取用法：调候）。主开运方向 → 方位南方、色调红紫、行业能源/电子/餐饮/传媒。需规避过度的水、金之气与对应人事环境。",
+      "source": "《子平真诠·论用神配合》"
+    },
+    "socialRole": {
+      "dimension": "社会角色",
+      "tag": "比劫格（从旺倾向）",
+      "description": "月令亥藏干透日干壬（比肩），日主水气53%极旺。按文档 §3.3.1 比劫不立正格之规，本可论「润下格」（水专旺），但木气混杂未成纯一方势，故归「比劫格（从旺倾向）」偏格。喜用神参见用神章节，忌再见生扶旺势之五行。若大运行食伤泄秀或财耗之地，格局可由「半成」转「成」。",
+      "source": "《子平真诠·论八格》"
+    },
+    "mentality": [
+      {
+        "dimension": "十神心性",
+        "tag": "比劫旺·朋友易聚易散",
+        "description": "命中比劫偏旺（合计 3.5 位）：自立有主见、朋友圈活跃；但易争财、合伙宜慎，财运起伏。",
+        "source": "《三命通会·比肩劫财篇》《滴天髓·论比劫》"
+      },
+      {
+        "dimension": "十神组合",
+        "tag": "比劫成势",
+        "description": "日主水行得月令亥（水），且天干比劫多透：兄弟朋友众多、自立性极强；财星易被劫，宜走食伤泄秀路线。",
+        "source": "《滴天髓·论比劫》"
+      },
+      {
+        "dimension": "显象·内蕴",
+        "tag": "内蕴☆比肩（自我意识）",
+        "description": "「比肩」内蕴·实质：未透天干但藏月支本气，是命主内心的真实诉求和潜在能力，外人不易察觉",
+        "source": "《子平真诠·论藏干》\"藏支本气，主内之诉求\""
+      },
+      {
+        "dimension": "显象·内蕴",
+        "tag": "内蕴☆伤官（锋芒才华）",
+        "description": "「伤官」内蕴·实质：未透天干但藏时支本气，是命主内心的真实诉求和潜在能力，外人不易察觉",
+        "source": "《子平真诠·论藏干》\"藏支本气，主内之诉求\""
+      },
+      {
+        "dimension": "显象·虚位",
+        "tag": "虚位△劫财（冒险冲劲）",
+        "description": "「劫财」外显·虚位：天干透出（年、月、时柱）但地支无根，看似有此特质但实际虚浮，易\"心有余而力不足\"",
+        "source": "《滴天髓·论无根》\"透干无根，假神也\""
+      }
+    ],
+    "highlights": [
+      {
+        "dimension": "神煞亮点",
+        "tag": "★ 天乙贵人",
+        "description": "天乙贵人（时支卯（日干壬查天乙=卯或巳））：逢难呈祥，逢凶化吉，主一生贵人扶持，多得长辈、上司、师长之助。",
+        "source": "《三命通会·神煞篇》"
+      },
+      {
+        "dimension": "神煞亮点",
+        "tag": "★ 将星",
+        "description": "将星（年支见酉（年支酉属巳酉丑组，将星=酉））：主有领导才能、统御之气，得用则掌权、得贵气，多见于将相之命。",
+        "source": "《三命通会·神煞篇》"
+      },
+      {
+        "dimension": "神煞亮点",
+        "tag": "· 魁罡",
+        "description": "魁罡（日柱壬戌（魁罡四日：庚辰、庚戌、壬辰、壬戌））：主性格刚毅、聪敏果决，男命掌权得位、女命独立强势，但易孤傲，需柔和处事。",
+        "source": "《三命通会·神煞篇》"
+      },
+      {
+        "dimension": "神煞亮点",
+        "tag": "★ 禄神",
+        "description": "禄神（月支见亥（日干壬查禄神=亥））：主衣食无忧、自立之命，得禄位之助，事业有立足之地。",
+        "source": "《三命通会·神煞篇》"
+      }
+    ],
+    "strengths": [
+      "江河汪洋之气旺：执行力强、能独当一面",
+      "天乙贵人在命：逢凶化吉、贵人多助",
+      "将星临身：有领导力与威望",
+      "用神为火：行能源/电子/餐饮/传媒方向得心应手"
+    ],
+    "cautions": [
+      "江河汪洋过旺：易刚愎自用、独断独行，需学会倾听与放权",
+      "比劫成势：财来财去难积累，合伙易破财，宜独立掌财、量入为出",
+      "阴阳差错：婚姻易曲折，宜晚婚或异地"
+    ],
+    "keywords": [
+      "专旺刚强",
+      "江河汪洋",
+      "比劫格",
+      "比劫旺",
+      "比劫成势",
+      "内蕴☆比肩（自我意识）",
+      "内蕴☆伤官（锋芒才华）",
+      "虚位△劫财（冒险冲劲）",
+      "天乙贵人",
+      "将星"
+    ],
+    "confidence": 5,
+    "convergence": {
+      "methods": [
+        "旺衰法：日主偏旺，宜泄宜耗",
+        "用神法：取火、土（克身）"
+      ],
+      "conclusion": "日主偏旺以泄/克为用，三法共指，命格主线清晰",
+      "consumerNote": "从多个角度看，您命格的主线是高度一致的，这意味着您的天赋方向非常明确。"
+    }
+  },
+  "relations": {
+    "ganHeHua": [],
+    "ganChong": [],
+    "zhiSanHui": [],
+    "zhiSanHe": [
+      {
+        "type": "地支半三合",
+        "members": [
+          {
+            "zhi": "亥",
+            "pos": 1
+          },
+          {
+            "zhi": "卯",
+            "pos": 3
+          }
+        ],
+        "hua": "木",
+        "banType": "生旺",
+        "strength": "weak",
+        "description": "月支亥+时支卯生旺半合木（隔一柱）：木气弱增"
+      }
+    ],
+    "zhiLiuHe": [
+      {
+        "type": "地支六合",
+        "zhiA": "戌",
+        "posA": 2,
+        "zhiB": "卯",
+        "posB": 3,
+        "hua": "火",
+        "distance": "adjacent",
+        "strength": "strong",
+        "description": "日支戌与时支卯六合化火（紧贴，作用力强）：主合好、暗藏火气"
+      }
+    ],
+    "zhiChong": [
+      {
+        "type": "地支六冲",
+        "zhiA": "酉",
+        "posA": 0,
+        "zhiB": "卯",
+        "posB": 3,
+        "distance": "far-apart",
+        "strength": "weak",
+        "resolvedByHe": false,
+        "description": "年支酉↔时支卯相冲（隔两柱，作用力弱）：门户之冲，主婚姻、出入变动"
+      }
+    ],
+    "zhiXing": [],
+    "zhengHeOrDuHe": [],
+    "anHe": [],
+    "xunKong": {
+      "xunName": "甲寅旬",
+      "emptyZhi": [
+        "子",
+        "丑"
+      ],
+      "hitPositions": [],
+      "description": "日柱壬戌属甲寅旬，旬空在「子、丑」二支，命中四柱无该二支，全盘不犯空亡，根基稳固"
+    },
+    "manifestation": [
+      {
+        "shiShen": "比肩",
+        "level": "hidden-strong",
+        "ganPositions": [],
+        "cangPositions": [
+          {
+            "pos": 1,
+            "type": "本气"
+          }
+        ],
+        "inXunKong": false,
+        "description": "「比肩」内蕴·实质：未透天干但藏月支本气，是命主内心的真实诉求和潜在能力，外人不易察觉"
+      },
+      {
+        "shiShen": "劫财",
+        "level": "manifest-weak",
+        "ganPositions": [
+          0,
+          1,
+          3
+        ],
+        "cangPositions": [],
+        "inXunKong": false,
+        "description": "「劫财」外显·虚位：天干透出（年、月、时柱）但地支无根，看似有此特质但实际虚浮，易\"心有余而力不足\""
+      },
+      {
+        "shiShen": "食神",
+        "level": "hidden-weak",
+        "ganPositions": [],
+        "cangPositions": [
+          {
+            "pos": 1,
+            "type": "中气"
+          }
+        ],
+        "inXunKong": false,
+        "description": "「食神」内蕴·潜藏：仅在地支中余气出现，影响微弱，多体现在心理层面而非外在行为"
+      },
+      {
+        "shiShen": "伤官",
+        "level": "hidden-strong",
+        "ganPositions": [],
+        "cangPositions": [
+          {
+            "pos": 3,
+            "type": "本气"
+          }
+        ],
+        "inXunKong": false,
+        "description": "「伤官」内蕴·实质：未透天干但藏时支本气，是命主内心的真实诉求和潜在能力，外人不易察觉"
+      },
+      {
+        "shiShen": "正财",
+        "level": "hidden-weak",
+        "ganPositions": [],
+        "cangPositions": [
+          {
+            "pos": 2,
+            "type": "余气"
+          }
+        ],
+        "inXunKong": false,
+        "description": "「正财」内蕴·潜藏：仅在地支中余气出现，影响微弱，多体现在心理层面而非外在行为"
+      },
+      {
+        "shiShen": "七杀",
+        "level": "hidden-strong",
+        "ganPositions": [],
+        "cangPositions": [
+          {
+            "pos": 2,
+            "type": "本气"
+          }
+        ],
+        "inXunKong": false,
+        "description": "「七杀」内蕴·实质：未透天干但藏日支本气，是命主内心的真实诉求和潜在能力，外人不易察觉"
+      },
+      {
+        "shiShen": "正印",
+        "level": "hidden-strong",
+        "ganPositions": [],
+        "cangPositions": [
+          {
+            "pos": 0,
+            "type": "本气"
+          },
+          {
+            "pos": 2,
+            "type": "中气"
+          }
+        ],
+        "inXunKong": false,
+        "description": "「正印」内蕴·实质：未透天干但藏年支本气，是命主内心的真实诉求和潜在能力，外人不易察觉"
+      }
+    ],
+    "keyThemes": [
+      {
+        "title": "戌卯六合化火",
+        "description": "日支戌与时支卯六合化火（紧贴，作用力强）：主合好、暗藏火气",
+        "weight": "medium",
+        "source": "《命理分析方法论》§1.4.3"
+      },
+      {
+        "title": "木局半合",
+        "description": "月支亥+时支卯生旺半合木（隔一柱）：木气弱增",
+        "weight": "medium",
+        "source": "《命理分析方法论》§1.4.4"
+      }
+    ]
+  },
+  "lifeTimeline": {
+    "segments": [
+      {
+        "daYunIndex": 1,
+        "ageRange": [
+          11,
+          20
+        ],
+        "yearRange": [
+          2003,
+          2012
+        ],
+        "daYunGanZhi": "壬戌",
+        "wuxingRole": "忌神",
+        "score": 2,
+        "headline": "壬戌 · 忌神运 · 评分 2/5 · ↻ 伏吟旧事·需防 10 年",
+        "keyEvents": [
+          "↻大运伏吟：自身伏吟，命主此运多有\"重复旧事/旧痛复发/老问题再现\"之象"
+        ],
+        "topLiuNian": [
+          {
+            "year": 2012,
+            "ganZhi": "壬辰",
+            "age": 20,
+            "eventType": "反吟",
+            "tendency": "inauspicious",
+            "description": "2012年壬辰冲日支戌：婚姻波动/搬迁出行/健康受冲，需主动求变以化冲"
+          },
+          {
+            "year": 2008,
+            "ganZhi": "戊子",
+            "age": 16,
+            "eventType": "填实空亡",
+            "tendency": "auspicious",
+            "description": "2008年戊子填实原局空亡（子）：原本虚位之神在此年实现，事业/感情/财运可有实质收获"
+          },
+          {
+            "year": 2009,
+            "ganZhi": "己丑",
+            "age": 17,
+            "eventType": "填实空亡",
+            "tendency": "auspicious",
+            "description": "2009年己丑填实原局空亡（丑）：原本虚位之神在此年实现，事业/感情/财运可有实质收获"
+          }
+        ]
+      },
+      {
+        "daYunIndex": 2,
+        "ageRange": [
+          21,
+          30
+        ],
+        "yearRange": [
+          2013,
+          2022
+        ],
+        "daYunGanZhi": "辛酉",
+        "wuxingRole": "忌神",
+        "score": 1,
+        "headline": "辛酉 · 忌神运 · 评分 1/5 · ↻ 伏吟旧事·需防 10 年",
+        "keyEvents": [],
+        "topLiuNian": [
+          {
+            "year": 2020,
+            "ganZhi": "庚子",
+            "age": 28,
+            "eventType": "填实空亡",
+            "tendency": "auspicious",
+            "description": "2020年庚子填实原局空亡（子）：原本虚位之神在此年实现，事业/感情/财运可有实质收获"
+          },
+          {
+            "year": 2021,
+            "ganZhi": "辛丑",
+            "age": 29,
+            "eventType": "填实空亡",
+            "tendency": "auspicious",
+            "description": "2021年辛丑填实原局空亡（丑）：原本虚位之神在此年实现，事业/感情/财运可有实质收获"
+          },
+          {
+            "year": 2016,
+            "ganZhi": "丙申",
+            "age": 24,
+            "eventType": "忌神年",
+            "tendency": "inauspicious",
+            "description": "2016年丙申流年五行金为忌神：此年不顺，宜守不宜攻"
+          }
+        ]
+      },
+      {
+        "daYunIndex": 3,
+        "ageRange": [
+          31,
+          40
+        ],
+        "yearRange": [
+          2023,
+          2032
+        ],
+        "daYunGanZhi": "庚申",
+        "wuxingRole": "忌神",
+        "score": 1,
+        "headline": "庚申 · 忌神运 · 评分 1/5 · 需防 10 年",
+        "keyEvents": [],
+        "topLiuNian": [
+          {
+            "year": 2024,
+            "ganZhi": "甲辰",
+            "age": 32,
+            "eventType": "反吟",
+            "tendency": "inauspicious",
+            "description": "2024年甲辰冲日支戌：婚姻波动/搬迁出行/健康受冲，需主动求变以化冲"
+          },
+          {
+            "year": 2032,
+            "ganZhi": "壬子",
+            "age": 40,
+            "eventType": "填实空亡",
+            "tendency": "auspicious",
+            "description": "2032年壬子填实原局空亡（子）：原本虚位之神在此年实现，事业/感情/财运可有实质收获"
+          },
+          {
+            "year": 2023,
+            "ganZhi": "癸卯",
+            "age": 31,
+            "eventType": "流年合日支",
+            "tendency": "auspicious",
+            "description": "2023年癸卯合日支戌化火：感情/合作机缘明显，未婚者主婚配信号、已婚者主合作贵人"
+          }
+        ]
+      },
+      {
+        "daYunIndex": 4,
+        "ageRange": [
+          41,
+          50
+        ],
+        "yearRange": [
+          2033,
+          2042
+        ],
+        "daYunGanZhi": "己未",
+        "wuxingRole": "用神",
+        "score": 4,
+        "headline": "己未 · 用神运 · 评分 4/5 · ⊕ 局势成型·黄金 10 年",
+        "keyEvents": [
+          "⊕大运地支三合：此运木气压倒全盘，命局格局可能临时改变",
+          "⊕大运地支三合：此运木气压倒全盘，命局格局可能临时改变",
+          "⊕大运地支三合：此运木气压倒全盘，命局格局可能临时改变"
+        ],
+        "topLiuNian": [
+          {
+            "year": 2039,
+            "ganZhi": "己未",
+            "age": 47,
+            "eventType": "岁运并临",
+            "tendency": "inauspicious",
+            "description": "2039年己未岁运并临：流年与大运完全相同，吉凶倍增（如本运为忌神运则祸事尤烈），命理学列为高危年"
+          },
+          {
+            "year": 2042,
+            "ganZhi": "壬戌",
+            "age": 50,
+            "eventType": "伏吟",
+            "tendency": "inauspicious",
+            "description": "2042年壬戌伏吟日柱：自身重大变动、旧事重提、健康复发，命理\"伏吟泪不干\""
+          },
+          {
+            "year": 2036,
+            "ganZhi": "丙辰",
+            "age": 44,
+            "eventType": "反吟",
+            "tendency": "inauspicious",
+            "description": "2036年丙辰冲日支戌：婚姻波动/搬迁出行/健康受冲，需主动求变以化冲"
+          }
+        ]
+      },
+      {
+        "daYunIndex": 5,
+        "ageRange": [
+          51,
+          60
+        ],
+        "yearRange": [
+          2043,
+          2052
+        ],
+        "daYunGanZhi": "戊午",
+        "wuxingRole": "用神",
+        "score": 5,
+        "headline": "戊午 · 用神运 · 评分 5/5 · 黄金 10 年",
+        "keyEvents": [
+          "◐大运地支半三合：火气大增，影响命局力量平衡"
+        ],
+        "topLiuNian": [
+          {
+            "year": 2048,
+            "ganZhi": "戊辰",
+            "age": 56,
+            "eventType": "反吟",
+            "tendency": "inauspicious",
+            "description": "2048年戊辰冲日支戌：婚姻波动/搬迁出行/健康受冲，需主动求变以化冲"
+          },
+          {
+            "year": 2044,
+            "ganZhi": "甲子",
+            "age": 52,
+            "eventType": "填实空亡",
+            "tendency": "auspicious",
+            "description": "2044年甲子填实原局空亡（子）：原本虚位之神在此年实现，事业/感情/财运可有实质收获"
+          },
+          {
+            "year": 2045,
+            "ganZhi": "乙丑",
+            "age": 53,
+            "eventType": "填实空亡",
+            "tendency": "auspicious",
+            "description": "2045年乙丑填实原局空亡（丑）：原本虚位之神在此年实现，事业/感情/财运可有实质收获"
+          }
+        ]
+      },
+      {
+        "daYunIndex": 6,
+        "ageRange": [
+          61,
+          70
+        ],
+        "yearRange": [
+          2053,
+          2062
+        ],
+        "daYunGanZhi": "丁巳",
+        "wuxingRole": "用神",
+        "score": 4,
+        "headline": "丁巳 · 用神运 · 评分 4/5 · ⊕ 局势成型·黄金 10 年",
+        "keyEvents": [
+          "⊕大运合化：日主此运临时改性为木，整个十年的人生气质和事业方向发生根本转向"
+        ],
+        "topLiuNian": [
+          {
+            "year": 2060,
+            "ganZhi": "庚辰",
+            "age": 68,
+            "eventType": "反吟",
+            "tendency": "inauspicious",
+            "description": "2060年庚辰冲日支戌：婚姻波动/搬迁出行/健康受冲，需主动求变以化冲"
+          },
+          {
+            "year": 2056,
+            "ganZhi": "丙子",
+            "age": 64,
+            "eventType": "填实空亡",
+            "tendency": "auspicious",
+            "description": "2056年丙子填实原局空亡（子）：原本虚位之神在此年实现，事业/感情/财运可有实质收获"
+          },
+          {
+            "year": 2057,
+            "ganZhi": "丁丑",
+            "age": 65,
+            "eventType": "填实空亡",
+            "tendency": "auspicious",
+            "description": "2057年丁丑填实原局空亡（丑）：原本虚位之神在此年实现，事业/感情/财运可有实质收获"
+          }
+        ]
+      },
+      {
+        "daYunIndex": 7,
+        "ageRange": [
+          71,
+          80
+        ],
+        "yearRange": [
+          2063,
+          2072
+        ],
+        "daYunGanZhi": "丙辰",
+        "wuxingRole": "用神",
+        "score": 3,
+        "headline": "丙辰 · 用神运 · 评分 3/5 · ⚡ 反吟冲日·黄金 10 年",
+        "keyEvents": [
+          "⚔大运天干相冲：直接冲击日主，此运易有重大变动、健康/事业波动",
+          "⚡大运反吟：冲动配偶宫，此运婚姻易有大变动、迁移搬迁、健康波动；命理学谓\"反吟伏吟，泪流不止\""
+        ],
+        "topLiuNian": [
+          {
+            "year": 2072,
+            "ganZhi": "壬辰",
+            "age": 80,
+            "eventType": "反吟",
+            "tendency": "inauspicious",
+            "description": "2072年壬辰冲日支戌：婚姻波动/搬迁出行/健康受冲，需主动求变以化冲"
+          },
+          {
+            "year": 2068,
+            "ganZhi": "戊子",
+            "age": 76,
+            "eventType": "填实空亡",
+            "tendency": "auspicious",
+            "description": "2068年戊子填实原局空亡（子）：原本虚位之神在此年实现，事业/感情/财运可有实质收获"
+          },
+          {
+            "year": 2069,
+            "ganZhi": "己丑",
+            "age": 77,
+            "eventType": "填实空亡",
+            "tendency": "auspicious",
+            "description": "2069年己丑填实原局空亡（丑）：原本虚位之神在此年实现，事业/感情/财运可有实质收获"
+          }
+        ]
+      },
+      {
+        "daYunIndex": 8,
+        "ageRange": [
+          81,
+          90
+        ],
+        "yearRange": [
+          2073,
+          2082
+        ],
+        "daYunGanZhi": "乙卯",
+        "wuxingRole": "喜神",
+        "score": 5,
+        "headline": "乙卯 · 喜神运 · 评分 5/5 · ↻ 伏吟旧事·吉运 10 年",
+        "keyEvents": [
+          "♥大运地支六合：合配偶宫，此运感情升温/婚姻信号显著（已婚者需防外遇桃花）"
+        ],
+        "topLiuNian": [
+          {
+            "year": 2080,
+            "ganZhi": "庚子",
+            "age": 88,
+            "eventType": "填实空亡",
+            "tendency": "auspicious",
+            "description": "2080年庚子填实原局空亡（子）：原本虚位之神在此年实现，事业/感情/财运可有实质收获"
+          },
+          {
+            "year": 2081,
+            "ganZhi": "辛丑",
+            "age": 89,
+            "eventType": "填实空亡",
+            "tendency": "auspicious",
+            "description": "2081年辛丑填实原局空亡（丑）：原本虚位之神在此年实现，事业/感情/财运可有实质收获"
+          },
+          {
+            "year": 2078,
+            "ganZhi": "戊戌",
+            "age": 86,
+            "eventType": "流年合大运",
+            "tendency": "auspicious",
+            "description": "2078年戊戌与大运乙卯地支六合化火：流年与大运联动，用神局成势，全年顺遂"
+          }
+        ]
+      }
+    ],
+    "summary": "人生黄金期：41-50虚岁（己未用神运）、51-60虚岁（戊午用神运）、61-70虚岁（丁巳用神运）、81-90虚岁（乙卯喜神运）（用神/喜神到位，大胆进取）；需谨慎期：11-20虚岁（壬戌忌神运）、21-30虚岁（辛酉忌神运）、31-40虚岁（庚申忌神运）（忌神当令，守为上策）。",
+    "goldenPeriods": [
+      4,
+      5,
+      6,
+      8
+    ],
+    "cautionPeriods": [
+      1,
+      2,
+      3
+    ]
+  },
+  "marriage": {
+    "gender": "男",
+    "spouseStar": {
+      "primaryStar": "正财",
+      "secondaryStar": "偏财",
+      "primaryLevel": "hidden-weak",
+      "secondaryLevel": "absent",
+      "bothManifest": false,
+      "mixedMarriage": false,
+      "starWuXing": "火",
+      "starBeingHe": false,
+      "starBeingChong": false,
+      "description": "正财仅藏中余气，配偶缘分浅薄、易迟婚"
+    },
+    "spousePalace": {
+      "dayZhi": "戌",
+      "benQiShiShen": "七杀",
+      "allShiShen": [
+        "七杀",
+        "正印",
+        "正财"
+      ],
+      "selfSeated": true,
+      "heRelations": [
+        "戌与卯六合化火"
+      ],
+      "chongRelations": [],
+      "xingRelations": [],
+      "anHeRelations": [],
+      "inXunKong": false,
+      "description": "配偶宫坐戌（藏七杀/正印/正财）：配偶有威严、果敢强势，相处需互让；自坐正财，配偶就在你身边、关系紧密；戌与卯六合化火，配偶宫被合（重感情/有第三方介入信号）"
+    },
+    "peachBlossom": {
+      "hasTaoHua": true,
+      "taoHuaPositions": [
+        3
+      ],
+      "taoHuaType": "墙外桃花",
+      "hasHongYan": false,
+      "hongYanPositions": [],
+      "hasTianXi": false,
+      "tianXiPositions": [],
+      "description": "命带墙外桃花（午、卯），异性缘旺"
+    },
+    "qualityScore": 4,
+    "qualityLabel": "良好",
+    "events": [
+      {
+        "year": 2011,
+        "ganZhi": "辛卯",
+        "age": 19,
+        "inDaYunIndex": 1,
+        "inDaYunGanZhi": "壬戌",
+        "eventType": "流年合日支",
+        "strength": "strong",
+        "tendency": "auspicious",
+        "description": "2011年辛卯合日支戌（19岁），当年婚动最强信号：易遇正缘/订婚/结婚"
+      },
+      {
+        "year": 2023,
+        "ganZhi": "癸卯",
+        "age": 31,
+        "inDaYunIndex": 3,
+        "inDaYunGanZhi": "庚申",
+        "eventType": "流年合日支",
+        "strength": "strong",
+        "tendency": "auspicious",
+        "description": "2023年癸卯合日支戌（31岁），当年婚动最强信号：易遇正缘/订婚/结婚"
+      },
+      {
+        "year": 2026,
+        "ganZhi": "丙午",
+        "age": 34,
+        "inDaYunIndex": 3,
+        "inDaYunGanZhi": "庚申",
+        "eventType": "桃花年",
+        "strength": "medium",
+        "tendency": "auspicious",
+        "description": "2026年丙午（34岁）流年带桃花午，异性缘旺、易有恋情"
+      },
+      {
+        "year": 2035,
+        "ganZhi": "乙卯",
+        "age": 43,
+        "inDaYunIndex": 4,
+        "inDaYunGanZhi": "己未",
+        "eventType": "流年合日支",
+        "strength": "strong",
+        "tendency": "auspicious",
+        "description": "2035年乙卯合日支戌（43岁），当年婚动最强信号：易遇正缘/订婚/结婚"
+      },
+      {
+        "year": 2037,
+        "ganZhi": "丁巳",
+        "age": 45,
+        "inDaYunIndex": 4,
+        "inDaYunGanZhi": "己未",
+        "eventType": "配偶星到位年",
+        "strength": "strong",
+        "tendency": "auspicious",
+        "description": "2037年丁巳（45岁）配偶星正财干支齐透通根，正缘到位之年"
+      }
+    ],
+    "risks": [],
+    "summary": "男命壬日主，配偶星为正财（火）。正财仅藏中余气，配偶缘分浅薄、易迟婚。配偶宫坐戌（七杀），配偶强势刚烈。命带墙外桃花（午、卯），异性缘旺。综合评定：婚姻质量【良好】（4/5）。首次强应婚信号年：2011年（19岁，流年合日支）。命局婚姻无显著风险点，宜把握良机。\n「但请注意运势节奏」：婚姻格局虽佳（4星），但 1-40 岁早年大运不利（均分仅 1.3 星），努力多见挫败、收获滞后；41 岁起入用神大运，方为婚姻真正起飞期，宜耐心积淀、择时而动。",
+    "highlights": [
+      "日支自坐正财，与配偶感情天然紧密",
+      "配偶宫属用神，配偶能助你运势、是命中贵人",
+      "命带墙外桃花，异性缘旺，不愁追求者",
+      "一生中有 8 个强应婚信号年，正缘机会充足"
+    ],
+    "reminders": [
+      "婚姻波动重点关注：2063 年（反吟冲日支等强信号）"
+    ]
+  },
+  "wealth": {
+    "wealthStar": {
+      "primaryStar": "正财",
+      "secondaryStar": "偏财",
+      "primaryLevel": "hidden-weak",
+      "secondaryLevel": "absent",
+      "starWuXing": "火",
+      "bothManifest": false,
+      "starBeingHe": false,
+      "starBeingChong": false,
+      "description": "正财仅藏中余气，正财薄弱，需多元化求财"
+    },
+    "wealthVault": {
+      "hasVault": true,
+      "vaultZhi": [
+        "戌"
+      ],
+      "vaultShiShen": [
+        "正财"
+      ],
+      "vaultOpened": false,
+      "description": "命带财库（戌），藏正财，财气有\"仓库\"可积；财库未被冲开，财气深藏需大运/流年引动方能兑现"
+    },
+    "sources": [
+      "财来就我"
+    ],
+    "directions": [
+      "南",
+      "中"
+    ],
+    "industries": [
+      "餐饮",
+      "能源",
+      "化工",
+      "电子",
+      "美容",
+      "广告",
+      "影视",
+      "电力"
+    ],
+    "qualityScore": 4,
+    "qualityLabel": "富足",
+    "events": [
+      {
+        "year": 2012,
+        "ganZhi": "壬辰",
+        "age": 20,
+        "inDaYunIndex": 1,
+        "inDaYunGanZhi": "壬戌",
+        "eventType": "财库开年",
+        "strength": "medium",
+        "tendency": "auspicious",
+        "description": "2012年壬辰（20岁）流年辰冲开财库戌，深藏财气兑现，但需防\"开库即散\""
+      },
+      {
+        "year": 2024,
+        "ganZhi": "甲辰",
+        "age": 32,
+        "inDaYunIndex": 3,
+        "inDaYunGanZhi": "庚申",
+        "eventType": "财库开年",
+        "strength": "medium",
+        "tendency": "auspicious",
+        "description": "2024年甲辰（32岁）流年辰冲开财库戌，深藏财气兑现，但需防\"开库即散\""
+      },
+      {
+        "year": 2026,
+        "ganZhi": "丙午",
+        "age": 34,
+        "inDaYunIndex": 3,
+        "inDaYunGanZhi": "庚申",
+        "eventType": "偏财年",
+        "strength": "strong",
+        "tendency": "auspicious",
+        "description": "2026年丙午（34岁）偏财干支齐透，横财/投资收益/创业机会之年"
+      },
+      {
+        "year": 2036,
+        "ganZhi": "丙辰",
+        "age": 44,
+        "inDaYunIndex": 4,
+        "inDaYunGanZhi": "己未",
+        "eventType": "财库开年",
+        "strength": "medium",
+        "tendency": "auspicious",
+        "description": "2036年丙辰（44岁）流年辰冲开财库戌，深藏财气兑现，但需防\"开库即散\""
+      },
+      {
+        "year": 2037,
+        "ganZhi": "丁巳",
+        "age": 45,
+        "inDaYunIndex": 4,
+        "inDaYunGanZhi": "己未",
+        "eventType": "正财年",
+        "strength": "strong",
+        "tendency": "auspicious",
+        "description": "2037年丁巳（45岁）正财干支齐透通根，正业大幅增收/升职加薪/置业之年"
+      },
+      {
+        "year": 2043,
+        "ganZhi": "戊午",
+        "age": 51,
+        "inDaYunIndex": 5,
+        "inDaYunGanZhi": "戊午",
+        "eventType": "财星到位运",
+        "strength": "strong",
+        "tendency": "auspicious",
+        "description": "大运戊午属财星五行（火），10 年财运高峰：正业增收 / 投资增值 / 资产积累的关键时期"
+      },
+      {
+        "year": 2048,
+        "ganZhi": "戊辰",
+        "age": 56,
+        "inDaYunIndex": 5,
+        "inDaYunGanZhi": "戊午",
+        "eventType": "财库开年",
+        "strength": "medium",
+        "tendency": "auspicious",
+        "description": "2048年戊辰（56岁）流年辰冲开财库戌，深藏财气兑现，但需防\"开库即散\""
+      },
+      {
+        "year": 2053,
+        "ganZhi": "丁巳",
+        "age": 61,
+        "inDaYunIndex": 6,
+        "inDaYunGanZhi": "丁巳",
+        "eventType": "财星到位运",
+        "strength": "strong",
+        "tendency": "auspicious",
+        "description": "大运丁巳属财星五行（火），10 年财运高峰：正业增收 / 投资增值 / 资产积累的关键时期"
+      }
+    ],
+    "risks": [
+      {
+        "type": "财星藏支不透（有财难显）",
+        "level": "low",
+        "evidence": "正财仅藏支不透干",
+        "advice": "财气隐藏，外人难知，需主动表现/营销让财气外显方能兑现"
+      }
+    ],
+    "summary": "日主壬（水），财星正财属火。正财仅藏中余气，正财薄弱，需多元化求财。财源类型：财来就我。命带财库戌（未冲开）。综合评定：财运【富足】（4/5）。首个强财运信号：2026年（34岁，偏财年）。主要风险：财星藏支不透（有财难显）。求财方位：南、中方为吉。\n「但请注意运势节奏」：财富格局虽佳（4星），但 1-40 岁早年大运不利（均分仅 1.3 星），努力多见挫败、收获滞后；41 岁起入用神大运，方为财富真正起飞期，宜耐心积淀、择时而动。",
+    "highlights": [
+      "命带财库（戌），财气可积累",
+      "一生 5 个强财运年，机会充足"
+    ],
+    "reminders": [
+      "【财星藏支不透（有财难显）·低】财气隐藏，外人难知，需主动表现/营销让财气外显方能兑现",
+      "财运谨慎年：2003、2003、2012"
+    ]
+  },
+  "career": {
+    "officialStar": {
+      "primaryStar": "正官",
+      "secondaryStar": "七杀",
+      "primaryLevel": "absent",
+      "secondaryLevel": "hidden-strong",
+      "mixedOfficial": false,
+      "yinHuOfficial": true,
+      "description": "正官原局未现，需大运引动；七杀有力，有实权魄力，宜挑战型/创业型/武职；印星护官（官印相生），升迁稳定且有学历/资格加持"
+    },
+    "careerPalace": {
+      "monthGanZhi": "癸亥",
+      "monthGanShiShen": "劫财",
+      "monthZhiBenQi": "比肩",
+      "monthWuXing": "水",
+      "description": "事业宫坐比肩，事业基调自立独行、宜独立专业户（月支亥藏壬本气比肩）"
+    },
+    "careerTypes": [
+      "体制内（公务员/事业单位）",
+      "专业技术（工程师/医生/律师）",
+      "艺术/演艺",
+      "自由职业"
+    ],
+    "industries": [
+      "航运",
+      "旅游",
+      "渔业",
+      "酒水",
+      "清洁",
+      "互联网",
+      "心理咨询",
+      "物流"
+    ],
+    "entrepreneurVsEmployee": "适合创业",
+    "bossQuotient": 4,
+    "qualityScore": 4,
+    "qualityLabel": "步步高升",
+    "events": [
+      {
+        "year": 2009,
+        "ganZhi": "己丑",
+        "age": 17,
+        "inDaYunIndex": 1,
+        "inDaYunGanZhi": "壬戌",
+        "eventType": "正官到位年",
+        "strength": "strong",
+        "tendency": "auspicious",
+        "description": "2009年己丑（17岁）正官干支齐透通根，升职/职位提升/获权威认可的强信号"
+      },
+      {
+        "year": 2015,
+        "ganZhi": "乙未",
+        "age": 23,
+        "inDaYunIndex": 2,
+        "inDaYunGanZhi": "辛酉",
+        "eventType": "伤官见官年",
+        "strength": "medium",
+        "tendency": "inauspicious",
+        "description": "2015年乙未（23岁）伤官透出，若命中有官星则\"伤官见官\"，防降职/官非/口舌"
+      },
+      {
+        "year": 2018,
+        "ganZhi": "戊戌",
+        "age": 26,
+        "inDaYunIndex": 2,
+        "inDaYunGanZhi": "辛酉",
+        "eventType": "七杀到位年",
+        "strength": "strong",
+        "tendency": "auspicious",
+        "description": "2018年戊戌（26岁）七杀干支齐透，实权机遇/挑战型项目/创业关键年"
+      },
+      {
+        "year": 2025,
+        "ganZhi": "乙巳",
+        "age": 33,
+        "inDaYunIndex": 3,
+        "inDaYunGanZhi": "庚申",
+        "eventType": "伤官见官年",
+        "strength": "medium",
+        "tendency": "inauspicious",
+        "description": "2025年乙巳（33岁）伤官透出，若命中有官星则\"伤官见官\"，防降职/官非/口舌"
+      },
+      {
+        "year": 2025,
+        "ganZhi": "乙巳",
+        "age": 33,
+        "inDaYunIndex": 3,
+        "inDaYunGanZhi": "庚申",
+        "eventType": "事业宫被冲年",
+        "strength": "medium",
+        "tendency": "inauspicious",
+        "description": "2025年乙巳（33岁）流年巳冲月柱事业宫亥，事业易动荡/调岗/换工作"
+      },
+      {
+        "year": 2035,
+        "ganZhi": "乙卯",
+        "age": 43,
+        "inDaYunIndex": 4,
+        "inDaYunGanZhi": "己未",
+        "eventType": "伤官见官年",
+        "strength": "medium",
+        "tendency": "inauspicious",
+        "description": "2035年乙卯（43岁）伤官透出，若命中有官星则\"伤官见官\"，防降职/官非/口舌"
+      },
+      {
+        "year": 2037,
+        "ganZhi": "丁巳",
+        "age": 45,
+        "inDaYunIndex": 4,
+        "inDaYunGanZhi": "己未",
+        "eventType": "事业宫被冲年",
+        "strength": "medium",
+        "tendency": "inauspicious",
+        "description": "2037年丁巳（45岁）流年巳冲月柱事业宫亥，事业易动荡/调岗/换工作"
+      },
+      {
+        "year": 2039,
+        "ganZhi": "己未",
+        "age": 47,
+        "inDaYunIndex": 4,
+        "inDaYunGanZhi": "己未",
+        "eventType": "正官到位年",
+        "strength": "strong",
+        "tendency": "auspicious",
+        "description": "2039年己未（47岁）正官干支齐透通根，升职/职位提升/获权威认可的强信号"
+      }
+    ],
+    "risks": [],
+    "summary": "日主壬（水），事业宫月柱癸亥（比肩）。正官原局未现，需大运引动。推荐路线：【适合创业】，老板气质 ★4/5。综合评定：事业【步步高升】（4/5）。首个强事业信号：2009年（17岁，正官到位年）。\n「但请注意运势节奏」：事业格局虽佳（4星），但 1-40 岁早年大运不利（均分仅 1.3 星），努力多见挫败、收获滞后；41 岁起入用神大运，方为事业真正起飞期，宜耐心积淀、择时而动。",
+    "highlights": [
+      "七杀有力，有实权魄力",
+      "官印相生，升迁稳定且有学历加持",
+      "伤官有力，创意/技术天赋出众",
+      "一生 6 个强事业机遇年"
+    ],
+    "reminders": [
+      "事业谨慎年：2005、2013、2015"
+    ]
+  },
+  "health": {
+    "organs": [
+      {
+        "wuxing": "木",
+        "organ": "肝",
+        "bowel": "胆",
+        "wuxingScore": 0,
+        "riskLevel": "high",
+        "description": "木（肝/胆）原局缺失，肝系统先天虚弱，需重点调养"
+      },
+      {
+        "wuxing": "火",
+        "organ": "心",
+        "bowel": "小肠",
+        "wuxingScore": 0,
+        "riskLevel": "high",
+        "description": "火（心/小肠）原局缺失，心系统先天虚弱，需重点调养"
+      },
+      {
+        "wuxing": "土",
+        "organ": "脾",
+        "bowel": "胃",
+        "wuxingScore": 0,
+        "riskLevel": "high",
+        "description": "土（脾/胃）原局缺失，脾系统先天虚弱，需重点调养"
+      },
+      {
+        "wuxing": "金",
+        "organ": "肺",
+        "bowel": "大肠",
+        "wuxingScore": 0,
+        "riskLevel": "high",
+        "description": "金（肺/大肠）原局缺失，肺系统先天虚弱，需重点调养"
+      },
+      {
+        "wuxing": "水",
+        "organ": "肾",
+        "bowel": "膀胱",
+        "wuxingScore": 0,
+        "riskLevel": "high",
+        "description": "水（肾/膀胱）原局缺失，肾系统先天虚弱，需重点调养"
+      }
+    ],
+    "constitution": "水旺肾寒型",
+    "diseaseRisks": [
+      "肝系统：肝胆功能失调",
+      "肝系统：眼疾",
+      "肝系统：筋骨问题",
+      "心系统：心血管疾病",
+      "心系统：小肠吸收差",
+      "心系统：失眠多梦",
+      "脾系统：脾胃虚弱",
+      "脾系统：消化不良",
+      "脾系统：糖尿病风险",
+      "肺系统：呼吸系统疾病",
+      "肺系统：皮肤干燥",
+      "肺系统：大肠功能弱",
+      "肾系统：肾虚腰疼",
+      "肾系统：泌尿系统",
+      "肾系统：生殖系统"
+    ],
+    "recommendations": {
+      "diet": [
+        "红色食物（红枣/番茄）",
+        "苦味食物（苦瓜/绿茶）",
+        "羊肉/咖啡（适度）",
+        "黄色食物（南瓜/小米）",
+        "甘味食物（蜂蜜/红薯）",
+        "健脾祛湿（薏米/山药）"
+      ],
+      "exercise": [
+        "有氧运动（慢跑/游泳）",
+        "降火运动",
+        "冥想静心",
+        "中等强度（快走/骑行）"
+      ],
+      "lifestyle": [
+        "11pm-1am 必须入睡（养肝胆）",
+        "保持心情舒畅，避免郁怒",
+        "11am-1pm 适当午休（养心）",
+        "避免熬夜，少看手机",
+        "7am-9am 按时早餐（养胃）"
+      ]
+    },
+    "events": [
+      {
+        "year": 2012,
+        "ganZhi": "壬辰",
+        "age": 20,
+        "inDaYunIndex": 1,
+        "inDaYunGanZhi": "壬戌",
+        "eventType": "冲日支年（健康波动）",
+        "strength": "strong",
+        "description": "2012年壬辰（20岁）流年辰冲日支戌，身体波动信号，注意意外/手术/搬动"
+      },
+      {
+        "year": 2023,
+        "ganZhi": "庚申",
+        "age": 31,
+        "inDaYunIndex": 3,
+        "inDaYunGanZhi": "庚申",
+        "eventType": "忌神大运（慢性消耗）",
+        "strength": "medium",
+        "description": "2023-2032（31-undefined岁）大运庚申（金）非用神，10 年内宜重视养生"
+      },
+      {
+        "year": 2024,
+        "ganZhi": "甲辰",
+        "age": 32,
+        "inDaYunIndex": 3,
+        "inDaYunGanZhi": "庚申",
+        "eventType": "冲日支年（健康波动）",
+        "strength": "strong",
+        "description": "2024年甲辰（32岁）流年辰冲日支戌，身体波动信号，注意意外/手术/搬动"
+      },
+      {
+        "year": 2036,
+        "ganZhi": "丙辰",
+        "age": 44,
+        "inDaYunIndex": 4,
+        "inDaYunGanZhi": "己未",
+        "eventType": "冲日支年（健康波动）",
+        "strength": "strong",
+        "description": "2036年丙辰（44岁）流年辰冲日支戌，身体波动信号，注意意外/手术/搬动"
+      },
+      {
+        "year": 2039,
+        "ganZhi": "己未",
+        "age": 47,
+        "inDaYunIndex": 4,
+        "inDaYunGanZhi": "己未",
+        "eventType": "岁运并临年（凶吉倍增）",
+        "strength": "strong",
+        "description": "2039年己未（47岁）岁运并临，吉凶倍增，关键年份"
+      },
+      {
+        "year": 2047,
+        "ganZhi": "丁卯",
+        "age": 55,
+        "inDaYunIndex": 5,
+        "inDaYunGanZhi": "戊午",
+        "eventType": "反吟流年（手术/意外）",
+        "strength": "strong",
+        "description": "2047年丁卯（55岁）流年反吟年柱，重大变化年，注意意外伤害/手术风险"
+      }
+    ],
+    "qualityScore": 2,
+    "qualityLabel": "亚健康",
+    "summary": "体质类型：【水旺肾寒型】。重点保养脏腑：肝、心、脾、肺、肾。综合评定：健康【亚健康】（2/5）。首个健康关注年：2012年（20岁）。调养主方向：补火、补土。",
+    "highlights": [],
+    "reminders": [
+      "【肝风险高】木（肝/胆）原局缺失，肝系统先天虚弱，需重点调养",
+      "【心风险高】火（心/小肠）原局缺失，心系统先天虚弱，需重点调养",
+      "【脾风险高】土（脾/胃）原局缺失，脾系统先天虚弱，需重点调养",
+      "健康谨慎年：2012、2024、2036、2039"
+    ]
+  },
+  "relatives": {
+    "gender": "男",
+    "father": {
+      "role": "父亲",
+      "shiShen": "偏财",
+      "level": "absent",
+      "palace": "年柱",
+      "closenessScore": 1,
+      "closenessLabel": "极疏/早离",
+      "description": "父亲星偏财原局未现，父亲缘较淡，需主动经营；父亲宫酉被冲，父亲易远离/分离/聚少离多"
+    },
+    "mother": {
+      "role": "母亲",
+      "shiShen": "正印",
+      "level": "hidden-strong",
+      "palace": "月柱",
+      "closenessScore": 4,
+      "closenessLabel": "亲密",
+      "description": "母亲星正印藏支本气有力，母亲缘稳固但低调，关系亲近"
+    },
+    "siblings": {
+      "role": "兄弟姐妹",
+      "shiShen": "比肩",
+      "level": "hidden-strong",
+      "palace": "月柱",
+      "closenessScore": 5,
+      "closenessLabel": "极亲",
+      "description": "兄弟姐妹星比肩藏支本气有力，兄弟姐妹缘稳固但低调，关系亲近；比肩恰落兄弟姐妹宫（月柱），位星合一更显亲缘"
+    },
+    "children": {
+      "role": "子女",
+      "shiShen": "正官",
+      "level": "absent",
+      "palace": "时柱",
+      "closenessScore": 1,
+      "closenessLabel": "极疏/早离",
+      "description": "子女星正官原局未现，子女缘较淡，需主动经营；子女宫卯被冲，子女易远离/分离/聚少离多"
+    },
+    "qualityScore": 3,
+    "qualityLabel": "亲缘一般",
+    "summary": "日主壬（水）男命。父（偏财·未现）极疏/早离、母（正印·藏·实）亲密、兄弟（比肩·藏·实）极亲、子女（正官·未现）极疏/早离。综合评定：六亲【亲缘一般】（3/5）。最深缘分：兄弟姐妹（比肩藏·实）。最薄缘分：父亲（需特别留意维系）。",
+    "highlights": [
+      "母亲缘亲密（正印藏·实）",
+      "兄弟姐妹缘极亲（比肩藏·实）"
+    ],
+    "reminders": [
+      "【父亲缘极疏/早离】偏财未现，需主动维系或心理建设",
+      "【子女缘极疏/早离】正官未现，需主动维系或心理建设"
+    ]
+  },
+  "education": {
+    "educationStar": {
+      "primaryStar": "正印",
+      "secondaryStar": "偏印",
+      "primaryLevel": "hidden-strong",
+      "secondaryLevel": "absent",
+      "starWuXing": "金",
+      "shiShenPeiYin": false,
+      "shangGuanPeiYin": true,
+      "guanYinSheng": false,
+      "description": "正印藏支本气有力，学问根基稳固；伤官佩印（才艺学者），创意+学问俱佳"
+    },
+    "shenSha": {
+      "hasWenChang": false,
+      "wenChangZhi": [],
+      "hasXueTang": false,
+      "xueTangZhi": [],
+      "hasCiGuan": true,
+      "ciGuanZhi": [
+        "亥"
+      ],
+      "description": "命带：词馆在亥。主聪敏过人/文采出众/利文化教育之路"
+    },
+    "scholarType": "才艺学者（伤官佩印）",
+    "recommendedFields": [
+      "艺术",
+      "设计",
+      "影视",
+      "传媒",
+      "心理学"
+    ],
+    "qualityScore": 4,
+    "qualityLabel": "学有所成",
+    "events": [
+      {
+        "year": 2015,
+        "ganZhi": "乙未",
+        "age": 23,
+        "inDaYunIndex": 2,
+        "inDaYunGanZhi": "辛酉",
+        "eventType": "伤官佩印年",
+        "strength": "medium",
+        "tendency": "auspicious",
+        "description": "2015年乙未（23岁）伤官佩印，宜参赛/获奖/才艺显露"
+      },
+      {
+        "year": 2025,
+        "ganZhi": "乙巳",
+        "age": 33,
+        "inDaYunIndex": 3,
+        "inDaYunGanZhi": "庚申",
+        "eventType": "伤官佩印年",
+        "strength": "medium",
+        "tendency": "auspicious",
+        "description": "2025年乙巳（33岁）伤官佩印，宜参赛/获奖/才艺显露"
+      },
+      {
+        "year": 2035,
+        "ganZhi": "乙卯",
+        "age": 43,
+        "inDaYunIndex": 4,
+        "inDaYunGanZhi": "己未",
+        "eventType": "伤官佩印年",
+        "strength": "medium",
+        "tendency": "auspicious",
+        "description": "2035年乙卯（43岁）伤官佩印，宜参赛/获奖/才艺显露"
+      },
+      {
+        "year": 2040,
+        "ganZhi": "庚申",
+        "age": 48,
+        "inDaYunIndex": 4,
+        "inDaYunGanZhi": "己未",
+        "eventType": "偏印到位年",
+        "strength": "medium",
+        "tendency": "auspicious",
+        "description": "2040年庚申（48岁）偏印到位，进修/转专业/获专项资格的好年份"
+      },
+      {
+        "year": 2041,
+        "ganZhi": "辛酉",
+        "age": 49,
+        "inDaYunIndex": 4,
+        "inDaYunGanZhi": "己未",
+        "eventType": "正印到位年",
+        "strength": "strong",
+        "tendency": "auspicious",
+        "description": "2041年辛酉（49岁）正印干支齐透，升学/获文凭/导师加持的强信号"
+      }
+    ],
+    "summary": "日主壬（水），印星五行金。正印藏支本气有力，学问根基稳固。学业类型：【才艺学者（伤官佩印）】。综合评定：学业【学有所成】（★4/5）。命带：词馆在亥。首个强学业信号：2041年（49岁）。推荐方向：艺术、设计、影视。\n「但请注意运势节奏」：学业格局虽佳（4星），但 1-40 岁早年大运不利（均分仅 1.3 星），努力多见挫败、收获滞后；41 岁起入用神大运，方为学业真正起飞期，宜耐心积淀、择时而动。",
+    "highlights": [
+      "伤官佩印 - 才艺学者",
+      "正印有力 - 学历有保障",
+      "命带词馆 - 文采出众"
+    ],
+    "reminders": []
+  },
+  "travel": {
+    "yiMa": {
+      "hasYiMa": true,
+      "yiMaZhi": "亥",
+      "hitPositions": [
+        "月柱"
+      ],
+      "yiMaBeingChong": false,
+      "yiMaBeingHe": false,
+      "description": "命主驿马亥在月柱，主好动、喜出门、易远行、与海外/远方有缘"
+    },
+    "travelType": "商旅频繁",
+    "overseasAffinity": true,
+    "qualityScore": 4,
+    "qualityLabel": "常出常入",
+    "events": [
+      {
+        "year": 2013,
+        "ganZhi": "癸巳",
+        "age": 21,
+        "inDaYunIndex": 2,
+        "inDaYunGanZhi": "辛酉",
+        "eventType": "驿马逢冲年",
+        "strength": "strong",
+        "description": "2013年癸巳（21岁）流年巳冲驿马亥，必动且急"
+      },
+      {
+        "year": 2019,
+        "ganZhi": "己亥",
+        "age": 27,
+        "inDaYunIndex": 2,
+        "inDaYunGanZhi": "辛酉",
+        "eventType": "流年驿马",
+        "strength": "strong",
+        "description": "2019年己亥（27岁）流年驿马到位，主出行/出差/搬迁/换居"
+      },
+      {
+        "year": 2024,
+        "ganZhi": "甲辰",
+        "age": 32,
+        "inDaYunIndex": 3,
+        "inDaYunGanZhi": "庚申",
+        "eventType": "日支被冲年",
+        "strength": "medium",
+        "description": "2024年甲辰（32岁）流年辰冲日支戌，主搬迁/换居/家中变动"
+      },
+      {
+        "year": 2025,
+        "ganZhi": "乙巳",
+        "age": 33,
+        "inDaYunIndex": 3,
+        "inDaYunGanZhi": "庚申",
+        "eventType": "驿马逢冲年",
+        "strength": "strong",
+        "description": "2025年乙巳（33岁）流年巳冲驿马亥，必动且急"
+      },
+      {
+        "year": 2031,
+        "ganZhi": "辛亥",
+        "age": 39,
+        "inDaYunIndex": 3,
+        "inDaYunGanZhi": "庚申",
+        "eventType": "流年驿马",
+        "strength": "strong",
+        "description": "2031年辛亥（39岁）流年驿马到位，主出行/出差/搬迁/换居"
+      },
+      {
+        "year": 2037,
+        "ganZhi": "丁巳",
+        "age": 45,
+        "inDaYunIndex": 4,
+        "inDaYunGanZhi": "己未",
+        "eventType": "驿马逢冲年",
+        "strength": "strong",
+        "description": "2037年丁巳（45岁）流年巳冲驿马亥，必动且急"
+      }
+    ],
+    "summary": "命主驿马亥在月柱，主好动、喜出门、易远行、与海外/远方有缘。出行类型：【商旅频繁】。综合评定：出行【常出常入】（★4/5）。主有海外/远方城市缘分。首个重大出行年：2007年（15岁）。",
+    "highlights": [
+      "命带驿马（亥）- 利出门、易远行",
+      "与海外/远方城市有缘",
+      "一生 13 次重大出行/搬迁机会"
+    ],
+    "reminders": [
+      "重大出行年：2007、2013、2019"
+    ]
+  },
+  "legalRisk": {
+    "factors": [],
+    "overallRiskLevel": "high",
+    "qualityScore": 2,
+    "qualityLabel": "高度警惕",
+    "events": [
+      {
+        "year": 2012,
+        "ganZhi": "壬辰",
+        "age": 20,
+        "inDaYunIndex": 1,
+        "inDaYunGanZhi": "壬戌",
+        "eventType": "日柱反吟年",
+        "severity": "high",
+        "description": "2012年壬辰（20岁）流年与日柱反吟（天干同/地支冲），主重大变化/官非/意外"
+      },
+      {
+        "year": 2014,
+        "ganZhi": "甲午",
+        "age": 22,
+        "inDaYunIndex": 2,
+        "inDaYunGanZhi": "辛酉",
+        "eventType": "羊刃逢冲年",
+        "severity": "high",
+        "description": "2014年甲午（22岁）流年午冲命中羊刃子，主血光/手术/官非"
+      },
+      {
+        "year": 2019,
+        "ganZhi": "己亥",
+        "age": 27,
+        "inDaYunIndex": 2,
+        "inDaYunGanZhi": "辛酉",
+        "eventType": "官杀混杂年",
+        "severity": "medium",
+        "description": "2019年己亥（27岁）流年加重官杀混杂，事业易反复/法律纠纷"
+      },
+      {
+        "year": 2026,
+        "ganZhi": "丙午",
+        "age": 34,
+        "inDaYunIndex": 3,
+        "inDaYunGanZhi": "庚申",
+        "eventType": "羊刃逢冲年",
+        "severity": "high",
+        "description": "2026年丙午（34岁）流年午冲命中羊刃子，主血光/手术/官非"
+      },
+      {
+        "year": 2029,
+        "ganZhi": "己酉",
+        "age": 37,
+        "inDaYunIndex": 3,
+        "inDaYunGanZhi": "庚申",
+        "eventType": "官杀混杂年",
+        "severity": "medium",
+        "description": "2029年己酉（37岁）流年加重官杀混杂，事业易反复/法律纠纷"
+      },
+      {
+        "year": 2038,
+        "ganZhi": "戊午",
+        "age": 46,
+        "inDaYunIndex": 4,
+        "inDaYunGanZhi": "己未",
+        "eventType": "羊刃逢冲年",
+        "severity": "high",
+        "description": "2038年戊午（46岁）流年午冲命中羊刃子，主血光/手术/官非"
+      }
+    ],
+    "summary": "综合官非风险等级：【高度警惕】（★2/5）。原局未带凶神组合。首个高危年：2012年（20岁，日柱反吟年）。",
+    "highlights": [
+      "原局未带羊刃劫煞三刑等凶神"
+    ],
+    "reminders": [
+      "官非高危年：2012(日柱反吟年)、2014(羊刃逢冲年)、2026(羊刃逢冲年)、2038(羊刃逢冲年)、2050(羊刃逢冲年)"
+    ]
+  },
+  "monthlyForecast": {
+    "year": 2026,
+    "yearGanZhi": "丙午",
+    "inDaYunIndex": 3,
+    "inDaYunGanZhi": "庚申",
+    "liuYues": [
+      {
+        "ganZhi": "庚寅",
+        "month": 1,
+        "startDate": "2026-02-04",
+        "endDate": "2026-03-06",
+        "relations": [
+          "流月寅六合月支亥",
+          "流月寅与日支戌半三合",
+          "流月寅与时支卯半三会"
+        ],
+        "tendency": "auspicious",
+        "highlights": [
+          "流月寅六合月支亥",
+          "流月寅与日支戌半三合",
+          "流月寅与时支卯半三会"
+        ]
+      },
+      {
+        "ganZhi": "辛卯",
+        "month": 2,
+        "startDate": "2026-03-06",
+        "endDate": "2026-04-05",
+        "relations": [
+          "流月卯冲年支酉",
+          "流月卯与月支亥半三合",
+          "流月卯六合日支戌",
+          "流月卯伏吟时支卯"
+        ],
+        "tendency": "neutral",
+        "highlights": [
+          "流月卯冲年支酉",
+          "流月卯与月支亥半三合",
+          "流月卯六合日支戌",
+          "流月卯伏吟时支卯"
+        ]
+      },
+      {
+        "ganZhi": "壬辰",
+        "month": 3,
+        "startDate": "2026-04-05",
+        "endDate": "2026-05-06",
+        "relations": [
+          "流月辰六合年支酉",
+          "流月辰冲日支戌",
+          "流月辰害时支卯"
+        ],
+        "tendency": "inauspicious",
+        "highlights": [
+          "流月辰六合年支酉",
+          "流月辰冲日支戌",
+          "流月辰害时支卯"
+        ]
+      },
+      {
+        "ganZhi": "癸巳",
+        "month": 4,
+        "startDate": "2026-05-06",
+        "endDate": "2026-06-06",
+        "relations": [
+          "流月巳与年支酉半三合",
+          "流月巳冲月支亥"
+        ],
+        "tendency": "neutral",
+        "highlights": [
+          "流月巳与年支酉半三合",
+          "流月巳冲月支亥"
+        ]
+      },
+      {
+        "ganZhi": "甲午",
+        "month": 5,
+        "startDate": "2026-06-06",
+        "endDate": "2026-07-07",
+        "relations": [
+          "流月午与日支戌半三合"
+        ],
+        "tendency": "neutral",
+        "highlights": [
+          "流月午与日支戌半三合"
+        ]
+      },
+      {
+        "ganZhi": "乙未",
+        "month": 6,
+        "startDate": "2026-07-07",
+        "endDate": "2026-08-08",
+        "relations": [
+          "流月未与月支亥半三合",
+          "流月未刑日支戌",
+          "流月未与时支卯半三合"
+        ],
+        "tendency": "neutral",
+        "highlights": [
+          "流月未与月支亥半三合",
+          "流月未刑日支戌",
+          "流月未与时支卯半三合"
+        ]
+      },
+      {
+        "ganZhi": "丙申",
+        "month": 7,
+        "startDate": "2026-08-08",
+        "endDate": "2026-09-08",
+        "relations": [
+          "流月申与年支酉半三会",
+          "流月申害月支亥",
+          "流月申与日支戌半三会"
+        ],
+        "tendency": "neutral",
+        "highlights": [
+          "流月申与年支酉半三会",
+          "流月申害月支亥",
+          "流月申与日支戌半三会"
+        ]
+      },
+      {
+        "ganZhi": "丁酉",
+        "month": 8,
+        "startDate": "2026-09-08",
+        "endDate": "2026-10-08",
+        "relations": [
+          "流月酉伏吟年支酉",
+          "流月酉害日支戌",
+          "流月酉冲时支卯"
+        ],
+        "tendency": "inauspicious",
+        "highlights": [
+          "流月酉伏吟年支酉",
+          "流月酉害日支戌",
+          "流月酉冲时支卯"
+        ]
+      },
+      {
+        "ganZhi": "戊戌",
+        "month": 9,
+        "startDate": "2026-10-08",
+        "endDate": "2026-11-07",
+        "relations": [
+          "流月戌害年支酉",
+          "流月戌伏吟日支戌",
+          "流月戌六合时支卯"
+        ],
+        "tendency": "inauspicious",
+        "highlights": [
+          "流月戌害年支酉",
+          "流月戌伏吟日支戌",
+          "流月戌六合时支卯"
+        ]
+      },
+      {
+        "ganZhi": "己亥",
+        "month": 10,
+        "startDate": "2026-11-07",
+        "endDate": "2026-12-07",
+        "relations": [
+          "流月亥伏吟月支亥",
+          "流月亥与时支卯半三合"
+        ],
+        "tendency": "neutral",
+        "highlights": [
+          "流月亥伏吟月支亥",
+          "流月亥与时支卯半三合"
+        ]
+      },
+      {
+        "ganZhi": "庚子",
+        "month": 11,
+        "startDate": "2026-12-07",
+        "endDate": "2026-01-06",
+        "relations": [
+          "流月子与月支亥半三会",
+          "流月子刑时支卯"
+        ],
+        "tendency": "neutral",
+        "highlights": [
+          "流月子与月支亥半三会",
+          "流月子刑时支卯"
+        ]
+      },
+      {
+        "ganZhi": "辛丑",
+        "month": 12,
+        "startDate": "2027-01-06",
+        "endDate": "2027-02-04",
+        "relations": [
+          "流月丑与年支酉半三合",
+          "流月丑与月支亥半三会",
+          "流月丑刑日支戌"
+        ],
+        "tendency": "neutral",
+        "highlights": [
+          "流月丑与年支酉半三合",
+          "流月丑与月支亥半三会",
+          "流月丑刑日支戌"
+        ]
+      }
+    ],
+    "summary": "2026年（丙午），处于第3步大运庚申（31-40岁）。本年最顺利的月份：农历1月。需要谨慎的月份：农历3、8、9月。",
+    "bestMonths": [
+      1
+    ],
+    "worstMonths": [
+      3,
+      8,
+      9
+    ]
+  },
+  "dailyCalendar": {
+    "year": 2026,
+    "month": 5,
+    "days": [
+      {
+        "date": "2026-05-01",
+        "ganZhi": "乙亥",
+        "shiShenGan": "伤官",
+        "shiShenZhi": "比肩",
+        "zhiRelationToDayPalace": "无",
+        "fortune": "inauspicious",
+        "suitable": [],
+        "avoid": [
+          "重大决策",
+          "签约",
+          "动土",
+          "远行"
+        ]
+      },
+      {
+        "date": "2026-05-02",
+        "ganZhi": "丙子",
+        "shiShenGan": "偏财",
+        "shiShenZhi": "劫财",
+        "zhiRelationToDayPalace": "无",
+        "fortune": "neutral",
+        "suitable": [],
+        "avoid": []
+      },
+      {
+        "date": "2026-05-03",
+        "ganZhi": "丁丑",
+        "shiShenGan": "正财",
+        "shiShenZhi": "正官",
+        "zhiRelationToDayPalace": "无",
+        "fortune": "auspicious",
+        "suitable": [
+          "商谈",
+          "出行",
+          "社交",
+          "学习"
+        ],
+        "avoid": []
+      },
+      {
+        "date": "2026-05-04",
+        "ganZhi": "戊寅",
+        "shiShenGan": "七杀",
+        "shiShenZhi": "食神",
+        "zhiRelationToDayPalace": "无",
+        "fortune": "inauspicious",
+        "suitable": [],
+        "avoid": [
+          "重大决策",
+          "签约",
+          "动土",
+          "远行"
+        ]
+      },
+      {
+        "date": "2026-05-05",
+        "ganZhi": "己卯",
+        "shiShenGan": "正官",
+        "shiShenZhi": "伤官",
+        "zhiRelationToDayPalace": "合",
+        "fortune": "auspicious",
+        "suitable": [
+          "商谈",
+          "出行",
+          "社交",
+          "学习"
+        ],
+        "avoid": []
+      },
+      {
+        "date": "2026-05-06",
+        "ganZhi": "庚辰",
+        "shiShenGan": "偏印",
+        "shiShenZhi": "七杀",
+        "zhiRelationToDayPalace": "冲",
+        "fortune": "inauspicious",
+        "suitable": [],
+        "avoid": [
+          "重大决策",
+          "签约",
+          "动土",
+          "远行"
+        ]
+      },
+      {
+        "date": "2026-05-07",
+        "ganZhi": "辛巳",
+        "shiShenGan": "正印",
+        "shiShenZhi": "偏财",
+        "zhiRelationToDayPalace": "无",
+        "fortune": "auspicious",
+        "suitable": [
+          "商谈",
+          "出行",
+          "社交",
+          "学习"
+        ],
+        "avoid": []
+      },
+      {
+        "date": "2026-05-08",
+        "ganZhi": "壬午",
+        "shiShenGan": "比肩",
+        "shiShenZhi": "正财",
+        "zhiRelationToDayPalace": "无",
+        "fortune": "neutral",
+        "suitable": [],
+        "avoid": []
+      },
+      {
+        "date": "2026-05-09",
+        "ganZhi": "癸未",
+        "shiShenGan": "劫财",
+        "shiShenZhi": "正官",
+        "zhiRelationToDayPalace": "无",
+        "fortune": "inauspicious",
+        "suitable": [],
+        "avoid": [
+          "重大决策",
+          "签约",
+          "动土",
+          "远行"
+        ]
+      },
+      {
+        "date": "2026-05-10",
+        "ganZhi": "甲申",
+        "shiShenGan": "食神",
+        "shiShenZhi": "偏印",
+        "zhiRelationToDayPalace": "无",
+        "fortune": "auspicious",
+        "suitable": [
+          "商谈",
+          "出行",
+          "社交",
+          "学习"
+        ],
+        "avoid": []
+      },
+      {
+        "date": "2026-05-11",
+        "ganZhi": "乙酉",
+        "shiShenGan": "伤官",
+        "shiShenZhi": "正印",
+        "zhiRelationToDayPalace": "无",
+        "fortune": "inauspicious",
+        "suitable": [],
+        "avoid": [
+          "重大决策",
+          "签约",
+          "动土",
+          "远行"
+        ]
+      },
+      {
+        "date": "2026-05-12",
+        "ganZhi": "丙戌",
+        "shiShenGan": "偏财",
+        "shiShenZhi": "七杀",
+        "zhiRelationToDayPalace": "同",
+        "fortune": "inauspicious",
+        "suitable": [],
+        "avoid": [
+          "重大决策",
+          "签约",
+          "动土",
+          "远行"
+        ]
+      },
+      {
+        "date": "2026-05-13",
+        "ganZhi": "丁亥",
+        "shiShenGan": "正财",
+        "shiShenZhi": "比肩",
+        "zhiRelationToDayPalace": "无",
+        "fortune": "auspicious",
+        "suitable": [
+          "商谈",
+          "出行",
+          "社交",
+          "学习"
+        ],
+        "avoid": []
+      },
+      {
+        "date": "2026-05-14",
+        "ganZhi": "戊子",
+        "shiShenGan": "七杀",
+        "shiShenZhi": "劫财",
+        "zhiRelationToDayPalace": "无",
+        "fortune": "inauspicious",
+        "suitable": [],
+        "avoid": [
+          "重大决策",
+          "签约",
+          "动土",
+          "远行"
+        ]
+      },
+      {
+        "date": "2026-05-15",
+        "ganZhi": "己丑",
+        "shiShenGan": "正官",
+        "shiShenZhi": "正官",
+        "zhiRelationToDayPalace": "无",
+        "fortune": "neutral",
+        "suitable": [],
+        "avoid": []
+      },
+      {
+        "date": "2026-05-16",
+        "ganZhi": "庚寅",
+        "shiShenGan": "偏印",
+        "shiShenZhi": "食神",
+        "zhiRelationToDayPalace": "无",
+        "fortune": "neutral",
+        "suitable": [],
+        "avoid": []
+      },
+      {
+        "date": "2026-05-17",
+        "ganZhi": "辛卯",
+        "shiShenGan": "正印",
+        "shiShenZhi": "伤官",
+        "zhiRelationToDayPalace": "合",
+        "fortune": "auspicious",
+        "suitable": [
+          "商谈",
+          "出行",
+          "社交",
+          "学习"
+        ],
+        "avoid": []
+      },
+      {
+        "date": "2026-05-18",
+        "ganZhi": "壬辰",
+        "shiShenGan": "比肩",
+        "shiShenZhi": "七杀",
+        "zhiRelationToDayPalace": "冲",
+        "fortune": "inauspicious",
+        "suitable": [],
+        "avoid": [
+          "重大决策",
+          "签约",
+          "动土",
+          "远行"
+        ]
+      },
+      {
+        "date": "2026-05-19",
+        "ganZhi": "癸巳",
+        "shiShenGan": "劫财",
+        "shiShenZhi": "偏财",
+        "zhiRelationToDayPalace": "无",
+        "fortune": "inauspicious",
+        "suitable": [],
+        "avoid": [
+          "重大决策",
+          "签约",
+          "动土",
+          "远行"
+        ]
+      },
+      {
+        "date": "2026-05-20",
+        "ganZhi": "甲午",
+        "shiShenGan": "食神",
+        "shiShenZhi": "正财",
+        "zhiRelationToDayPalace": "无",
+        "fortune": "auspicious",
+        "suitable": [
+          "商谈",
+          "出行",
+          "社交",
+          "学习"
+        ],
+        "avoid": []
+      },
+      {
+        "date": "2026-05-21",
+        "ganZhi": "乙未",
+        "shiShenGan": "伤官",
+        "shiShenZhi": "正官",
+        "zhiRelationToDayPalace": "无",
+        "fortune": "inauspicious",
+        "suitable": [],
+        "avoid": [
+          "重大决策",
+          "签约",
+          "动土",
+          "远行"
+        ]
+      },
+      {
+        "date": "2026-05-22",
+        "ganZhi": "丙申",
+        "shiShenGan": "偏财",
+        "shiShenZhi": "偏印",
+        "zhiRelationToDayPalace": "无",
+        "fortune": "neutral",
+        "suitable": [],
+        "avoid": []
+      },
+      {
+        "date": "2026-05-23",
+        "ganZhi": "丁酉",
+        "shiShenGan": "正财",
+        "shiShenZhi": "正印",
+        "zhiRelationToDayPalace": "无",
+        "fortune": "auspicious",
+        "suitable": [
+          "商谈",
+          "出行",
+          "社交",
+          "学习"
+        ],
+        "avoid": []
+      },
+      {
+        "date": "2026-05-24",
+        "ganZhi": "戊戌",
+        "shiShenGan": "七杀",
+        "shiShenZhi": "七杀",
+        "zhiRelationToDayPalace": "同",
+        "fortune": "inauspicious",
+        "suitable": [],
+        "avoid": [
+          "重大决策",
+          "签约",
+          "动土",
+          "远行"
+        ]
+      },
+      {
+        "date": "2026-05-25",
+        "ganZhi": "己亥",
+        "shiShenGan": "正官",
+        "shiShenZhi": "比肩",
+        "zhiRelationToDayPalace": "无",
+        "fortune": "neutral",
+        "suitable": [],
+        "avoid": []
+      },
+      {
+        "date": "2026-05-26",
+        "ganZhi": "庚子",
+        "shiShenGan": "偏印",
+        "shiShenZhi": "劫财",
+        "zhiRelationToDayPalace": "无",
+        "fortune": "neutral",
+        "suitable": [],
+        "avoid": []
+      },
+      {
+        "date": "2026-05-27",
+        "ganZhi": "辛丑",
+        "shiShenGan": "正印",
+        "shiShenZhi": "正官",
+        "zhiRelationToDayPalace": "无",
+        "fortune": "auspicious",
+        "suitable": [
+          "商谈",
+          "出行",
+          "社交",
+          "学习"
+        ],
+        "avoid": []
+      },
+      {
+        "date": "2026-05-28",
+        "ganZhi": "壬寅",
+        "shiShenGan": "比肩",
+        "shiShenZhi": "食神",
+        "zhiRelationToDayPalace": "无",
+        "fortune": "neutral",
+        "suitable": [],
+        "avoid": []
+      },
+      {
+        "date": "2026-05-29",
+        "ganZhi": "癸卯",
+        "shiShenGan": "劫财",
+        "shiShenZhi": "伤官",
+        "zhiRelationToDayPalace": "合",
+        "fortune": "auspicious",
+        "suitable": [
+          "商谈",
+          "出行",
+          "社交",
+          "学习"
+        ],
+        "avoid": []
+      },
+      {
+        "date": "2026-05-30",
+        "ganZhi": "甲辰",
+        "shiShenGan": "食神",
+        "shiShenZhi": "七杀",
+        "zhiRelationToDayPalace": "冲",
+        "fortune": "auspicious",
+        "suitable": [
+          "商谈",
+          "出行",
+          "社交",
+          "学习"
+        ],
+        "avoid": []
+      },
+      {
+        "date": "2026-05-31",
+        "ganZhi": "乙巳",
+        "shiShenGan": "伤官",
+        "shiShenZhi": "偏财",
+        "zhiRelationToDayPalace": "无",
+        "fortune": "inauspicious",
+        "suitable": [],
+        "avoid": [
+          "重大决策",
+          "签约",
+          "动土",
+          "远行"
+        ]
+      }
+    ],
+    "bestDays": [
+      "2026-05-03",
+      "2026-05-05",
+      "2026-05-07"
+    ],
+    "worstDays": [
+      "2026-05-01",
+      "2026-05-04",
+      "2026-05-06"
+    ],
+    "summary": "2026年5月日级吉凶（共31天）：大吉日 0 天，吉日 11 天，平日 8 天，凶日 12 天，大凶日 0 天。"
+  },
+  "narrativeBook": {
+    "title": "蔡 · 命书",
+    "chapters": [
+      {
+        "title": "一、四柱排盘",
+        "content": "### 一、四柱排盘\n\n**蔡**，男，公历 1993年12月7日 06:00（农历 一九九三年 十月廿四 卯时）。\n\n| 柱位 | 天干 | 地支 | 藏干 | 纳音 |\n| :-: | :-: | :-: | :-: | :-: |\n| 年柱 | 癸 | 酉 | 辛 | 剑锋金 |\n| 月柱 | 癸 | 亥 | 壬、甲 | 大海水 |\n| 日柱 | 壬 | 戌 | 戊、辛、丁 | 大海水 |\n| 时柱 | 癸 | 卯 | 乙 | 金箔金 |\n",
+        "subChapters": [
+          {
+            "title": "叙述",
+            "content": "蔡（男），出生于1993年12月7日 06:00，农历一九九三年 十月廿四 卯时，节气为大雪后（已入亥月）。命主四柱为：癸酉、癸亥、壬戌、癸卯。日主壬戌，是为本命。"
+          }
+        ]
+      },
+      {
+        "title": "二、五行与旺衰",
+        "content": "### 二、五行与旺衰\n\n**五行分布：**\n\n| 五行 | 力量 | 占比 |\n| :-: | :-: | :-: |\n| 金 | 1.6 | 15.0% |\n| 木 | 1.9 | 17.0% |\n| 水 | 5.8 | 53.0% |\n| 火 | 0.7 | 6.0% |\n| 土 | 1.0 | 9.0% |\n\n**日主旺衰：日主极旺（水势汪洋，易成专旺）**（置信度 ★5/5）\n\n动态关系净效应为「克泄」（克泄力量 3 > 助身 0）：原局通过合化/三合等关系增强了对日主水的牵制，旺衰倾向于「极旺」减弱方向，但未足以改变档位，结论维持。\n",
+        "subChapters": [
+          {
+            "title": "叙述",
+            "content": "就五行而论，金1.6，木1.9，水5.8，火0.7，土1.0。日主旺衰判定为【日主极旺（水势汪洋，易成专旺）】。动态关系净效应为「克泄」（克泄力量 3 > 助身 0）：原局通过合化/三合等关系增强了对日主水的牵制，旺衰倾向于「极旺」减弱方向，但未足以改变档位，结论维持。"
+          }
+        ]
+      },
+      {
+        "title": "三、用神与格局",
+        "content": "### 三、用神与格局\n**格局：比劫格（从旺倾向）**（偏格 · 半成 · 中级）\n月令亥藏干透日干壬（比肩），日主水气53%极旺。按文档 §3.3.1 比劫不立正格之规，本可论「润下格」（水专旺），但木气混杂未成纯一方势，故归「比劫格（从旺倾向）」偏格。喜用神参见用神章节，忌再见生扶旺势之五行。若大运行食伤泄秀或财耗之地，格局可由「半成」转「成」。\n**用神方法：调候**\n**主用神：火、土**\n**次用神：木**\n**忌神：水、金**\n日主极旺。【扶抑】日主水偏旺，按文档优先级取木（食伤泄秀，最温和）→ 火（财星耗身）→ 土（官杀克身，最烈）抑之。【调候】水日主生冬季（亥月）：冬月水气泛滥成灾（《穷通宝鉴·论壬水》亥月壬水，专用戊土制水为堤防，配以丙火暖局），必取火暖局 + 土制水为堤防，缺火则寒水无情，取火、土调候。综合：主用神=火+土，次用神=木，忌神=水+金。",
+        "subChapters": [
+          {
+            "title": "叙述",
+            "content": "命主格局为【比劫格（从旺倾向）】（偏格·半成），月令亥藏干透日干壬（比肩），日主水气53%极旺。按文档 §3.3.1 比劫不立正格之规，本可论「润下格」（水专旺），但木气混杂未成纯一方势，故归「比劫格（从旺倾向）」偏格。喜用神参见用神章节，忌再见生扶旺势之五行。若大运行食伤泄秀或财耗之地，格局可由「半成」转「成」。。用神取火、土（调候法），忌神为水、金。日主极旺。【扶抑】日主水偏旺，按文档优先级取木（食伤泄秀，最温和）→ 火（财星耗身）→ 土（官杀克身，最烈）抑之。【调候】水日主生冬季（亥月）：冬月水气泛滥成灾（《穷通宝鉴·论壬水》亥月壬水，专用戊土制水为堤防，配以丙火暖局），必取火暖局 + 土制水为堤防，缺火则寒水无情，取火、土调候。综合：主用神=火+土，次用神=木，忌神=水+金。"
+          }
+        ]
+      },
+      {
+        "title": "四、性格命格",
+        "content": "### 四、性格命格\n**核心画像：江海奔流之性，才华横溢之士。一生需借火土之力，以成其功。**\n**基底气质：** 专旺刚强 - 日主极旺（水势汪洋，易成专旺）。日主一气独旺，自我意志极强、独立性高，宜顺其势而非逆之；忌他人压制，易刚愎自用。\n**内在本性：** 壬水 · 江河汪洋 - 日主壬水如江河汪洋：智慧奔放、胸怀宽广，喜变化、不羁；过旺则桀骜难驯、漂泊不定。（主智，性聪，喜变通）\n**人生主题：** 用火、土、木·忌水、金 - 一生需借火、土、木之气化解命局失衡（取用法：调候）。主开运方向 → 方位南方、色调红紫、行业能源/电子/餐饮/传媒。需规避过度的水、金之气与对应人事环境。\n**社会角色：** 比劫格（从旺倾向） - 月令亥藏干透日干壬（比肩），日主水气53%极旺。按文档 §3.3.1 比劫不立正格之规，本可论「润下格」（水专旺），但木气混杂未成纯一方势，故归「比劫格（从旺倾向）」偏格。喜用神参见用神章节，忌再见生扶旺势之五行。若大运行食伤泄秀或财耗之地，格局可由「半成」转「成」。\n**心性组合：** 比劫旺·朋友易聚易散、比劫成势、内蕴☆比肩（自我意识）、内蕴☆伤官（锋芒才华）、虚位△劫财（冒险冲劲）\n**神煞亮点：** ★ 天乙贵人、★ 将星、· 魁罡、★ 禄神\n**优势天赋：**\n- 江河汪洋之气旺：执行力强、能独当一面\n- 天乙贵人在命：逢凶化吉、贵人多助\n- 将星临身：有领导力与威望\n- 用神为火：行能源/电子/餐饮/传媒方向得心应手\n**需要注意：**\n- 江河汪洋过旺：易刚愎自用、独断独行，需学会倾听与放权\n- 比劫成势：财来财去难积累，合伙易破财，宜独立掌财、量入为出\n- 阴阳差错：婚姻易曲折，宜晚婚或异地\n**关键词：** 专旺刚强 · 江河汪洋 · 比劫格 · 比劫旺 · 比劫成势 · 内蕴☆比肩（自我意识） · 内蕴☆伤官（锋芒才华） · 虚位△劫财（冒险冲劲） · 天乙贵人 · 将星",
+        "subChapters": [
+          {
+            "title": "叙述",
+            "content": "江海奔流之性，才华横溢之士。一生需借火土之力，以成其功。心性方面表现为比劫旺·朋友易聚易散、比劫成势、内蕴☆比肩（自我意识）、内蕴☆伤官（锋芒才华）、虚位△劫财（冒险冲劲）。主要优势在于：江河汪洋之气旺：执行力强、能独当一面；天乙贵人在命：逢凶化吉、贵人多助；将星临身：有领导力与威望。需要注意的是：江河汪洋过旺：易刚愎自用、独断独行，需学会倾听与放权；比劫成势：财来财去难积累，合伙易破财，宜独立掌财、量入为出；阴阳差错：婚姻易曲折，宜晚婚或异地。"
+          }
+        ]
+      },
+      {
+        "title": "五、婚姻",
+        "content": "### 五、婚姻\n\n**综合质量：良好（★4/5）**\n\n男命壬日主，配偶星为正财（火）。正财仅藏中余气，配偶缘分浅薄、易迟婚。配偶宫坐戌（七杀），配偶强势刚烈。命带墙外桃花（午、卯），异性缘旺。综合评定：婚姻质量【良好】（4/5）。首次强应婚信号年：2011年（19岁，流年合日支）。命局婚姻无显著风险点，宜把握良机。\n「但请注意运势节奏」：婚姻格局虽佳（4星），但 1-40 岁早年大运不利（均分仅 1.3 星），努力多见挫败、收获滞后；41 岁起入用神大运，方为婚姻真正起飞期，宜耐心积淀、择时而动。\n\n**优势：**\n- 日支自坐正财，与配偶感情天然紧密\n- 配偶宫属用神，配偶能助你运势、是命中贵人\n- 命带墙外桃花，异性缘旺，不愁追求者\n- 一生中有 8 个强应婚信号年，正缘机会充足\n\n**关注：**\n- 婚姻波动重点关注：2063 年（反吟冲日支等强信号）\n\n**关键婚期：**\n\n| 年份 | 干支 | 类型 | 强度 |\n| :-: | :-: | :-: | :-: |\n| 2011 | 辛卯 | 流年合日支 | strong |\n| 2023 | 癸卯 | 流年合日支 | strong |\n| 2026 | 丙午 | 桃花年 | medium |\n| 2035 | 乙卯 | 流年合日支 | strong |\n| 2037 | 丁巳 | 配偶星到位年 | strong |\n",
+        "subChapters": [
+          {
+            "title": "叙述",
+            "content": "婚姻方面，综合评定为【良好】。男命壬日主，配偶星为正财（火）。正财仅藏中余气，配偶缘分浅薄、易迟婚。配偶宫坐戌（七杀），配偶强势刚烈。命带墙外桃花（午、卯），异性缘旺。综合评定：婚姻质量【良好】（4/5）。首次强应婚信号年：2011年（19岁，流年合日支）。命局婚姻无显著风险点，宜把握良机。\n「但请注意运势节奏」：婚姻格局虽佳（4星），但 1-40 岁早年大运不利（均分仅 1.3 星），努力多见挫败、收获滞后；41 岁起入用神大运，方为婚姻真正起飞期，宜耐心积淀、择时而动。"
+          }
+        ]
+      },
+      {
+        "title": "六、财富",
+        "content": "### 六、财富\n\n**综合财运：富足（★4/5）**\n\n日主壬（水），财星正财属火。正财仅藏中余气，正财薄弱，需多元化求财。财源类型：财来就我。命带财库戌（未冲开）。综合评定：财运【富足】（4/5）。首个强财运信号：2026年（34岁，偏财年）。主要风险：财星藏支不透（有财难显）。求财方位：南、中方为吉。\n「但请注意运势节奏」：财富格局虽佳（4星），但 1-40 岁早年大运不利（均分仅 1.3 星），努力多见挫败、收获滞后；41 岁起入用神大运，方为财富真正起飞期，宜耐心积淀、择时而动。\n\n**财星画像：** 正财仅藏中余气，正财薄弱，需多元化求财\n**财库画像：** 命带财库（戌），藏正财，财气有\"仓库\"可积；财库未被冲开，财气深藏需大运/流年引动方能兑现\n**财源类型：财来就我**\n**适合行业：餐饮、能源、化工、电子、美容**\n**求财方位：南、中**\n\n**财富关键年（按时序）：**\n\n| 年份 | 干支 | 类型 | 强度 | 倾向 |\n| :-: | :-: | :-: | :-: | :-: |\n| 2012 | 壬辰 | 财库开年 | medium | auspicious |\n| 2024 | 甲辰 | 财库开年 | medium | auspicious |\n| 2026 | 丙午 | 偏财年 | strong | auspicious |\n| 2036 | 丙辰 | 财库开年 | medium | auspicious |\n| 2037 | 丁巳 | 正财年 | strong | auspicious |\n| 2043 | 戊午 | 财星到位运 | strong | auspicious |\n| 2048 | 戊辰 | 财库开年 | medium | auspicious |\n| 2053 | 丁巳 | 财星到位运 | strong | auspicious |\n\n**财运风险点：**\n\n- **财星藏支不透（有财难显）（low）**：正财仅藏支不透干 → 建议：财气隐藏，外人难知，需主动表现/营销让财气外显方能兑现\n\n**优势：**\n- 命带财库（戌），财气可积累\n- 一生 5 个强财运年，机会充足\n\n**关注：**\n- 【财星藏支不透（有财难显）·低】财气隐藏，外人难知，需主动表现/营销让财气外显方能兑现\n- 财运谨慎年：2003、2003、2012\n",
+        "subChapters": [
+          {
+            "title": "叙述",
+            "content": "财富方面综合评定为【富足】，日主壬（水），财星正财属火。正财仅藏中余气，正财薄弱，需多元化求财。财源类型：财来就我。命带财库戌（未冲开）。综合评定：财运【富足】（4/5）。首个强财运信号：2026年（34岁，偏财年）。主要风险：财星藏支不透（有财难显）。求财方位：南、中方为吉。\n「但请注意运势节奏」：财富格局虽佳（4星），但 1-40 岁早年大运不利（均分仅 1.3 星），努力多见挫败、收获滞后；41 岁起入用神大运，方为财富真正起飞期，宜耐心积淀、择时而动。财源以【财来就我】为主，宜于南、中方求财。近期财富关键年：2012年财库开年、2024年财库开年、2026年偏财年。"
+          }
+        ]
+      },
+      {
+        "title": "七、事业",
+        "content": "### 七、事业\n\n**综合事业：步步高升（★4/5）**\n\n日主壬（水），事业宫月柱癸亥（比肩）。正官原局未现，需大运引动。推荐路线：【适合创业】，老板气质 ★4/5。综合评定：事业【步步高升】（4/5）。首个强事业信号：2009年（17岁，正官到位年）。\n「但请注意运势节奏」：事业格局虽佳（4星），但 1-40 岁早年大运不利（均分仅 1.3 星），努力多见挫败、收获滞后；41 岁起入用神大运，方为事业真正起飞期，宜耐心积淀、择时而动。\n\n**官星画像：** 正官原局未现，需大运引动；七杀有力，有实权魄力，宜挑战型/创业型/武职；印星护官（官印相生），升迁稳定且有学历/资格加持\n**事业宫（癸亥）：** 事业宫坐比肩，事业基调自立独行、宜独立专业户（月支亥藏壬本气比肩）\n**推荐事业类型：** 体制内（公务员/事业单位）、专业技术（工程师/医生/律师）、艺术/演艺\n**推荐行业：** 航运、旅游、渔业、酒水、清洁\n**创业 vs 打工：** 适合创业（老板气质 ★4/5）\n\n**事业关键年（升迁/转折）：**\n\n| 年份 | 干支 | 类型 | 强度 | 倾向 |\n| :-: | :-: | :-: | :-: | :-: |\n| 2009 | 己丑 | 正官到位年 | strong | auspicious |\n| 2015 | 乙未 | 伤官见官年 | medium | inauspicious |\n| 2018 | 戊戌 | 七杀到位年 | strong | auspicious |\n| 2025 | 乙巳 | 伤官见官年 | medium | inauspicious |\n| 2025 | 乙巳 | 事业宫被冲年 | medium | inauspicious |\n| 2035 | 乙卯 | 伤官见官年 | medium | inauspicious |\n| 2037 | 丁巳 | 事业宫被冲年 | medium | inauspicious |\n| 2039 | 己未 | 正官到位年 | strong | auspicious |\n\n**优势：**\n- 七杀有力，有实权魄力\n- 官印相生，升迁稳定且有学历加持\n- 伤官有力，创意/技术天赋出众\n- 一生 6 个强事业机遇年\n\n**关注：**\n- 事业谨慎年：2005、2013、2015\n",
+        "subChapters": [
+          {
+            "title": "叙述",
+            "content": "事业方面综合评定为【步步高升】，日主壬（水），事业宫月柱癸亥（比肩）。正官原局未现，需大运引动。推荐路线：【适合创业】，老板气质 ★4/5。综合评定：事业【步步高升】（4/5）。首个强事业信号：2009年（17岁，正官到位年）。\n「但请注意运势节奏」：事业格局虽佳（4星），但 1-40 岁早年大运不利（均分仅 1.3 星），努力多见挫败、收获滞后；41 岁起入用神大运，方为事业真正起飞期，宜耐心积淀、择时而动。适合体制内（公务员/事业单位）、专业技术（工程师/医生/律师），路径建议适合创业。事业关键年：2009年正官到位年、2015年伤官见官年、2018年七杀到位年。"
+          }
+        ]
+      },
+      {
+        "title": "八、健康",
+        "content": "### 八、健康\n\n**体质：水旺肾寒型（★2/5 · 亚健康）**\n\n体质类型：【水旺肾寒型】。重点保养脏腑：肝、心、脾、肺、肾。综合评定：健康【亚健康】（2/5）。首个健康关注年：2012年（20岁）。调养主方向：补火、补土。\n\n**五脏六腑健康分布：**\n\n| 五行 | 主脏 / 副腑 | 强弱评分 | 风险等级 | 描述 |\n| :-: | :-: | :-: | :-: | :-- |\n| 木 | 肝 / 胆 | 0.0 | high | 木（肝/胆）原局缺失，肝系统先天虚弱，需重点调养 |\n| 火 | 心 / 小肠 | 0.0 | high | 火（心/小肠）原局缺失，心系统先天虚弱，需重点调养 |\n| 土 | 脾 / 胃 | 0.0 | high | 土（脾/胃）原局缺失，脾系统先天虚弱，需重点调养 |\n| 金 | 肺 / 大肠 | 0.0 | high | 金（肺/大肠）原局缺失，肺系统先天虚弱，需重点调养 |\n| 水 | 肾 / 膀胱 | 0.0 | high | 水（肾/膀胱）原局缺失，肾系统先天虚弱，需重点调养 |\n\n**易患疾病：肝系统：肝胆功能失调、肝系统：眼疾、肝系统：筋骨问题、心系统：心血管疾病、心系统：小肠吸收差**\n**食疗调养：红色食物（红枣/番茄）、苦味食物（苦瓜/绿茶）、羊肉/咖啡（适度）、黄色食物（南瓜/小米）**\n**运动建议：有氧运动（慢跑/游泳）、降火运动、冥想静心**\n**起居作息：11pm-1am 必须入睡（养肝胆）、保持心情舒畅，避免郁怒、11am-1pm 适当午休（养心）**\n\n**健康危险年：**\n\n| 年份 | 干支 | 类型 | 强度 |\n| :-: | :-: | :-: | :-: |\n| 2012 | 壬辰 | 冲日支年（健康波动） | strong |\n| 2023 | 庚申 | 忌神大运（慢性消耗） | medium |\n| 2024 | 甲辰 | 冲日支年（健康波动） | strong |\n| 2036 | 丙辰 | 冲日支年（健康波动） | strong |\n| 2039 | 己未 | 岁运并临年（凶吉倍增） | strong |\n| 2047 | 丁卯 | 反吟流年（手术/意外） | strong |\n\n**优势：**\n\n**关注：**\n- 【肝风险高】木（肝/胆）原局缺失，肝系统先天虚弱，需重点调养\n- 【心风险高】火（心/小肠）原局缺失，心系统先天虚弱，需重点调养\n- 【脾风险高】土（脾/胃）原局缺失，脾系统先天虚弱，需重点调养\n- 健康谨慎年：2012、2024、2036、2039\n",
+        "subChapters": [
+          {
+            "title": "叙述",
+            "content": "健康方面体质属【水旺肾寒型】，体质类型：【水旺肾寒型】。重点保养脏腑：肝、心、脾、肺、肾。综合评定：健康【亚健康】（2/5）。首个健康关注年：2012年（20岁）。调养主方向：补火、补土。易患方向：肝系统：肝胆功能失调、肝系统：眼疾、肝系统：筋骨问题。需重点关注的危险年：2012年、2024年、2036年。"
+          }
+        ]
+      },
+      {
+        "title": "九、六亲",
+        "content": "### 九、六亲\n\n**综合评定：亲缘一般（★3/5）**\n\n日主壬（水）男命。父（偏财·未现）极疏/早离、母（正印·藏·实）亲密、兄弟（比肩·藏·实）极亲、子女（正官·未现）极疏/早离。综合评定：六亲【亲缘一般】（3/5）。最深缘分：兄弟姐妹（比肩藏·实）。最薄缘分：父亲（需特别留意维系）。\n\n**父亲（偏财/年柱）：极疏/早离（★1/5）**\n父亲星偏财原局未现，父亲缘较淡，需主动经营；父亲宫酉被冲，父亲易远离/分离/聚少离多\n\n**母亲（正印/月柱）：亲密（★4/5）**\n母亲星正印藏支本气有力，母亲缘稳固但低调，关系亲近\n\n**兄弟姐妹（比肩/月柱）：极亲（★5/5）**\n兄弟姐妹星比肩藏支本气有力，兄弟姐妹缘稳固但低调，关系亲近；比肩恰落兄弟姐妹宫（月柱），位星合一更显亲缘\n\n**子女（正官/时柱）：极疏/早离（★1/5）**\n子女星正官原局未现，子女缘较淡，需主动经营；子女宫卯被冲，子女易远离/分离/聚少离多\n",
+        "subChapters": [
+          {
+            "title": "叙述",
+            "content": "六亲方面，综合评定为【亲缘一般】。日主壬（水）男命。父（偏财·未现）极疏/早离、母（正印·藏·实）亲密、兄弟（比肩·藏·实）极亲、子女（正官·未现）极疏/早离。综合评定：六亲【亲缘一般】（3/5）。最深缘分：兄弟姐妹（比肩藏·实）。最薄缘分：父亲（需特别留意维系）。"
+          }
+        ]
+      },
+      {
+        "title": "十、学业",
+        "content": "### 十、学业\n\n**学业类型：才艺学者（伤官佩印）（★4/5 · 学有所成）**\n\n日主壬（水），印星五行金。正印藏支本气有力，学问根基稳固。学业类型：【才艺学者（伤官佩印）】。综合评定：学业【学有所成】（★4/5）。命带：词馆在亥。首个强学业信号：2041年（49岁）。推荐方向：艺术、设计、影视。\n「但请注意运势节奏」：学业格局虽佳（4星），但 1-40 岁早年大运不利（均分仅 1.3 星），努力多见挫败、收获滞后；41 岁起入用神大运，方为学业真正起飞期，宜耐心积淀、择时而动。\n\n**印星画像：** 正印藏支本气有力，学问根基稳固；伤官佩印（才艺学者），创意+学问俱佳\n**学业神煞：** 命带：词馆在亥。主聪敏过人/文采出众/利文化教育之路\n**推荐方向：艺术、设计、影视、传媒、心理学**\n\n**升学/学业关键年：**\n\n| 年份 | 干支 | 类型 | 强度 | 倾向 |\n| :-: | :-: | :-: | :-: | :-: |\n| 2015 | 乙未 | 伤官佩印年 | medium | auspicious |\n| 2025 | 乙巳 | 伤官佩印年 | medium | auspicious |\n| 2035 | 乙卯 | 伤官佩印年 | medium | auspicious |\n| 2040 | 庚申 | 偏印到位年 | medium | auspicious |\n| 2041 | 辛酉 | 正印到位年 | strong | auspicious |\n\n**优势：**\n- 伤官佩印 - 才艺学者\n- 正印有力 - 学历有保障\n- 命带词馆 - 文采出众\n\n**关注：**\n",
+        "subChapters": [
+          {
+            "title": "叙述",
+            "content": "学业方面类型为【才艺学者（伤官佩印）】，日主壬（水），印星五行金。正印藏支本气有力，学问根基稳固。学业类型：【才艺学者（伤官佩印）】。综合评定：学业【学有所成】（★4/5）。命带：词馆在亥。首个强学业信号：2041年（49岁）。推荐方向：艺术、设计、影视。\n「但请注意运势节奏」：学业格局虽佳（4星），但 1-40 岁早年大运不利（均分仅 1.3 星），努力多见挫败、收获滞后；41 岁起入用神大运，方为学业真正起飞期，宜耐心积淀、择时而动。印星五行属金，推荐方向：艺术、设计、影视。首个强学业信号在2041年（正印到位年）。"
+          }
+        ]
+      },
+      {
+        "title": "十一、出行/搬迁",
+        "content": "### 十一、出行/搬迁\n\n**出行类型：商旅频繁（★4/5 · 常出常入）**\n\n命主驿马亥在月柱，主好动、喜出门、易远行、与海外/远方有缘。出行类型：【商旅频繁】。综合评定：出行【常出常入】（★4/5）。主有海外/远方城市缘分。首个重大出行年：2007年（15岁）。\n\n**驿马星：** 命主驿马亥在月柱，主好动、喜出门、易远行、与海外/远方有缘\n**海外/远方缘：** 有缘（命带海外缘）\n\n**出行/搬迁关键年：**\n\n| 年份 | 干支 | 类型 | 强度 |\n| :-: | :-: | :-: | :-: |\n| 2013 | 癸巳 | 驿马逢冲年 | strong |\n| 2019 | 己亥 | 流年驿马 | strong |\n| 2024 | 甲辰 | 日支被冲年 | medium |\n| 2025 | 乙巳 | 驿马逢冲年 | strong |\n| 2031 | 辛亥 | 流年驿马 | strong |\n| 2037 | 丁巳 | 驿马逢冲年 | strong |\n\n**优势：**\n- 命带驿马（亥）- 利出门、易远行\n- 与海外/远方城市有缘\n- 一生 13 次重大出行/搬迁机会\n\n**关注：**\n- 重大出行年：2007、2013、2019\n",
+        "subChapters": [
+          {
+            "title": "叙述",
+            "content": "出行方面类型为【商旅频繁】，命主驿马亥在月柱，主好动、喜出门、易远行、与海外/远方有缘。出行类型：【商旅频繁】。综合评定：出行【常出常入】（★4/5）。主有海外/远方城市缘分。首个重大出行年：2007年（15岁）。命带海外缘，远行有助。一生标记出行/搬迁信号 6 次。"
+          }
+        ]
+      },
+      {
+        "title": "十二、官非牢狱",
+        "content": "### 十二、官非牢狱\n\n**风险等级：高度警惕（★2/5 · 综合评级 high）**\n\n综合官非风险等级：【高度警惕】（★2/5）。原局未带凶神组合。首个高危年：2012年（20岁，日柱反吟年）。\n\n**原局无显著风险因子。**\n\n**高危流年（按时序）：**\n\n| 年份 | 干支 | 类型 | 严重度 | 描述 |\n| :-: | :-: | :-: | :-: | :-- |\n| 2012 | 壬辰 | 日柱反吟年 | high | 2012年壬辰（20岁）流年与日柱反吟（天干同/地支冲），主重大变化/官非/意外 |\n| 2014 | 甲午 | 羊刃逢冲年 | high | 2014年甲午（22岁）流年午冲命中羊刃子，主血光/手术/官非 |\n| 2019 | 己亥 | 官杀混杂年 | medium | 2019年己亥（27岁）流年加重官杀混杂，事业易反复/法律纠纷 |\n| 2026 | 丙午 | 羊刃逢冲年 | high | 2026年丙午（34岁）流年午冲命中羊刃子，主血光/手术/官非 |\n| 2029 | 己酉 | 官杀混杂年 | medium | 2029年己酉（37岁）流年加重官杀混杂，事业易反复/法律纠纷 |\n| 2038 | 戊午 | 羊刃逢冲年 | high | 2038年戊午（46岁）流年午冲命中羊刃子，主血光/手术/官非 |\n\n**优势：**\n- 原局未带羊刃劫煞三刑等凶神\n\n**关注：**\n- 官非高危年：2012(日柱反吟年)、2014(羊刃逢冲年)、2026(羊刃逢冲年)、2038(羊刃逢冲年)、2050(羊刃逢冲年)\n",
+        "subChapters": [
+          {
+            "title": "叙述",
+            "content": "官非牢狱方面，风险等级为【高度警惕】。综合官非风险等级：【高度警惕】（★2/5）。原局未带凶神组合。首个高危年：2012年（20岁，日柱反吟年）。原局无显著风险因子。重点警惕年份：2012年、2014年、2026年。"
+          }
+        ]
+      },
+      {
+        "title": "十三、大运流年",
+        "content": "### 十三、大运流年\n\n**起运：11 岁起运（精确为出生后 9 年 10 个月 0 天，即 2003-10-07 交脱）（逆行）**\n\n| 序号 | 干支 | 起运年龄 | 起讫年份 | 十神 | 五行角色 | 吉凶 | 简评 |\n| :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-- |\n| 1 | 壬戌 | 11 | 2003-2012 | 比肩 | 忌神 | ★2 | 比肩坐运，自立独行之时 |\n| 2 | 辛酉 | 21 | 2013-2022 | 正印 | 忌神 | ★1 | 正印护身，长辈/平台之助 |\n| 3 | 庚申 | 31 | 2023-2032 | 偏印 | 忌神 | ★1 | 偏印生身，思虑深沉之时 |\n| 4 | 己未 | 41 | 2033-2042 | 正官 | 用神 | ★4 | 正官当令，事业贵气之运 |\n| 5 | 戊午 | 51 | 2043-2052 | 七杀 | 用神 | ★5 | 七杀临身，压力与机遇并存 |\n| 6 | 丁巳 | 61 | 2053-2062 | 正财 | 用神 | ★4 | 正财得地，务实稳健之运 |\n| 7 | 丙辰 | 71 | 2063-2072 | 偏财 | 用神 | ★3 | 偏财大运，机缘横财并至 |\n| 8 | 乙卯 | 81 | 2073-2082 | 伤官 | 喜神 | ★5 | 伤官泄秀，才华显露之时 |\n\n**人生时间轴总览：** 人生黄金期：41-50虚岁（己未用神运）、51-60虚岁（戊午用神运）、61-70虚岁（丁巳用神运）、81-90虚岁（乙卯喜神运）（用神/喜神到位，大胆进取）；需谨慎期：11-20虚岁（壬戌忌神运）、21-30虚岁（辛酉忌神运）、31-40虚岁（庚申忌神运）（忌神当令，守为上策）。\n\n**人生黄金期：** 第6步运 戊午（51-60岁，戊午 · 用神运 · 评分 5/5 · 黄金 10 年）；第7步运 丁巳（61-70岁，丁巳 · 用神运 · 评分 4/5 · ⊕ 局势成型·黄金 10 年）；第8步运 丙辰（71-80岁，丙辰 · 用神运 · 评分 3/5 · ⚡ 反吟冲日·黄金 10 年）\n\n**人生需谨慎期：** 第3步运 辛酉（21-30岁，辛酉 · 忌神运 · 评分 1/5 · ↻ 伏吟旧事·需防 10 年）；第4步运 庚申（31-40岁，庚申 · 忌神运 · 评分 1/5 · 需防 10 年）；第5步运 己未（41-50岁，己未 · 用神运 · 评分 4/5 · ⊕ 局势成型·黄金 10 年）\n\n**各步大运关键事件：**\n\n- **第2步 壬戌（11-20岁，壬戌 · 忌神运 · 评分 2/5 · ↻ 伏吟旧事·需防 10 年）**\n  - 关键作用：↻大运伏吟：自身伏吟，命主此运多有\"重复旧事/旧痛复发/老问题再现\"之象\n  - 关键流年：2012年(反吟)、2008年(填实空亡)、2009年(填实空亡)\n- **第3步 辛酉（21-30岁，辛酉 · 忌神运 · 评分 1/5 · ↻ 伏吟旧事·需防 10 年）**\n  - 关键流年：2020年(填实空亡)、2021年(填实空亡)、2016年(忌神年)\n- **第4步 庚申（31-40岁，庚申 · 忌神运 · 评分 1/5 · 需防 10 年）**\n  - 关键流年：2024年(反吟)、2032年(填实空亡)、2023年(流年合日支)\n- **第5步 己未（41-50岁，己未 · 用神运 · 评分 4/5 · ⊕ 局势成型·黄金 10 年）**\n  - 关键作用：⊕大运地支三合：此运木气压倒全盘，命局格局可能临时改变；⊕大运地支三合：此运木气压倒全盘，命局格局可能临时改变；⊕大运地支三合：此运木气压倒全盘，命局格局可能临时改变\n  - 关键流年：2039年(岁运并临)、2042年(伏吟)、2036年(反吟)\n- **第6步 戊午（51-60岁，戊午 · 用神运 · 评分 5/5 · 黄金 10 年）**\n  - 关键作用：◐大运地支半三合：火气大增，影响命局力量平衡\n  - 关键流年：2048年(反吟)、2044年(填实空亡)、2045年(填实空亡)\n- **第7步 丁巳（61-70岁，丁巳 · 用神运 · 评分 4/5 · ⊕ 局势成型·黄金 10 年）**\n  - 关键作用：⊕大运合化：日主此运临时改性为木，整个十年的人生气质和事业方向发生根本转向\n  - 关键流年：2060年(反吟)、2056年(填实空亡)、2057年(填实空亡)\n- **第8步 丙辰（71-80岁，丙辰 · 用神运 · 评分 3/5 · ⚡ 反吟冲日·黄金 10 年）**\n  - 关键作用：⚔大运天干相冲：直接冲击日主，此运易有重大变动、健康/事业波动；⚡大运反吟：冲动配偶宫，此运婚姻易有大变动、迁移搬迁、健康波动；命理学谓\"反吟伏吟，泪流不止\"\n  - 关键流年：2072年(反吟)、2068年(填实空亡)、2069年(填实空亡)\n- **第9步 乙卯（81-90岁，乙卯 · 喜神运 · 评分 5/5 · ↻ 伏吟旧事·吉运 10 年）**\n  - 关键作用：♥大运地支六合：合配偶宫，此运感情升温/婚姻信号显著（已婚者需防外遇桃花）\n  - 关键流年：2080年(填实空亡)、2081年(填实空亡)、2078年(流年合大运)\n\n**2026年流月概览：**\n\n2026年（丙午），处于第3步大运庚申（31-40岁）。本年最顺利的月份：农历1月。需要谨慎的月份：农历3、8、9月。\n\n- 最吉月份：农历 1 月\n- 最忌月份：农历 3、8、9 月\n",
+        "subChapters": [
+          {
+            "title": "叙述",
+            "content": "命主11 岁起运（精确为出生后 9 年 10 个月 0 天，即 2003-10-07 交脱）起运，运程逆行，一生共历 8 步大运。人生黄金期：41-50虚岁（己未用神运）、51-60虚岁（戊午用神运）、61-70虚岁（丁巳用神运）、81-90虚岁（乙卯喜神运）（用神/喜神到位，大胆进取）；需谨慎期：11-20虚岁（壬戌忌神运）、21-30虚岁（辛酉忌神运）、31-40虚岁（庚申忌神运）（忌神当令，守为上策）。人生黄金期为第6步运（51-60岁）与第7步运（61-70岁），宜把握。"
+          }
+        ]
+      },
+      {
+        "title": "十四、综合论命",
+        "content": "### 十四、综合论命\n\n> **壬水汪洋，亥月成势，专旺之局。调候缺火，寒湿为病。用神火土为药，运入东南则发。**\n\n**一句话画像：** 江海奔流之性，才华横溢之士。一生需借火土之力，以成其功。\n\n#### 🔴 这辈子最需要警觉的 3 件事\n\n**1. 日主水极旺成势**（来源：日主旺衰 · 影响权重 90）\n> 日主水占比 53%，已成一方之势。命理学：\"强者宜抑、宜泄、宜制\"——人生主基调是\"如何驾驭过盛的自我能量\"，影响行业、城市、伴侣的所有选择。\n> 💡 **可执行建议**：避免去北方城市发展，避免水产/物流/酒水/航运/旅游相关行业，配偶不宜冬天生的人。需要一辈子有意识地\"减法\"——少做、慢做、克制。\n\n**2. 日主极旺（水势汪洋，易成专旺），水势汪洋**（来源：关键发现 · 影响权重 80）\n> 壬水生亥月得令，日主极旺（水势汪洋，易成专旺）。水气占全局53%，最忌再行金水之地。命运关键在于如何疏导和平衡这股水势。\n> 💡 **可执行建议**：这是引擎多维度共同识别出的命局隐患，需要长期意识 + 主动化解。详细参考\"日主极旺（水势汪洋，易成专旺），水势汪洋\"对应模块。\n\n**3. 调候缺火（仅 6%）**（来源：用神调候缺位 · 影响权重 75）\n> 命理学口径：\"调候用神优先级高于扶抑\"——原局调候用神火占比仅 6%，意味着寒暖燥湿失衡的核心矛盾贯穿一生。水日主生冬季（亥月）：冬月水气泛滥成灾（《穷通宝鉴·论壬水》亥月壬水，专用戊土制水为堤防，配以丙火暖局），必取火暖局 + 土制水为堤防，缺火则寒水无情，取火、土调候\n> 💡 **可执行建议**：居住宜南方城市（火旺地）；居所采光好、装修暖色调、配偶宜夏天生；事业方向可往能源/餐饮/影视/广告靠拢。这是一辈子需要主动追求的\"补缺\"动作。\n\n#### 🟢 这辈子最值得放大的 3 件事\n\n**1. 41-90岁用神大运50年**（来源：大运用神段 · 影响权重 80）\n> 连续 50 年（共 5 步大运）走用神/喜神运，是命中最重要的人生黄金期。命理学：\"用神得运，富贵可期\"。\n> 💡 **可执行建议**：这段时间是事业起飞、财富积累、关系建立的关键窗口期，应主动出击、加大投入、扩张资源。错过这段窗口，黄金期不再。\n\n**2. 木食伤泄秀，是命中天赋**（来源：关键发现 · 影响权重 50）\n> 月柱亥藏甲（食神）、时柱卯藏乙（伤官）——主才华、表达、创造力。这是命里闪光的一笔，建议把\"输出表达\"作为人生主线。\n> 💡 **可执行建议**：这是引擎多维度共同识别出的命局优势，应该有意识地放大、强化、利用。\n\n**3. 2033年起进入正官大运**（来源：关键发现 · 影响权重 50）\n> 41岁起入己未大运（正官），土正合用神方向。正官当令，事业贵气之运\n> 💡 **可执行建议**：这是引擎多维度共同识别出的命局优势，应该有意识地放大、强化、利用。\n\n#### 📋 命格定盘\n\n- **格局**：【比劫格（从旺倾向）】（偏格 · 半成 · 中级）\n- **用神**：火、土（调候法）｜忌神：水、金\n- **体质**：水旺肾寒型\n\n#### 📊 八维评分一览\n\n| 维度 | 评分 | 标签 |\n| :-: | :-: | :-- |\n| 婚姻 | ★4/5 | 良好 |\n| 财富 | ★4/5 | 富足 |\n| 事业 | ★4/5 | 步步高升 |\n| 健康 | ★2/5 | 亚健康 |\n| 六亲 | ★3/5 | 亲缘一般 |\n| 学业 | ★4/5 | 学有所成 |\n| 出行 | ★4/5 | 常出常入 |\n| 官非 | ★2/5 | 高度警惕 |\n\n#### 🔍 全部关键发现（红黄绿三级）\n\n🔴 **红色（重大警示）：**\n- **日主极旺（水势汪洋，易成专旺），水势汪洋**：壬水生亥月得令，日主极旺（水势汪洋，易成专旺）。水气占全局53%，最忌再行金水之地。命运关键在于如何疏导和平衡这股水势。\n\n🟡 **黄色（重要关注）：**\n- **冬水寒凝，缺火调候**：全局火气仅6%，冬水无火则寒。内心常感\"冷\"——情感不易升温、易陷入理性自省。需要主动寻找让自己\"暖\"的人和事。\n- **比劫成群，财易破耗**：天干3个比劫夺财，命中财星（火）力薄。遇兄弟朋友合作易破财，建议财务独立、避免合伙、警惕\"为情/为义\"出资。\n- **命带阴阳差错，需注意化解**：阴阳差错：主婚姻易有波折、与配偶亲族缘薄，需以平常心对待感情，重者影响家庭和睦。\n\n🟢 **绿色（吉利亮点）：**\n- **木食伤泄秀，是命中天赋**：月柱亥藏甲（食神）、时柱卯藏乙（伤官）——主才华、表达、创造力。这是命里闪光的一笔，建议把\"输出表达\"作为人生主线。\n- **命带天乙贵人、禄神、将星、魁罡**：天乙贵人（时支卯）；禄神（月支见亥）；将星（年支见酉）；魁罡（日柱壬戌）。天乙贵人主一生贵人扶持；将星主领导才能；魁罡主刚毅聪敏；禄神主衣食无忧。\n- **2033年起进入正官大运**：41岁起入己未大运（正官），土正合用神方向。正官当令，事业贵气之运\n\n#### 📝 综合判词\n\n蔡此命，婚姻和美，财运亨通，事业有成，需重保健。人生黄金期：41-50虚岁（己未用神运）、51-60虚岁（戊午用神运）、61-70虚岁（丁巳用神运）、81-90虚岁（乙卯喜神运）（用神/喜神到位，大胆进取）；需谨慎期：11-20虚岁（壬戌忌神运）、21-30虚岁（辛酉忌神运）、31-40虚岁（庚申忌神运）（忌神当令，守为上策）。\n\n#### 🎯 给命主的总建议\n\n1. **优先做 Top 3 优势事**：上方\"最值得放大的 3 件事\"是命主先天得天独厚的资源，应该有意识地放大、强化、利用。\n2. **优先避 Top 3 风险事**：上方\"最需要警觉的 3 件事\"是命主一生需长期意识 + 主动化解的核心矛盾。\n3. **用神方向**：取火、土为用，避水、金为忌；五行调候、人事择友、择业择居皆可参照。\n4. **时机把握**：重大决策宜在用神大运/流年行之，本年（2026）2026年（丙午），处于第3步大运庚申（31-40岁）。本年最顺利的月份：农历1月。需要谨慎的月份：农历3、8、9月。\n5. **修身养命**：命格虽定，但行善积德、修身养性、择善而从，可大改命途。\n",
+        "subChapters": [
+          {
+            "title": "叙述",
+            "content": "命局壬水生于亥月，水势滔天，日主极旺，有从旺之象。然冬水寒凝，调候为急，原局仅一戌中藏丁，火弱土虚，寒湿之气弥漫全局。此命之要，在于以火暖局、以土制水，方能激发生机。月时木气泄秀，食伤透清，主聪明才辩，艺术或技术天赋过人，然木浮于水，若无火引，终是虚花。\n\n运途之机，中年方显。41岁后入己未、戊午大运，火土齐来，正官正印用神得力，如寒谷逢春，事业贵气蒸腾。此前早运金水，难免志大难伸，宜潜心蓄力，待时而动。晚年丁巳、丙辰运，火土更炽，可成一方之业。\n\n一生大忌再行金水，若遇申酉亥子，恐水势泛濫，反成灾咎。宜择南方火地，从事能源、文化、传媒等火土属性行业。以才华输出为舟，以火土为舵，方能驾驭汪洋之势，化暴戾为祥和。"
+          }
+        ]
+      }
+    ],
+    "markdown": "## 蔡 · 命书全文\n\n> 公历 1993年12月7日 06:00 | 农历 一九九三年 十月廿四 卯时\n> 八字：癸酉 癸亥 壬戌 癸卯 | 日主：壬\n\n\n---\n\n### 一、四柱排盘\n\n**蔡**，男，公历 1993年12月7日 06:00（农历 一九九三年 十月廿四 卯时）。\n\n| 柱位 | 天干 | 地支 | 藏干 | 纳音 |\n| :-: | :-: | :-: | :-: | :-: |\n| 年柱 | 癸 | 酉 | 辛 | 剑锋金 |\n| 月柱 | 癸 | 亥 | 壬、甲 | 大海水 |\n| 日柱 | 壬 | 戌 | 戊、辛、丁 | 大海水 |\n| 时柱 | 癸 | 卯 | 乙 | 金箔金 |\n\n### 二、五行与旺衰\n\n**五行分布：**\n\n| 五行 | 力量 | 占比 |\n| :-: | :-: | :-: |\n| 金 | 1.6 | 15.0% |\n| 木 | 1.9 | 17.0% |\n| 水 | 5.8 | 53.0% |\n| 火 | 0.7 | 6.0% |\n| 土 | 1.0 | 9.0% |\n\n**日主旺衰：日主极旺（水势汪洋，易成专旺）**（置信度 ★5/5）\n\n动态关系净效应为「克泄」（克泄力量 3 > 助身 0）：原局通过合化/三合等关系增强了对日主水的牵制，旺衰倾向于「极旺」减弱方向，但未足以改变档位，结论维持。\n\n### 三、用神与格局\n**格局：比劫格（从旺倾向）**（偏格 · 半成 · 中级）\n月令亥藏干透日干壬（比肩），日主水气53%极旺。按文档 §3.3.1 比劫不立正格之规，本可论「润下格」（水专旺），但木气混杂未成纯一方势，故归「比劫格（从旺倾向）」偏格。喜用神参见用神章节，忌再见生扶旺势之五行。若大运行食伤泄秀或财耗之地，格局可由「半成」转「成」。\n**用神方法：调候**\n**主用神：火、土**\n**次用神：木**\n**忌神：水、金**\n日主极旺。【扶抑】日主水偏旺，按文档优先级取木（食伤泄秀，最温和）→ 火（财星耗身）→ 土（官杀克身，最烈）抑之。【调候】水日主生冬季（亥月）：冬月水气泛滥成灾（《穷通宝鉴·论壬水》亥月壬水，专用戊土制水为堤防，配以丙火暖局），必取火暖局 + 土制水为堤防，缺火则寒水无情，取火、土调候。综合：主用神=火+土，次用神=木，忌神=水+金。\n### 四、性格命格\n**核心画像：江海奔流之性，才华横溢之士。一生需借火土之力，以成其功。**\n**基底气质：** 专旺刚强 - 日主极旺（水势汪洋，易成专旺）。日主一气独旺，自我意志极强、独立性高，宜顺其势而非逆之；忌他人压制，易刚愎自用。\n**内在本性：** 壬水 · 江河汪洋 - 日主壬水如江河汪洋：智慧奔放、胸怀宽广，喜变化、不羁；过旺则桀骜难驯、漂泊不定。（主智，性聪，喜变通）\n**人生主题：** 用火、土、木·忌水、金 - 一生需借火、土、木之气化解命局失衡（取用法：调候）。主开运方向 → 方位南方、色调红紫、行业能源/电子/餐饮/传媒。需规避过度的水、金之气与对应人事环境。\n**社会角色：** 比劫格（从旺倾向） - 月令亥藏干透日干壬（比肩），日主水气53%极旺。按文档 §3.3.1 比劫不立正格之规，本可论「润下格」（水专旺），但木气混杂未成纯一方势，故归「比劫格（从旺倾向）」偏格。喜用神参见用神章节，忌再见生扶旺势之五行。若大运行食伤泄秀或财耗之地，格局可由「半成」转「成」。\n**心性组合：** 比劫旺·朋友易聚易散、比劫成势、内蕴☆比肩（自我意识）、内蕴☆伤官（锋芒才华）、虚位△劫财（冒险冲劲）\n**神煞亮点：** ★ 天乙贵人、★ 将星、· 魁罡、★ 禄神\n**优势天赋：**\n- 江河汪洋之气旺：执行力强、能独当一面\n- 天乙贵人在命：逢凶化吉、贵人多助\n- 将星临身：有领导力与威望\n- 用神为火：行能源/电子/餐饮/传媒方向得心应手\n**需要注意：**\n- 江河汪洋过旺：易刚愎自用、独断独行，需学会倾听与放权\n- 比劫成势：财来财去难积累，合伙易破财，宜独立掌财、量入为出\n- 阴阳差错：婚姻易曲折，宜晚婚或异地\n**关键词：** 专旺刚强 · 江河汪洋 · 比劫格 · 比劫旺 · 比劫成势 · 内蕴☆比肩（自我意识） · 内蕴☆伤官（锋芒才华） · 虚位△劫财（冒险冲劲） · 天乙贵人 · 将星\n### 五、婚姻\n\n**综合质量：良好（★4/5）**\n\n男命壬日主，配偶星为正财（火）。正财仅藏中余气，配偶缘分浅薄、易迟婚。配偶宫坐戌（七杀），配偶强势刚烈。命带墙外桃花（午、卯），异性缘旺。综合评定：婚姻质量【良好】（4/5）。首次强应婚信号年：2011年（19岁，流年合日支）。命局婚姻无显著风险点，宜把握良机。\n「但请注意运势节奏」：婚姻格局虽佳（4星），但 1-40 岁早年大运不利（均分仅 1.3 星），努力多见挫败、收获滞后；41 岁起入用神大运，方为婚姻真正起飞期，宜耐心积淀、择时而动。\n\n**优势：**\n- 日支自坐正财，与配偶感情天然紧密\n- 配偶宫属用神，配偶能助你运势、是命中贵人\n- 命带墙外桃花，异性缘旺，不愁追求者\n- 一生中有 8 个强应婚信号年，正缘机会充足\n\n**关注：**\n- 婚姻波动重点关注：2063 年（反吟冲日支等强信号）\n\n**关键婚期：**\n\n| 年份 | 干支 | 类型 | 强度 |\n| :-: | :-: | :-: | :-: |\n| 2011 | 辛卯 | 流年合日支 | strong |\n| 2023 | 癸卯 | 流年合日支 | strong |\n| 2026 | 丙午 | 桃花年 | medium |\n| 2035 | 乙卯 | 流年合日支 | strong |\n| 2037 | 丁巳 | 配偶星到位年 | strong |\n\n### 六、财富\n\n**综合财运：富足（★4/5）**\n\n日主壬（水），财星正财属火。正财仅藏中余气，正财薄弱，需多元化求财。财源类型：财来就我。命带财库戌（未冲开）。综合评定：财运【富足】（4/5）。首个强财运信号：2026年（34岁，偏财年）。主要风险：财星藏支不透（有财难显）。求财方位：南、中方为吉。\n「但请注意运势节奏」：财富格局虽佳（4星），但 1-40 岁早年大运不利（均分仅 1.3 星），努力多见挫败、收获滞后；41 岁起入用神大运，方为财富真正起飞期，宜耐心积淀、择时而动。\n\n**财星画像：** 正财仅藏中余气，正财薄弱，需多元化求财\n**财库画像：** 命带财库（戌），藏正财，财气有\"仓库\"可积；财库未被冲开，财气深藏需大运/流年引动方能兑现\n**财源类型：财来就我**\n**适合行业：餐饮、能源、化工、电子、美容**\n**求财方位：南、中**\n\n**财富关键年（按时序）：**\n\n| 年份 | 干支 | 类型 | 强度 | 倾向 |\n| :-: | :-: | :-: | :-: | :-: |\n| 2012 | 壬辰 | 财库开年 | medium | auspicious |\n| 2024 | 甲辰 | 财库开年 | medium | auspicious |\n| 2026 | 丙午 | 偏财年 | strong | auspicious |\n| 2036 | 丙辰 | 财库开年 | medium | auspicious |\n| 2037 | 丁巳 | 正财年 | strong | auspicious |\n| 2043 | 戊午 | 财星到位运 | strong | auspicious |\n| 2048 | 戊辰 | 财库开年 | medium | auspicious |\n| 2053 | 丁巳 | 财星到位运 | strong | auspicious |\n\n**财运风险点：**\n\n- **财星藏支不透（有财难显）（low）**：正财仅藏支不透干 → 建议：财气隐藏，外人难知，需主动表现/营销让财气外显方能兑现\n\n**优势：**\n- 命带财库（戌），财气可积累\n- 一生 5 个强财运年，机会充足\n\n**关注：**\n- 【财星藏支不透（有财难显）·低】财气隐藏，外人难知，需主动表现/营销让财气外显方能兑现\n- 财运谨慎年：2003、2003、2012\n\n### 七、事业\n\n**综合事业：步步高升（★4/5）**\n\n日主壬（水），事业宫月柱癸亥（比肩）。正官原局未现，需大运引动。推荐路线：【适合创业】，老板气质 ★4/5。综合评定：事业【步步高升】（4/5）。首个强事业信号：2009年（17岁，正官到位年）。\n「但请注意运势节奏」：事业格局虽佳（4星），但 1-40 岁早年大运不利（均分仅 1.3 星），努力多见挫败、收获滞后；41 岁起入用神大运，方为事业真正起飞期，宜耐心积淀、择时而动。\n\n**官星画像：** 正官原局未现，需大运引动；七杀有力，有实权魄力，宜挑战型/创业型/武职；印星护官（官印相生），升迁稳定且有学历/资格加持\n**事业宫（癸亥）：** 事业宫坐比肩，事业基调自立独行、宜独立专业户（月支亥藏壬本气比肩）\n**推荐事业类型：** 体制内（公务员/事业单位）、专业技术（工程师/医生/律师）、艺术/演艺\n**推荐行业：** 航运、旅游、渔业、酒水、清洁\n**创业 vs 打工：** 适合创业（老板气质 ★4/5）\n\n**事业关键年（升迁/转折）：**\n\n| 年份 | 干支 | 类型 | 强度 | 倾向 |\n| :-: | :-: | :-: | :-: | :-: |\n| 2009 | 己丑 | 正官到位年 | strong | auspicious |\n| 2015 | 乙未 | 伤官见官年 | medium | inauspicious |\n| 2018 | 戊戌 | 七杀到位年 | strong | auspicious |\n| 2025 | 乙巳 | 伤官见官年 | medium | inauspicious |\n| 2025 | 乙巳 | 事业宫被冲年 | medium | inauspicious |\n| 2035 | 乙卯 | 伤官见官年 | medium | inauspicious |\n| 2037 | 丁巳 | 事业宫被冲年 | medium | inauspicious |\n| 2039 | 己未 | 正官到位年 | strong | auspicious |\n\n**优势：**\n- 七杀有力，有实权魄力\n- 官印相生，升迁稳定且有学历加持\n- 伤官有力，创意/技术天赋出众\n- 一生 6 个强事业机遇年\n\n**关注：**\n- 事业谨慎年：2005、2013、2015\n\n### 八、健康\n\n**体质：水旺肾寒型（★2/5 · 亚健康）**\n\n体质类型：【水旺肾寒型】。重点保养脏腑：肝、心、脾、肺、肾。综合评定：健康【亚健康】（2/5）。首个健康关注年：2012年（20岁）。调养主方向：补火、补土。\n\n**五脏六腑健康分布：**\n\n| 五行 | 主脏 / 副腑 | 强弱评分 | 风险等级 | 描述 |\n| :-: | :-: | :-: | :-: | :-- |\n| 木 | 肝 / 胆 | 0.0 | high | 木（肝/胆）原局缺失，肝系统先天虚弱，需重点调养 |\n| 火 | 心 / 小肠 | 0.0 | high | 火（心/小肠）原局缺失，心系统先天虚弱，需重点调养 |\n| 土 | 脾 / 胃 | 0.0 | high | 土（脾/胃）原局缺失，脾系统先天虚弱，需重点调养 |\n| 金 | 肺 / 大肠 | 0.0 | high | 金（肺/大肠）原局缺失，肺系统先天虚弱，需重点调养 |\n| 水 | 肾 / 膀胱 | 0.0 | high | 水（肾/膀胱）原局缺失，肾系统先天虚弱，需重点调养 |\n\n**易患疾病：肝系统：肝胆功能失调、肝系统：眼疾、肝系统：筋骨问题、心系统：心血管疾病、心系统：小肠吸收差**\n**食疗调养：红色食物（红枣/番茄）、苦味食物（苦瓜/绿茶）、羊肉/咖啡（适度）、黄色食物（南瓜/小米）**\n**运动建议：有氧运动（慢跑/游泳）、降火运动、冥想静心**\n**起居作息：11pm-1am 必须入睡（养肝胆）、保持心情舒畅，避免郁怒、11am-1pm 适当午休（养心）**\n\n**健康危险年：**\n\n| 年份 | 干支 | 类型 | 强度 |\n| :-: | :-: | :-: | :-: |\n| 2012 | 壬辰 | 冲日支年（健康波动） | strong |\n| 2023 | 庚申 | 忌神大运（慢性消耗） | medium |\n| 2024 | 甲辰 | 冲日支年（健康波动） | strong |\n| 2036 | 丙辰 | 冲日支年（健康波动） | strong |\n| 2039 | 己未 | 岁运并临年（凶吉倍增） | strong |\n| 2047 | 丁卯 | 反吟流年（手术/意外） | strong |\n\n**优势：**\n\n**关注：**\n- 【肝风险高】木（肝/胆）原局缺失，肝系统先天虚弱，需重点调养\n- 【心风险高】火（心/小肠）原局缺失，心系统先天虚弱，需重点调养\n- 【脾风险高】土（脾/胃）原局缺失，脾系统先天虚弱，需重点调养\n- 健康谨慎年：2012、2024、2036、2039\n\n### 九、六亲\n\n**综合评定：亲缘一般（★3/5）**\n\n日主壬（水）男命。父（偏财·未现）极疏/早离、母（正印·藏·实）亲密、兄弟（比肩·藏·实）极亲、子女（正官·未现）极疏/早离。综合评定：六亲【亲缘一般】（3/5）。最深缘分：兄弟姐妹（比肩藏·实）。最薄缘分：父亲（需特别留意维系）。\n\n**父亲（偏财/年柱）：极疏/早离（★1/5）**\n父亲星偏财原局未现，父亲缘较淡，需主动经营；父亲宫酉被冲，父亲易远离/分离/聚少离多\n\n**母亲（正印/月柱）：亲密（★4/5）**\n母亲星正印藏支本气有力，母亲缘稳固但低调，关系亲近\n\n**兄弟姐妹（比肩/月柱）：极亲（★5/5）**\n兄弟姐妹星比肩藏支本气有力，兄弟姐妹缘稳固但低调，关系亲近；比肩恰落兄弟姐妹宫（月柱），位星合一更显亲缘\n\n**子女（正官/时柱）：极疏/早离（★1/5）**\n子女星正官原局未现，子女缘较淡，需主动经营；子女宫卯被冲，子女易远离/分离/聚少离多\n\n### 十、学业\n\n**学业类型：才艺学者（伤官佩印）（★4/5 · 学有所成）**\n\n日主壬（水），印星五行金。正印藏支本气有力，学问根基稳固。学业类型：【才艺学者（伤官佩印）】。综合评定：学业【学有所成】（★4/5）。命带：词馆在亥。首个强学业信号：2041年（49岁）。推荐方向：艺术、设计、影视。\n「但请注意运势节奏」：学业格局虽佳（4星），但 1-40 岁早年大运不利（均分仅 1.3 星），努力多见挫败、收获滞后；41 岁起入用神大运，方为学业真正起飞期，宜耐心积淀、择时而动。\n\n**印星画像：** 正印藏支本气有力，学问根基稳固；伤官佩印（才艺学者），创意+学问俱佳\n**学业神煞：** 命带：词馆在亥。主聪敏过人/文采出众/利文化教育之路\n**推荐方向：艺术、设计、影视、传媒、心理学**\n\n**升学/学业关键年：**\n\n| 年份 | 干支 | 类型 | 强度 | 倾向 |\n| :-: | :-: | :-: | :-: | :-: |\n| 2015 | 乙未 | 伤官佩印年 | medium | auspicious |\n| 2025 | 乙巳 | 伤官佩印年 | medium | auspicious |\n| 2035 | 乙卯 | 伤官佩印年 | medium | auspicious |\n| 2040 | 庚申 | 偏印到位年 | medium | auspicious |\n| 2041 | 辛酉 | 正印到位年 | strong | auspicious |\n\n**优势：**\n- 伤官佩印 - 才艺学者\n- 正印有力 - 学历有保障\n- 命带词馆 - 文采出众\n\n**关注：**\n\n### 十一、出行/搬迁\n\n**出行类型：商旅频繁（★4/5 · 常出常入）**\n\n命主驿马亥在月柱，主好动、喜出门、易远行、与海外/远方有缘。出行类型：【商旅频繁】。综合评定：出行【常出常入】（★4/5）。主有海外/远方城市缘分。首个重大出行年：2007年（15岁）。\n\n**驿马星：** 命主驿马亥在月柱，主好动、喜出门、易远行、与海外/远方有缘\n**海外/远方缘：** 有缘（命带海外缘）\n\n**出行/搬迁关键年：**\n\n| 年份 | 干支 | 类型 | 强度 |\n| :-: | :-: | :-: | :-: |\n| 2013 | 癸巳 | 驿马逢冲年 | strong |\n| 2019 | 己亥 | 流年驿马 | strong |\n| 2024 | 甲辰 | 日支被冲年 | medium |\n| 2025 | 乙巳 | 驿马逢冲年 | strong |\n| 2031 | 辛亥 | 流年驿马 | strong |\n| 2037 | 丁巳 | 驿马逢冲年 | strong |\n\n**优势：**\n- 命带驿马（亥）- 利出门、易远行\n- 与海外/远方城市有缘\n- 一生 13 次重大出行/搬迁机会\n\n**关注：**\n- 重大出行年：2007、2013、2019\n\n### 十二、官非牢狱\n\n**风险等级：高度警惕（★2/5 · 综合评级 high）**\n\n综合官非风险等级：【高度警惕】（★2/5）。原局未带凶神组合。首个高危年：2012年（20岁，日柱反吟年）。\n\n**原局无显著风险因子。**\n\n**高危流年（按时序）：**\n\n| 年份 | 干支 | 类型 | 严重度 | 描述 |\n| :-: | :-: | :-: | :-: | :-- |\n| 2012 | 壬辰 | 日柱反吟年 | high | 2012年壬辰（20岁）流年与日柱反吟（天干同/地支冲），主重大变化/官非/意外 |\n| 2014 | 甲午 | 羊刃逢冲年 | high | 2014年甲午（22岁）流年午冲命中羊刃子，主血光/手术/官非 |\n| 2019 | 己亥 | 官杀混杂年 | medium | 2019年己亥（27岁）流年加重官杀混杂，事业易反复/法律纠纷 |\n| 2026 | 丙午 | 羊刃逢冲年 | high | 2026年丙午（34岁）流年午冲命中羊刃子，主血光/手术/官非 |\n| 2029 | 己酉 | 官杀混杂年 | medium | 2029年己酉（37岁）流年加重官杀混杂，事业易反复/法律纠纷 |\n| 2038 | 戊午 | 羊刃逢冲年 | high | 2038年戊午（46岁）流年午冲命中羊刃子，主血光/手术/官非 |\n\n**优势：**\n- 原局未带羊刃劫煞三刑等凶神\n\n**关注：**\n- 官非高危年：2012(日柱反吟年)、2014(羊刃逢冲年)、2026(羊刃逢冲年)、2038(羊刃逢冲年)、2050(羊刃逢冲年)\n\n### 十三、大运流年\n\n**起运：11 岁起运（精确为出生后 9 年 10 个月 0 天，即 2003-10-07 交脱）（逆行）**\n\n| 序号 | 干支 | 起运年龄 | 起讫年份 | 十神 | 五行角色 | 吉凶 | 简评 |\n| :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-- |\n| 1 | 壬戌 | 11 | 2003-2012 | 比肩 | 忌神 | ★2 | 比肩坐运，自立独行之时 |\n| 2 | 辛酉 | 21 | 2013-2022 | 正印 | 忌神 | ★1 | 正印护身，长辈/平台之助 |\n| 3 | 庚申 | 31 | 2023-2032 | 偏印 | 忌神 | ★1 | 偏印生身，思虑深沉之时 |\n| 4 | 己未 | 41 | 2033-2042 | 正官 | 用神 | ★4 | 正官当令，事业贵气之运 |\n| 5 | 戊午 | 51 | 2043-2052 | 七杀 | 用神 | ★5 | 七杀临身，压力与机遇并存 |\n| 6 | 丁巳 | 61 | 2053-2062 | 正财 | 用神 | ★4 | 正财得地，务实稳健之运 |\n| 7 | 丙辰 | 71 | 2063-2072 | 偏财 | 用神 | ★3 | 偏财大运，机缘横财并至 |\n| 8 | 乙卯 | 81 | 2073-2082 | 伤官 | 喜神 | ★5 | 伤官泄秀，才华显露之时 |\n\n**人生时间轴总览：** 人生黄金期：41-50虚岁（己未用神运）、51-60虚岁（戊午用神运）、61-70虚岁（丁巳用神运）、81-90虚岁（乙卯喜神运）（用神/喜神到位，大胆进取）；需谨慎期：11-20虚岁（壬戌忌神运）、21-30虚岁（辛酉忌神运）、31-40虚岁（庚申忌神运）（忌神当令，守为上策）。\n\n**人生黄金期：** 第6步运 戊午（51-60岁，戊午 · 用神运 · 评分 5/5 · 黄金 10 年）；第7步运 丁巳（61-70岁，丁巳 · 用神运 · 评分 4/5 · ⊕ 局势成型·黄金 10 年）；第8步运 丙辰（71-80岁，丙辰 · 用神运 · 评分 3/5 · ⚡ 反吟冲日·黄金 10 年）\n\n**人生需谨慎期：** 第3步运 辛酉（21-30岁，辛酉 · 忌神运 · 评分 1/5 · ↻ 伏吟旧事·需防 10 年）；第4步运 庚申（31-40岁，庚申 · 忌神运 · 评分 1/5 · 需防 10 年）；第5步运 己未（41-50岁，己未 · 用神运 · 评分 4/5 · ⊕ 局势成型·黄金 10 年）\n\n**各步大运关键事件：**\n\n- **第2步 壬戌（11-20岁，壬戌 · 忌神运 · 评分 2/5 · ↻ 伏吟旧事·需防 10 年）**\n  - 关键作用：↻大运伏吟：自身伏吟，命主此运多有\"重复旧事/旧痛复发/老问题再现\"之象\n  - 关键流年：2012年(反吟)、2008年(填实空亡)、2009年(填实空亡)\n- **第3步 辛酉（21-30岁，辛酉 · 忌神运 · 评分 1/5 · ↻ 伏吟旧事·需防 10 年）**\n  - 关键流年：2020年(填实空亡)、2021年(填实空亡)、2016年(忌神年)\n- **第4步 庚申（31-40岁，庚申 · 忌神运 · 评分 1/5 · 需防 10 年）**\n  - 关键流年：2024年(反吟)、2032年(填实空亡)、2023年(流年合日支)\n- **第5步 己未（41-50岁，己未 · 用神运 · 评分 4/5 · ⊕ 局势成型·黄金 10 年）**\n  - 关键作用：⊕大运地支三合：此运木气压倒全盘，命局格局可能临时改变；⊕大运地支三合：此运木气压倒全盘，命局格局可能临时改变；⊕大运地支三合：此运木气压倒全盘，命局格局可能临时改变\n  - 关键流年：2039年(岁运并临)、2042年(伏吟)、2036年(反吟)\n- **第6步 戊午（51-60岁，戊午 · 用神运 · 评分 5/5 · 黄金 10 年）**\n  - 关键作用：◐大运地支半三合：火气大增，影响命局力量平衡\n  - 关键流年：2048年(反吟)、2044年(填实空亡)、2045年(填实空亡)\n- **第7步 丁巳（61-70岁，丁巳 · 用神运 · 评分 4/5 · ⊕ 局势成型·黄金 10 年）**\n  - 关键作用：⊕大运合化：日主此运临时改性为木，整个十年的人生气质和事业方向发生根本转向\n  - 关键流年：2060年(反吟)、2056年(填实空亡)、2057年(填实空亡)\n- **第8步 丙辰（71-80岁，丙辰 · 用神运 · 评分 3/5 · ⚡ 反吟冲日·黄金 10 年）**\n  - 关键作用：⚔大运天干相冲：直接冲击日主，此运易有重大变动、健康/事业波动；⚡大运反吟：冲动配偶宫，此运婚姻易有大变动、迁移搬迁、健康波动；命理学谓\"反吟伏吟，泪流不止\"\n  - 关键流年：2072年(反吟)、2068年(填实空亡)、2069年(填实空亡)\n- **第9步 乙卯（81-90岁，乙卯 · 喜神运 · 评分 5/5 · ↻ 伏吟旧事·吉运 10 年）**\n  - 关键作用：♥大运地支六合：合配偶宫，此运感情升温/婚姻信号显著（已婚者需防外遇桃花）\n  - 关键流年：2080年(填实空亡)、2081年(填实空亡)、2078年(流年合大运)\n\n**2026年流月概览：**\n\n2026年（丙午），处于第3步大运庚申（31-40岁）。本年最顺利的月份：农历1月。需要谨慎的月份：农历3、8、9月。\n\n- 最吉月份：农历 1 月\n- 最忌月份：农历 3、8、9 月\n\n### 十四、综合论命\n\n> **壬水汪洋，亥月成势，专旺之局。调候缺火，寒湿为病。用神火土为药，运入东南则发。**\n\n**一句话画像：** 江海奔流之性，才华横溢之士。一生需借火土之力，以成其功。\n\n#### 🔴 这辈子最需要警觉的 3 件事\n\n**1. 日主水极旺成势**（来源：日主旺衰 · 影响权重 90）\n> 日主水占比 53%，已成一方之势。命理学：\"强者宜抑、宜泄、宜制\"——人生主基调是\"如何驾驭过盛的自我能量\"，影响行业、城市、伴侣的所有选择。\n> 💡 **可执行建议**：避免去北方城市发展，避免水产/物流/酒水/航运/旅游相关行业，配偶不宜冬天生的人。需要一辈子有意识地\"减法\"——少做、慢做、克制。\n\n**2. 日主极旺（水势汪洋，易成专旺），水势汪洋**（来源：关键发现 · 影响权重 80）\n> 壬水生亥月得令，日主极旺（水势汪洋，易成专旺）。水气占全局53%，最忌再行金水之地。命运关键在于如何疏导和平衡这股水势。\n> 💡 **可执行建议**：这是引擎多维度共同识别出的命局隐患，需要长期意识 + 主动化解。详细参考\"日主极旺（水势汪洋，易成专旺），水势汪洋\"对应模块。\n\n**3. 调候缺火（仅 6%）**（来源：用神调候缺位 · 影响权重 75）\n> 命理学口径：\"调候用神优先级高于扶抑\"——原局调候用神火占比仅 6%，意味着寒暖燥湿失衡的核心矛盾贯穿一生。水日主生冬季（亥月）：冬月水气泛滥成灾（《穷通宝鉴·论壬水》亥月壬水，专用戊土制水为堤防，配以丙火暖局），必取火暖局 + 土制水为堤防，缺火则寒水无情，取火、土调候\n> 💡 **可执行建议**：居住宜南方城市（火旺地）；居所采光好、装修暖色调、配偶宜夏天生；事业方向可往能源/餐饮/影视/广告靠拢。这是一辈子需要主动追求的\"补缺\"动作。\n\n#### 🟢 这辈子最值得放大的 3 件事\n\n**1. 41-90岁用神大运50年**（来源：大运用神段 · 影响权重 80）\n> 连续 50 年（共 5 步大运）走用神/喜神运，是命中最重要的人生黄金期。命理学：\"用神得运，富贵可期\"。\n> 💡 **可执行建议**：这段时间是事业起飞、财富积累、关系建立的关键窗口期，应主动出击、加大投入、扩张资源。错过这段窗口，黄金期不再。\n\n**2. 木食伤泄秀，是命中天赋**（来源：关键发现 · 影响权重 50）\n> 月柱亥藏甲（食神）、时柱卯藏乙（伤官）——主才华、表达、创造力。这是命里闪光的一笔，建议把\"输出表达\"作为人生主线。\n> 💡 **可执行建议**：这是引擎多维度共同识别出的命局优势，应该有意识地放大、强化、利用。\n\n**3. 2033年起进入正官大运**（来源：关键发现 · 影响权重 50）\n> 41岁起入己未大运（正官），土正合用神方向。正官当令，事业贵气之运\n> 💡 **可执行建议**：这是引擎多维度共同识别出的命局优势，应该有意识地放大、强化、利用。\n\n#### 📋 命格定盘\n\n- **格局**：【比劫格（从旺倾向）】（偏格 · 半成 · 中级）\n- **用神**：火、土（调候法）｜忌神：水、金\n- **体质**：水旺肾寒型\n\n#### 📊 八维评分一览\n\n| 维度 | 评分 | 标签 |\n| :-: | :-: | :-- |\n| 婚姻 | ★4/5 | 良好 |\n| 财富 | ★4/5 | 富足 |\n| 事业 | ★4/5 | 步步高升 |\n| 健康 | ★2/5 | 亚健康 |\n| 六亲 | ★3/5 | 亲缘一般 |\n| 学业 | ★4/5 | 学有所成 |\n| 出行 | ★4/5 | 常出常入 |\n| 官非 | ★2/5 | 高度警惕 |\n\n#### 🔍 全部关键发现（红黄绿三级）\n\n🔴 **红色（重大警示）：**\n- **日主极旺（水势汪洋，易成专旺），水势汪洋**：壬水生亥月得令，日主极旺（水势汪洋，易成专旺）。水气占全局53%，最忌再行金水之地。命运关键在于如何疏导和平衡这股水势。\n\n🟡 **黄色（重要关注）：**\n- **冬水寒凝，缺火调候**：全局火气仅6%，冬水无火则寒。内心常感\"冷\"——情感不易升温、易陷入理性自省。需要主动寻找让自己\"暖\"的人和事。\n- **比劫成群，财易破耗**：天干3个比劫夺财，命中财星（火）力薄。遇兄弟朋友合作易破财，建议财务独立、避免合伙、警惕\"为情/为义\"出资。\n- **命带阴阳差错，需注意化解**：阴阳差错：主婚姻易有波折、与配偶亲族缘薄，需以平常心对待感情，重者影响家庭和睦。\n\n🟢 **绿色（吉利亮点）：**\n- **木食伤泄秀，是命中天赋**：月柱亥藏甲（食神）、时柱卯藏乙（伤官）——主才华、表达、创造力。这是命里闪光的一笔，建议把\"输出表达\"作为人生主线。\n- **命带天乙贵人、禄神、将星、魁罡**：天乙贵人（时支卯）；禄神（月支见亥）；将星（年支见酉）；魁罡（日柱壬戌）。天乙贵人主一生贵人扶持；将星主领导才能；魁罡主刚毅聪敏；禄神主衣食无忧。\n- **2033年起进入正官大运**：41岁起入己未大运（正官），土正合用神方向。正官当令，事业贵气之运\n\n#### 📝 综合判词\n\n蔡此命，婚姻和美，财运亨通，事业有成，需重保健。人生黄金期：41-50虚岁（己未用神运）、51-60虚岁（戊午用神运）、61-70虚岁（丁巳用神运）、81-90虚岁（乙卯喜神运）（用神/喜神到位，大胆进取）；需谨慎期：11-20虚岁（壬戌忌神运）、21-30虚岁（辛酉忌神运）、31-40虚岁（庚申忌神运）（忌神当令，守为上策）。\n\n#### 🎯 给命主的总建议\n\n1. **优先做 Top 3 优势事**：上方\"最值得放大的 3 件事\"是命主先天得天独厚的资源，应该有意识地放大、强化、利用。\n2. **优先避 Top 3 风险事**：上方\"最需要警觉的 3 件事\"是命主一生需长期意识 + 主动化解的核心矛盾。\n3. **用神方向**：取火、土为用，避水、金为忌；五行调候、人事择友、择业择居皆可参照。\n4. **时机把握**：重大决策宜在用神大运/流年行之，本年（2026）2026年（丙午），处于第3步大运庚申（31-40岁）。本年最顺利的月份：农历1月。需要谨慎的月份：农历3、8、9月。\n5. **修身养命**：命格虽定，但行善积德、修身养性、择善而从，可大改命途。\n",
+    "narrative": "蔡，男，生于1993年12月7日 06:00。\n\n今以子平之法，论其一生命理。\n\n\n\n【一、命理基础】\n\n蔡（男），出生于1993年12月7日 06:00，农历一九九三年 十月廿四 卯时，节气为大雪后（已入亥月）。命主四柱为：癸酉、癸亥、壬戌、癸卯。日主壬戌，是为本命。\n\n就五行而论，金1.6，木1.9，水5.8，火0.7，土1.0。日主旺衰判定为【日主极旺（水势汪洋，易成专旺）】。动态关系净效应为「克泄」（克泄力量 3 > 助身 0）：原局通过合化/三合等关系增强了对日主水的牵制，旺衰倾向于「极旺」减弱方向，但未足以改变档位，结论维持。\n\n命主格局为【比劫格（从旺倾向）】（偏格·半成），月令亥藏干透日干壬（比肩），日主水气53%极旺。按文档 §3.3.1 比劫不立正格之规，本可论「润下格」（水专旺），但木气混杂未成纯一方势，故归「比劫格（从旺倾向）」偏格。喜用神参见用神章节，忌再见生扶旺势之五行。若大运行食伤泄秀或财耗之地，格局可由「半成」转「成」。。用神取火、土（调候法），忌神为水、金。日主极旺。【扶抑】日主水偏旺，按文档优先级取木（食伤泄秀，最温和）→ 火（财星耗身）→ 土（官杀克身，最烈）抑之。【调候】水日主生冬季（亥月）：冬月水气泛滥成灾（《穷通宝鉴·论壬水》亥月壬水，专用戊土制水为堤防，配以丙火暖局），必取火暖局 + 土制水为堤防，缺火则寒水无情，取火、土调候。综合：主用神=火+土，次用神=木，忌神=水+金。\n\n江海奔流之性，才华横溢之士。一生需借火土之力，以成其功。心性方面表现为比劫旺·朋友易聚易散、比劫成势、内蕴☆比肩（自我意识）、内蕴☆伤官（锋芒才华）、虚位△劫财（冒险冲劲）。主要优势在于：江河汪洋之气旺：执行力强、能独当一面；天乙贵人在命：逢凶化吉、贵人多助；将星临身：有领导力与威望。需要注意的是：江河汪洋过旺：易刚愎自用、独断独行，需学会倾听与放权；比劫成势：财来财去难积累，合伙易破财，宜独立掌财、量入为出；阴阳差错：婚姻易曲折，宜晚婚或异地。\n\n\n\n【二、人生六大主线】\n\n婚姻方面，综合评定为【良好】。男命壬日主，配偶星为正财（火）。正财仅藏中余气，配偶缘分浅薄、易迟婚。配偶宫坐戌（七杀），配偶强势刚烈。命带墙外桃花（午、卯），异性缘旺。综合评定：婚姻质量【良好】（4/5）。首次强应婚信号年：2011年（19岁，流年合日支）。命局婚姻无显著风险点，宜把握良机。\n「但请注意运势节奏」：婚姻格局虽佳（4星），但 1-40 岁早年大运不利（均分仅 1.3 星），努力多见挫败、收获滞后；41 岁起入用神大运，方为婚姻真正起飞期，宜耐心积淀、择时而动。\n\n财富方面综合评定为【富足】，日主壬（水），财星正财属火。正财仅藏中余气，正财薄弱，需多元化求财。财源类型：财来就我。命带财库戌（未冲开）。综合评定：财运【富足】（4/5）。首个强财运信号：2026年（34岁，偏财年）。主要风险：财星藏支不透（有财难显）。求财方位：南、中方为吉。\n「但请注意运势节奏」：财富格局虽佳（4星），但 1-40 岁早年大运不利（均分仅 1.3 星），努力多见挫败、收获滞后；41 岁起入用神大运，方为财富真正起飞期，宜耐心积淀、择时而动。财源以【财来就我】为主，宜于南、中方求财。近期财富关键年：2012年财库开年、2024年财库开年、2026年偏财年。\n\n事业方面综合评定为【步步高升】，日主壬（水），事业宫月柱癸亥（比肩）。正官原局未现，需大运引动。推荐路线：【适合创业】，老板气质 ★4/5。综合评定：事业【步步高升】（4/5）。首个强事业信号：2009年（17岁，正官到位年）。\n「但请注意运势节奏」：事业格局虽佳（4星），但 1-40 岁早年大运不利（均分仅 1.3 星），努力多见挫败、收获滞后；41 岁起入用神大运，方为事业真正起飞期，宜耐心积淀、择时而动。适合体制内（公务员/事业单位）、专业技术（工程师/医生/律师），路径建议适合创业。事业关键年：2009年正官到位年、2015年伤官见官年、2018年七杀到位年。\n\n健康方面体质属【水旺肾寒型】，体质类型：【水旺肾寒型】。重点保养脏腑：肝、心、脾、肺、肾。综合评定：健康【亚健康】（2/5）。首个健康关注年：2012年（20岁）。调养主方向：补火、补土。易患方向：肝系统：肝胆功能失调、肝系统：眼疾、肝系统：筋骨问题。需重点关注的危险年：2012年、2024年、2036年。\n\n六亲方面，综合评定为【亲缘一般】。日主壬（水）男命。父（偏财·未现）极疏/早离、母（正印·藏·实）亲密、兄弟（比肩·藏·实）极亲、子女（正官·未现）极疏/早离。综合评定：六亲【亲缘一般】（3/5）。最深缘分：兄弟姐妹（比肩藏·实）。最薄缘分：父亲（需特别留意维系）。\n\n学业方面类型为【才艺学者（伤官佩印）】，日主壬（水），印星五行金。正印藏支本气有力，学问根基稳固。学业类型：【才艺学者（伤官佩印）】。综合评定：学业【学有所成】（★4/5）。命带：词馆在亥。首个强学业信号：2041年（49岁）。推荐方向：艺术、设计、影视。\n「但请注意运势节奏」：学业格局虽佳（4星），但 1-40 岁早年大运不利（均分仅 1.3 星），努力多见挫败、收获滞后；41 岁起入用神大运，方为学业真正起飞期，宜耐心积淀、择时而动。印星五行属金，推荐方向：艺术、设计、影视。首个强学业信号在2041年（正印到位年）。\n\n\n\n【三、特化分析】\n\n出行方面类型为【商旅频繁】，命主驿马亥在月柱，主好动、喜出门、易远行、与海外/远方有缘。出行类型：【商旅频繁】。综合评定：出行【常出常入】（★4/5）。主有海外/远方城市缘分。首个重大出行年：2007年（15岁）。命带海外缘，远行有助。一生标记出行/搬迁信号 6 次。\n\n官非牢狱方面，风险等级为【高度警惕】。综合官非风险等级：【高度警惕】（★2/5）。原局未带凶神组合。首个高危年：2012年（20岁，日柱反吟年）。原局无显著风险因子。重点警惕年份：2012年、2014年、2026年。\n\n\n\n【四、时间节奏】\n\n命主11 岁起运（精确为出生后 9 年 10 个月 0 天，即 2003-10-07 交脱）起运，运程逆行，一生共历 8 步大运。人生黄金期：41-50虚岁（己未用神运）、51-60虚岁（戊午用神运）、61-70虚岁（丁巳用神运）、81-90虚岁（乙卯喜神运）（用神/喜神到位，大胆进取）；需谨慎期：11-20虚岁（壬戌忌神运）、21-30虚岁（辛酉忌神运）、31-40虚岁（庚申忌神运）（忌神当令，守为上策）。人生黄金期为第6步运（51-60岁）与第7步运（61-70岁），宜把握。\n\n\n\n【五、综合论命】\n\n命局壬水生于亥月，水势滔天，日主极旺，有从旺之象。然冬水寒凝，调候为急，原局仅一戌中藏丁，火弱土虚，寒湿之气弥漫全局。此命之要，在于以火暖局、以土制水，方能激发生机。月时木气泄秀，食伤透清，主聪明才辩，艺术或技术天赋过人，然木浮于水，若无火引，终是虚花。\n\n运途之机，中年方显。41岁后入己未、戊午大运，火土齐来，正官正印用神得力，如寒谷逢春，事业贵气蒸腾。此前早运金水，难免志大难伸，宜潜心蓄力，待时而动。晚年丁巳、丙辰运，火土更炽，可成一方之业。\n\n一生大忌再行金水，若遇申酉亥子，恐水势泛濫，反成灾咎。宜择南方火地，从事能源、文化、传媒等火土属性行业。以才华输出为舟，以火土为舵，方能驾驭汪洋之势，化暴戾为祥和。\n\n\n\n——以上即为蔡全命浅论，详细分析请参阅各章。命理虽定，运在人为；趋吉避凶，修身养命，方为正道。"
+  }
+}

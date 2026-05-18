@@ -49,7 +49,7 @@ export const InputForm: React.FC<Props> = ({ onSubmit }) => {
   const submit = useBaziStore((s) => s.submit);
   const existingInput = useBaziStore((s) => s.inputData);
 
-  const handleFinish = (values: FormValues) => {
+  const handleFinish = async (values: FormValues) => {
     const birthTime =
       values.timeMode === 'precise' && values.birthTime
         ? values.birthTime.format('HH:mm')
@@ -65,7 +65,7 @@ export const InputForm: React.FC<Props> = ({ onSubmit }) => {
       useTrueSolarTime: values.useTrueSolarTime,
       ziShiSchool: values.ziShiSchool,
     };
-    submit(data);
+    await submit(data);
     onSubmit();
   };
 

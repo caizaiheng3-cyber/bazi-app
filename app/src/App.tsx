@@ -7,6 +7,7 @@ import { ResultPage } from './pages/ResultPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { ChatPage } from './pages/ChatPage';
 import { JournalPage } from './pages/JournalPage';
+import { CompatibilityPage } from './pages/CompatibilityPage';
 import { AppRouter } from './components/common/AppRouter';
 
 function App() {
@@ -42,6 +43,8 @@ function App() {
           <Route path="/journal" element={<JournalPage />} />
           {/* 整体报告（降为二级入口） */}
           <Route path="/chart" element={<ResultPage />} />
+          {/* M13 合婚（独立页，不依赖单人 chart） */}
+          <Route path="/compatibility" element={<CompatibilityPage />} />
         </Routes>
       </BrowserRouter>
     </ConfigProvider>

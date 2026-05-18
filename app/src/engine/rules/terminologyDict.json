@@ -1,0 +1,555 @@
+{
+  "$schema": "通俗化术语词典 - 命理术语到大白话的三段式翻译",
+  "$version": "1.0.0",
+  "$description": "把命理术语翻译成普通人能秒懂的「字面 + 生活类比 + 验证方法」三段式。给消费者报告的「📜 命理上 / 💡 通俗讲 / 🔁 验证方法」三层折叠依据使用。",
+  "$usage": "在 consumerReportEnhancer.ts 中：当报告需要展示「先生为什么这么说」的折叠层时，从 terms 中按 termKey 查找对应翻译。aliases 用于模糊匹配。",
+  "$updateGuide": "新增术语遵循 schema：termKey → { literal, lifeAnalogy, verifyHint, category, aliases[] }。category 用于按分类整理。",
+
+  "$schemaExample": {
+    "literal": "命理学的标准说法",
+    "lifeAnalogy": "用生活中能想象的画面解释",
+    "verifyHint": "让用户用自己的人生经历验证（最强信任武器）",
+    "category": "十神 | 格局 | 神煞 | 旺衰 | 调候 | 合化 | 大运",
+    "aliases": ["其他可能的说法"]
+  },
+
+  "terms": {
+    "============= 旺衰类 =============": {},
+
+    "wangShenJiWang": {
+      "literal": "日主极旺",
+      "lifeAnalogy": "你的核心能量像一座装满水的水库 —— 自己一个人就能撑起一摊事，但水太多也容易泛滥",
+      "verifyHint": "你是不是常被人说「自己一个人就能搞定」「想法太多」「不太需要别人」？",
+      "category": "旺衰",
+      "aliases": ["日主太旺", "身旺", "极旺"]
+    },
+
+    "wangShenPianWang": {
+      "literal": "日主偏旺",
+      "lifeAnalogy": "你的内在能量比一般人要强 —— 主见多、爱主导，但还没到极端",
+      "verifyHint": "做小组作业你是不是常常忍不住接管？",
+      "category": "旺衰",
+      "aliases": ["偏旺", "身偏旺"]
+    },
+
+    "wangShenZhongHe": {
+      "literal": "日主中和",
+      "lifeAnalogy": "你的能量配置很均衡 —— 进可攻、退可守，是命理最难得的平衡型",
+      "verifyHint": "你是不是面对不同的人能切换不同的样子，朋友评价你「随和但有底线」？",
+      "category": "旺衰",
+      "aliases": ["中和", "身平"]
+    },
+
+    "wangShenPianRuo": {
+      "literal": "日主偏弱",
+      "lifeAnalogy": "你的内在能量需要靠外界帮你撑起来 —— 一个人扛事容易累，有伙伴反而更出彩",
+      "verifyHint": "你是不是一个人时容易拖延，但有团队/伴侣支持时反而效率特别高？",
+      "category": "旺衰",
+      "aliases": ["偏弱", "身偏弱"]
+    },
+
+    "wangShenJiRuo": {
+      "literal": "日主极弱",
+      "lifeAnalogy": "你的能量天生就细腻，硬扛不是你的路 —— 你最大的本事是「借力」",
+      "verifyHint": "你是不是身边总有几个比你强势的「保护者」，他们走了你就慌？",
+      "category": "旺衰",
+      "aliases": ["极弱", "身太弱"]
+    },
+
+    "deLing": {
+      "literal": "得令（月令支持日主）",
+      "lifeAnalogy": "你出生的那个月份，天地能量正好是你这型人的「主场」—— 起跑线就比别人有优势",
+      "verifyHint": "你是不是常觉得「同样的努力，自己运气总比别人好那么一点」？",
+      "category": "旺衰",
+      "aliases": ["当令", "得月令"]
+    },
+
+    "shiLing": {
+      "literal": "失令（月令不支持日主）",
+      "lifeAnalogy": "你出生的月份，天地能量是不利于你这型人的 —— 起跑线略吃亏，但中后程可以追回",
+      "verifyHint": "你是不是常感觉「年轻时一直在补课」，三十岁后反而越来越顺？",
+      "category": "旺衰",
+      "aliases": ["不当令", "失月令"]
+    },
+
+    "============= 五行偏盛偏衰 =============": {},
+
+    "shuiTaiWang": {
+      "literal": "水气过旺（占比 ≥40%）",
+      "lifeAnalogy": "你像一片深海 —— 想得深、藏得深，但深到一定程度就成了内耗",
+      "verifyHint": "你是不是常一个人想问题想到失眠？想说的话总在心里翻来覆去？",
+      "category": "五行",
+      "aliases": ["水多", "水旺", "水汪洋"]
+    },
+
+    "huoTaiWang": {
+      "literal": "火气过旺",
+      "lifeAnalogy": "你像一团烈火 —— 热情、爱表达，但容易急、容易上头",
+      "verifyHint": "你是不是常因为「话说太快」事后后悔？",
+      "category": "五行",
+      "aliases": ["火多", "火旺"]
+    },
+
+    "muTaiWang": {
+      "literal": "木气过旺",
+      "lifeAnalogy": "你像一棵参天大树 —— 有规划、有理想，但有时候执着到不撞南墙不回头",
+      "verifyHint": "你是不是常被人说「太轴」「认准的事十头牛拉不回」？",
+      "category": "五行",
+      "aliases": ["木多", "木旺"]
+    },
+
+    "jinTaiWang": {
+      "literal": "金气过旺",
+      "lifeAnalogy": "你像一把锋利的刀 —— 决断快、原则清晰，但容易显得不近人情",
+      "verifyHint": "你是不是常因为「太直」让朋友尴尬？",
+      "category": "五行",
+      "aliases": ["金多", "金旺"]
+    },
+
+    "tuTaiWang": {
+      "literal": "土气过旺",
+      "lifeAnalogy": "你像一片厚重的土地 —— 稳重、可靠，但有时候慢到错过机会",
+      "verifyHint": "你是不是常被人说「想得太多迟迟不动」？",
+      "category": "五行",
+      "aliases": ["土多", "土旺"]
+    },
+
+    "shuiQueDiaoHou": {
+      "literal": "缺水（夏令燥）",
+      "lifeAnalogy": "你的能量场缺一个「冷却系统」—— 容易一根筋、容易上火",
+      "verifyHint": "你是不是夏天特别烦躁、做决定时缺一个能让你冷静下来的人？",
+      "category": "调候",
+      "aliases": ["夏缺水", "缺润燥之水"]
+    },
+
+    "huoQueDiaoHou": {
+      "literal": "缺火（冬令寒）",
+      "lifeAnalogy": "你的能量场缺一个「暖炉」—— 内心常感觉冷、对生活提不起劲",
+      "verifyHint": "你是不是冬天特别懒、看到外向爱笑的人特别想靠近？",
+      "category": "调候",
+      "aliases": ["冬缺火", "缺暖之火"]
+    },
+
+    "============= 十神类 =============": {},
+
+    "biJieDuoCai": {
+      "literal": "比劫夺财",
+      "lifeAnalogy": "好比 5 个人围着一锅饭，锅就这么大，多一个人就少一勺 —— 你命里这种「分饭」的能量特别强",
+      "verifyHint": "你过去有没有过「借钱给朋友收不回」「合伙做事最后吃亏」的经历？",
+      "category": "十神",
+      "aliases": ["比劫成群", "兄弟争财", "群比劫财"]
+    },
+
+    "yinXingKeShiShang": {
+      "literal": "印星压制食伤",
+      "lifeAnalogy": "你心里有满满的话和才华，但有股「再忍忍、再藏藏」的力量压着你不让出来",
+      "verifyHint": "你是不是经常写好的话最后没发？想说的意见到嘴边又咽回去？",
+      "category": "十神",
+      "aliases": ["印克食伤", "印重夺食", "枭神夺食"]
+    },
+
+    "shiShangShengCai": {
+      "literal": "食伤生财",
+      "lifeAnalogy": "你的能量配置就是「靠才华挣钱」型 —— 把脑子里的东西输出出来，自然有人付费",
+      "verifyHint": "你是不是发现「自己最赚钱的事情往往是凭一技之长」，单纯打杂时反而难赚？",
+      "category": "十神",
+      "aliases": ["食神生财", "伤官生财", "才华变现"]
+    },
+
+    "shangGuanJianGuan": {
+      "literal": "伤官见官",
+      "lifeAnalogy": "你心里有「我要表达」的力量，又有「规则压我」的力量，它们天然对冲 —— 容易和老板/权威起冲突",
+      "verifyHint": "你是不是有过「明明只是说了实话，却被领导认为在挑战他」的经历？",
+      "category": "十神",
+      "aliases": ["伤克官", "伤官冲官"]
+    },
+
+    "shiShenZhiSha": {
+      "literal": "食神制杀",
+      "lifeAnalogy": "你能用才华化解压力 —— 别人觉得你这人「外柔内韧、临危不乱」",
+      "verifyHint": "你是不是面对压力时很少崩溃，反而能用幽默或专业把局面化解？",
+      "category": "十神",
+      "aliases": ["食制杀", "以食制杀"]
+    },
+
+    "guanShaTaiWang": {
+      "literal": "官杀太旺",
+      "lifeAnalogy": "你身边的「压力源」（老板、规矩、责任）特别多 —— 容易被压得喘不过气",
+      "verifyHint": "你是不是常觉得「肩上的担子比同龄人重」？",
+      "category": "十神",
+      "aliases": ["官杀混杂", "杀重身轻"]
+    },
+
+    "yinXingChunCui": {
+      "literal": "印星纯净",
+      "lifeAnalogy": "你天生有「贵人和靠山」的能量 —— 关键时刻总有长辈/平台拉你一把",
+      "verifyHint": "你这辈子是不是关键节点都有「年长的人」帮过你？",
+      "category": "十神",
+      "aliases": ["正印当令", "印星当权"]
+    },
+
+    "caiXingLiBao": {
+      "literal": "财星力薄",
+      "lifeAnalogy": "你不是「随便挣钱」型 —— 财富需要你主动经营才能聚拢",
+      "verifyHint": "你是不是发现「躺着挣钱」对你来说特别难，必须自己折腾才有回报？",
+      "category": "十神",
+      "aliases": ["财弱", "财星不足"]
+    },
+
+    "qiShaWuZhi": {
+      "literal": "七杀无制",
+      "lifeAnalogy": "你内在的「冲劲」没有缰绳 —— 上头时容易做出后悔的决定",
+      "verifyHint": "你是不是有过「冲动决定，事后后悔半年」的经历？",
+      "category": "十神",
+      "aliases": ["七杀过旺", "杀星无制"]
+    },
+
+    "============= 显象层级 =============": {},
+
+    "manifestStrong": {
+      "literal": "外显·实力派（透干通根）",
+      "lifeAnalogy": "你这个特质是「明牌 + 真功夫」—— 别人一眼看出你有这本事，你也确实经得起验证",
+      "verifyHint": "周围人对你的某个能力评价是不是出奇地一致？",
+      "category": "显象",
+      "aliases": ["透干通根", "外显有力"]
+    },
+
+    "manifestWeak": {
+      "literal": "外显·虚位（透干无根）",
+      "lifeAnalogy": "你这个特质是「明牌但没底气」—— 看起来有，深究就空，是虚架子",
+      "verifyHint": "你是不是有些「人设」（比如硬汉/外向）其实是装出来的，自己心里清楚？",
+      "category": "显象",
+      "aliases": ["透干无根", "外显虚浮"]
+    },
+
+    "hiddenStrong": {
+      "literal": "内蕴·实质（藏支本气有力）",
+      "lifeAnalogy": "你这个特质是「暗牌但有真货」—— 不轻易露，但一旦显露就很强",
+      "verifyHint": "你是不是有些能力很少展示，但一展示就让人惊讶？",
+      "category": "显象",
+      "aliases": ["藏支有根", "内蕴有力"]
+    },
+
+    "============= 神煞类 =============": {},
+
+    "tianYiGuiRen": {
+      "literal": "天乙贵人",
+      "lifeAnalogy": "你命里天生有「关键时刻有人拉你一把」的能量 —— 不是你求来的，是命里安排好的",
+      "verifyHint": "你这辈子是不是有过「以为完蛋了，突然冒出一个人帮你解围」的经历？",
+      "category": "神煞",
+      "aliases": ["天乙", "贵人"]
+    },
+
+    "wenChangGuiRen": {
+      "literal": "文昌贵人",
+      "lifeAnalogy": "你的脑子天生比一般人灵光 —— 学东西快、考试运好、写东西有灵感",
+      "verifyHint": "你是不是临时抱佛脚的考试反而比别人苦读还考得好？",
+      "category": "神煞",
+      "aliases": ["文昌", "文星"]
+    },
+
+    "luShen": {
+      "literal": "禄神",
+      "lifeAnalogy": "你命里有「衣食无忧」的底气 —— 哪怕不大富大贵，基本生活总不会太差",
+      "verifyHint": "你是不是从来没真正为「下个月吃什么」担心过？",
+      "category": "神煞",
+      "aliases": ["禄", "建禄"]
+    },
+
+    "jiangXing": {
+      "literal": "将星",
+      "lifeAnalogy": "你天生有「主导一群人」的气场 —— 同等条件下，别人会自动看你做决定",
+      "verifyHint": "你是不是经常莫名其妙就被推举成小组负责人？",
+      "category": "神煞",
+      "aliases": ["将星临身"]
+    },
+
+    "kuiGang": {
+      "literal": "魁罡",
+      "lifeAnalogy": "你的性格里有股「不服输的硬气」—— 聪明 + 倔强 + 文武兼备",
+      "verifyHint": "你是不是常被人说「外表柔和但骨子里特别倔」？",
+      "category": "神煞",
+      "aliases": ["魁罡星"]
+    },
+
+    "huaGai": {
+      "literal": "华盖",
+      "lifeAnalogy": "你天生对「玄学/艺术/独立钻研」的事情有兴趣，但容易孤僻",
+      "verifyHint": "你是不是从小就对算命/占卜/宗教/艺术莫名感兴趣？",
+      "category": "神煞",
+      "aliases": ["华盖星"]
+    },
+
+    "yiMa": {
+      "literal": "驿马",
+      "lifeAnalogy": "你命里有「奔波动荡」的能量 —— 出差、搬家、远行的概率比一般人高",
+      "verifyHint": "你是不是从小到大搬过的家、换过的城市比同龄人多？",
+      "category": "神煞",
+      "aliases": ["驿马星"]
+    },
+
+    "taoHua": {
+      "literal": "桃花（咸池）",
+      "lifeAnalogy": "你天生有「让异性多看一眼」的魅力 —— 不一定长得好看，但有种说不清的吸引力",
+      "verifyHint": "你是不是常莫名其妙被告白/被搭讪，自己却没刻意做什么？",
+      "category": "神煞",
+      "aliases": ["桃花", "咸池"]
+    },
+
+    "yangRen": {
+      "literal": "羊刃",
+      "lifeAnalogy": "你内在有股「锋刃」—— 平时藏着，一旦动就特别快、特别烈",
+      "verifyHint": "你是不是平时温和但一旦发火就让所有人都愣住？",
+      "category": "神煞",
+      "aliases": ["羊刃星"]
+    },
+
+    "wangShen": {
+      "literal": "亡神",
+      "lifeAnalogy": "你身边偶尔会出现「看似帮你实则坑你」的人 —— 命里需要警惕",
+      "verifyHint": "你是不是有过「被表面热情的人坑过」的经历？",
+      "category": "神煞",
+      "aliases": ["亡神星"]
+    },
+
+    "jieSha": {
+      "literal": "劫煞",
+      "lifeAnalogy": "你命里有「财物意外损失」的小概率事件 —— 不大但要防",
+      "verifyHint": "你是不是丢过钱包/被偷过手机/被骗过定金？",
+      "category": "神煞",
+      "aliases": ["劫煞星"]
+    },
+
+    "yinYangChaCuo": {
+      "literal": "阴阳差错",
+      "lifeAnalogy": "你和伴侣之间天生有股「拉扯」的能量 —— 不是谁的错，是你们能量场放一起就会摩擦",
+      "verifyHint": "回想你恋爱/婚姻里，是不是常因为「小事」突然冷场？",
+      "category": "神煞",
+      "aliases": ["阴差阳错"]
+    },
+
+    "guChen": {
+      "literal": "孤辰",
+      "lifeAnalogy": "你命里有「独自一人」的能量 —— 朋友再多也常感觉孤独",
+      "verifyHint": "你是不是常在热闹的聚会上突然觉得「我其实不属于这里」？",
+      "category": "神煞",
+      "aliases": ["孤辰星"]
+    },
+
+    "guaSu": {
+      "literal": "寡宿",
+      "lifeAnalogy": "你和伴侣之间容易有「精神距离」—— 同床异梦、各想各的",
+      "verifyHint": "你和伴侣是不是常常坐在一起却没话说？",
+      "category": "神煞",
+      "aliases": ["寡宿星"]
+    },
+
+    "============= 格局类 =============": {},
+
+    "zhuanWangGe": {
+      "literal": "专旺格（一气成势）",
+      "lifeAnalogy": "你的命格走「顺势」路线最稳 —— 越是发挥自己的强项越成功，最忌强行去做不擅长的事",
+      "verifyHint": "你是不是发现自己「越是按自己的节奏来越顺，一被强迫改变就出问题」？",
+      "category": "格局",
+      "aliases": ["专旺", "一气格"]
+    },
+
+    "jiaZhuanWang": {
+      "literal": "假专旺格（接近成势但有破格隐患）",
+      "lifeAnalogy": "你的命格走「顺势」路线最稳，但比纯专旺多了一份灵活 —— 要避开命中那个「破格」的方向",
+      "verifyHint": "你是不是发现「有些事顺着做特别顺，有些事一碰就出问题」？",
+      "category": "格局",
+      "aliases": ["假从", "准从旺"]
+    },
+
+    "congQiang": {
+      "literal": "从强格",
+      "lifeAnalogy": "你的命格只能「顺着大流」走 —— 越顺越富贵，越逆越倒霉",
+      "verifyHint": "你是不是发现「跟着趋势走的事特别顺，逆势挑战的事特别累」？",
+      "category": "格局",
+      "aliases": ["从强", "从势"]
+    },
+
+    "congRuo": {
+      "literal": "从弱格",
+      "lifeAnalogy": "你的命格反而要「弃自己、从他人」—— 越是依靠环境/团队，反而越成功",
+      "verifyHint": "你是不是发现「单打独斗特别累，加入大平台/团队反而春风得意」？",
+      "category": "格局",
+      "aliases": ["从弱", "弃命从"]
+    },
+
+    "zhengGuanGe": {
+      "literal": "正官格",
+      "lifeAnalogy": "你天生有「按规矩办事、走主流路线」的命格 —— 适合体制内、大公司、走正职晋升",
+      "verifyHint": "你是不是发现「按部就班的工作反而让你最舒服」？",
+      "category": "格局",
+      "aliases": ["正官", "官格"]
+    },
+
+    "qiShaGe": {
+      "literal": "七杀格",
+      "lifeAnalogy": "你天生有「需要靠魄力突破」的命格 —— 适合销售、创业、需要冲一把的事",
+      "verifyHint": "你是不是发现「按部就班反而让你窒息，越有挑战的事越来劲」？",
+      "category": "格局",
+      "aliases": ["七杀", "偏官格"]
+    },
+
+    "shiShenGe": {
+      "literal": "食神格",
+      "lifeAnalogy": "你天生有「靠创造力和才华吃饭」的命格 —— 适合内容、艺术、教育、咨询",
+      "verifyHint": "你是不是发现「能输出作品的工作让你最有成就感」？",
+      "category": "格局",
+      "aliases": ["食神", "食格"]
+    },
+
+    "shangGuanGe": {
+      "literal": "伤官格",
+      "lifeAnalogy": "你天生有「锋芒毕露、不走寻常路」的命格 —— 适合需要创新、挑战权威的事",
+      "verifyHint": "你是不是发现「循规蹈矩让你窒息，需要突破的事让你兴奋」？",
+      "category": "格局",
+      "aliases": ["伤官", "伤格"]
+    },
+
+    "============= 合化类 =============": {},
+
+    "tianGanWuHe": {
+      "literal": "天干合化",
+      "lifeAnalogy": "你命里某两个力量会「化合成第三种」—— 就像化学反应，A 和 B 在一起会产生 C",
+      "verifyHint": "你是不是常发现「自己单独时是一种状态，遇到某类人就变成另一种」？",
+      "category": "合化",
+      "aliases": ["五合", "天干合"]
+    },
+
+    "diZhiSanHe": {
+      "literal": "地支三合",
+      "lifeAnalogy": "你命里有三股力量会「形成同盟」—— 在某些时间窗口会一起发挥作用",
+      "verifyHint": "你是不是发现「人生中某几年特别顺，所有事都好像在配合你」？",
+      "category": "合化",
+      "aliases": ["三合局"]
+    },
+
+    "diZhiLiuChong": {
+      "literal": "地支六冲",
+      "lifeAnalogy": "你命里有两股力量「天生对着干」—— 在某些时间窗口会引发剧烈变动",
+      "verifyHint": "你是不是发现「人生有那么几个节点，事情突然剧变（搬家/分手/换工作）」？",
+      "category": "合化",
+      "aliases": ["六冲", "对冲"]
+    },
+
+    "diZhiSanXing": {
+      "literal": "地支三刑",
+      "lifeAnalogy": "你命里有三股力量「互相伤害」—— 会引发官非、纠纷、反复折腾",
+      "verifyHint": "你是不是有过「莫名其妙卷入纠纷」「同一类问题反复找你」的经历？",
+      "category": "合化",
+      "aliases": ["三刑", "无恩之刑"]
+    },
+
+    "tianGanYiQi": {
+      "literal": "天干一气",
+      "lifeAnalogy": "你的四个天干属于同一种能量 —— 这是命理上极少见的「纯一」配置",
+      "verifyHint": "你是不是常被人说「你这个人特别纯粹」「一眼就能看出你是哪种人」？",
+      "category": "合化",
+      "aliases": ["四柱一气", "纯一"]
+    },
+
+    "============= 大运/流年类 =============": {},
+
+    "yongShenYun": {
+      "literal": "走用神运",
+      "lifeAnalogy": "未来这十年，天地能量正好补你命格的不足 —— 同样的努力回报最大的窗口期",
+      "verifyHint": "你过去的「人生顺风期」，回想是不是都集中在某些特定的年龄段？",
+      "category": "大运",
+      "aliases": ["用神大运", "喜用之运"]
+    },
+
+    "jiShenYun": {
+      "literal": "走忌神运",
+      "lifeAnalogy": "未来这十年，天地能量是逆着你命格走的 —— 不是说一定有灾，是说同样的事会更费力",
+      "verifyHint": "你过去的「人生卡顿期」，回想是不是也有那么几年事事不顺？",
+      "category": "大运",
+      "aliases": ["忌神大运", "凶运"]
+    },
+
+    "fuYin": {
+      "literal": "伏吟",
+      "lifeAnalogy": "未来某年你会经历「旧事重提」—— 之前的旧问题、旧关系、旧情绪会再次冒出来",
+      "verifyHint": "你过去是不是有过「以为翻篇的事突然又找上门」的年份？",
+      "category": "流年",
+      "aliases": ["伏吟年"]
+    },
+
+    "fanYin": {
+      "literal": "反吟（流年冲日支）",
+      "lifeAnalogy": "未来某年你的婚姻、健康、居住会有较大变动 —— 主动求变可以化被动为主动",
+      "verifyHint": "你过去搬过家/换过工作/结婚的那些年，是不是都集中在某些特定的年龄？",
+      "category": "流年",
+      "aliases": ["反吟年", "冲日支"]
+    },
+
+    "tianShiKongWang": {
+      "literal": "填实空亡",
+      "lifeAnalogy": "你命里某些「虚位」（看似有却实际空）会在某年「被填满」—— 那年是真正的转折",
+      "verifyHint": "你过去是不是有那么一两年「突然得到了一直没得到的东西」（升职/伴侣/孩子）？",
+      "category": "流年",
+      "aliases": ["填空", "实空亡"]
+    },
+
+    "suiYunBingLin": {
+      "literal": "岁运并临",
+      "lifeAnalogy": "未来某年大运和流年的能量「叠加同步」—— 吉的更吉、凶的更凶，是命理里的极端年份",
+      "verifyHint": "你过去人生最高光或最低谷的那一年，是不是来得特别突然又特别强烈？",
+      "category": "流年",
+      "aliases": ["岁运重叠"]
+    },
+
+    "============= 用神/调候类 =============": {},
+
+    "yongShen": {
+      "literal": "用神（最对你有益的五行）",
+      "lifeAnalogy": "你命里最缺、最需要的那种能量 —— 靠近它，运势就转好；远离它，事事不顺",
+      "verifyHint": "你是不是发现「某种颜色/方位/类型的人」对你特别有帮助？",
+      "category": "用神",
+      "aliases": ["喜用神", "命中所喜"]
+    },
+
+    "jiShen": {
+      "literal": "忌神（最克你的五行）",
+      "lifeAnalogy": "你命里最不需要、最该避开的那种能量 —— 越靠近越倒霉",
+      "verifyHint": "你是不是发现「某种类型的人/某种方位/某种行业」对你来说总是不顺？",
+      "category": "用神",
+      "aliases": ["忌神", "命中所忌"]
+    },
+
+    "fuYi": {
+      "literal": "扶抑（旺则抑，弱则扶）",
+      "lifeAnalogy": "命理调节的基本逻辑 —— 你能量太多就要泄/克掉一些，太少就要补一些，保持平衡",
+      "verifyHint": "你是不是发现「自己强项太突出反而不好，反而是补短板时进步最大」？",
+      "category": "用神",
+      "aliases": ["扶抑法"]
+    },
+
+    "diaoHou": {
+      "literal": "调候（冷暖调节）",
+      "lifeAnalogy": "你出生的季节决定了命格的「温度」—— 冬天生的需要补暖，夏天生的需要补凉",
+      "verifyHint": "你是不是对某个季节特别敏感（冬天特别懒/夏天特别烦）？",
+      "category": "用神",
+      "aliases": ["调候用神"]
+    },
+
+    "tongGuan": {
+      "literal": "通关（化解两股对冲力量）",
+      "lifeAnalogy": "你命里有两股力量在「打架」，需要第三股力量来「劝和」",
+      "verifyHint": "你是不是发现「某些朋友能让你和某些人重新沟通起来」？",
+      "category": "用神",
+      "aliases": ["通关用神"]
+    }
+  },
+
+  "$conventions": {
+    "literal": "保留原命理术语，让懂的人能对上专业典籍",
+    "lifeAnalogy": "用生活类比，避免「能量场」「磁场」等玄学词汇 —— 用「水库」「锅」「刀」这种具象的画面",
+    "verifyHint": "用「你是不是…」的句式，让用户用自己的人生经历验证 —— 这是建立信任最有效的方式",
+    "category": "用于按维度分类整理：旺衰 / 五行 / 调候 / 十神 / 显象 / 神煞 / 格局 / 合化 / 大运 / 流年 / 用神",
+    "aliases": "同义术语列表 —— 用于报告生成时模糊匹配（比如 keyFinding.title 可能用「比劫成群」，词典 key 是「biJieDuoCai」）"
+  }
+}

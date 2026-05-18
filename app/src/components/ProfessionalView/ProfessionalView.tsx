@@ -6,7 +6,20 @@ import { ClassicDivider } from '../common/ClassicDivider';
 import { PillarsTable } from './PillarsTable';
 import { WuxingChart } from './WuxingChart';
 import { WangShuaiChain } from './WangShuaiChain';
+import { PersonaCard } from './PersonaCard';
+import { MarriageCard } from './MarriageCard';
+import { WealthCard } from './WealthCard';
+import { CareerCard } from './CareerCard';
+import { HealthCard } from './HealthCard';
+import { RelativesCard } from './RelativesCard';
+import { EducationCard } from './EducationCard';
+import { TravelCard } from './TravelCard';
+import { LegalRiskCard } from './LegalRiskCard';
+import { MonthlyForecastCard } from './MonthlyForecastCard';
+import { DailyCalendarCard } from './DailyCalendarCard';
+import { NarrativeBookCard } from './NarrativeBookCard';
 import { DayunTimeline } from './DayunTimeline';
+import { LifeTimeline } from './LifeTimeline';
 
 const KEY_FINDING_STYLE = {
   red:    { color: '#C5392F', bg: 'rgba(197,57,47,0.08)',  label: '需关注' },
@@ -21,7 +34,7 @@ const SHENSHA_STYLE = {
 } as const;
 
 export const ProfessionalView: React.FC<{ chart: BaziChart }> = ({ chart }) => {
-  const { basicInfo, wuxingStats, wangShuai, yongShen, geJu, shenShas, daYuns, keyFindings } = chart;
+  const { basicInfo, wuxingStats, wangShuai, yongShen, geJu, shenShas, daYuns, keyFindings, persona, relations } = chart;
 
   return (
     <div className="space-y-6">
@@ -85,97 +98,280 @@ export const ProfessionalView: React.FC<{ chart: BaziChart }> = ({ chart }) => {
         <WangShuaiChain data={wangShuai} />
       </ClassicCard>
 
-      {/* 5. 用神 / 格局 */}
-      <ClassicCard>
-        <SectionTitle title="用神 · 格局" />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* 用神 */}
-          <div>
-            <div className="flex items-center gap-2 mb-3">
-              <h3 className="font-classic text-base text-cinnabar m-0">用神推断（{yongShen.method}法）</h3>
-              {yongShen.convergence && <span className="convergence-seal">多法同断</span>}
+      {/* 4.5 命格特征（六维交叉画像 + 干支动态关系网） */}
+      {persona && (
+        <ClassicCard>
+          <SectionTitle
+            title="命格特征"
+            subtitle="六维交叉 + 干支动态关系 · 滴天髓·子平真诠·三命通会"
+          />
+          <PersonaCard persona={persona} relations={relations} />
+        </ClassicCard>
+      )}
+
+      {/* 4.6 M3 婚姻细论（配偶星 / 配偶宫 / 桃花 / 婚期 / 质量评分 / 风险） */}
+      {chart.marriage && (
+        <ClassicCard>
+          <SectionTitle
+            title="婚姻细论"
+            subtitle="配偶画像 + 婚期推算 + 质量评分 + 风险预警"
+          />
+          <MarriageCard marriage={chart.marriage} />
+        </ClassicCard>
+      )}
+
+      {/* 4.7 M4 财富细论（财星/财库/财源/方位/行业/财运/风险） */}
+      {chart.wealth && (
+        <ClassicCard>
+          <SectionTitle
+            title="财富细论"
+            subtitle="财星 + 财库 + 财源类型 + 求财方位 + 财运周期 + 风险预警"
+          />
+          <WealthCard wealth={chart.wealth} />
+        </ClassicCard>
+      )}
+
+      {/* 4.8 M5 事业细论（官星/事业宫/创业打工/行业/升迁/风险） */}
+      {chart.career && (
+        <ClassicCard>
+          <SectionTitle
+            title="事业细论"
+            subtitle="官星 + 事业宫 + 创业打工建议 + 行业匹配 + 事业周期 + 风险预警"
+          />
+          <CareerCard career={chart.career} />
+        </ClassicCard>
+      )}
+
+      {/* 4.9 M6 健康细论（脏腑/体质/疾病/调养/危险年） */}
+      {chart.health && (
+        <ClassicCard>
+          <SectionTitle
+            title="健康细论"
+            subtitle="五脏六腑 + 体质类型 + 易患疾病 + 调养方向 + 健康关注年"
+          />
+          <HealthCard health={chart.health} />
+        </ClassicCard>
+      )}
+
+      {/* 4.10 M7 六亲细论（父母/兄弟/子女三宫位 + 亲缘厚薄） */}
+      {chart.relatives && (
+        <ClassicCard>
+          <SectionTitle
+            title="六亲细论"
+            subtitle="父母 + 兄弟姐妹 + 子女 三宫位 + 各亲缘厚薄评分"
+          />
+          <RelativesCard relatives={chart.relatives} />
+        </ClassicCard>
+      )}
+
+      {/* 4.11 M8 学业细论（印星 + 文昌学堂词馆 + 升学关键年） */}
+      {chart.education && (
+        <ClassicCard>
+          <SectionTitle
+            title="学业细论"
+            subtitle="印星画像 + 文昌学堂词馆神煞 + 学习方向 + 关键学业年"
+          />
+          <EducationCard education={chart.education} />
+        </ClassicCard>
+      )}
+
+      {/* 4.12 M9 出行/搬迁（驿马 + 海外缘 + 出行年） */}
+      {chart.travel && (
+        <ClassicCard>
+          <SectionTitle
+            title="出行 / 搬迁"
+            subtitle="驿马星 + 海外缘分 + 大运流年触发 + 关键出行年"
+          />
+          <TravelCard travel={chart.travel} />
+        </ClassicCard>
+      )}
+
+      {/* 4.13 M10 官非/牢狱（羊刃+劫煞+三刑+伤官见官 + 高危年） */}
+      {chart.legalRisk && (
+        <ClassicCard>
+          <SectionTitle
+            title="官非 / 牢狱风险"
+            subtitle="原局凶神组合 + 三刑齐全 + 伤官见官 + 高危流年"
+          />
+          <LegalRiskCard legalRisk={chart.legalRisk} />
+        </ClassicCard>
+      )}
+
+      {/* 4.14 M11 流月预测（当年 12 个月） */}
+      {chart.monthlyForecast && (
+        <ClassicCard>
+          <SectionTitle
+            title="流月推演"
+            subtitle={`${chart.monthlyForecast.year}年 12 个月吉凶 · 与日柱合冲刑害分析`}
+          />
+          <MonthlyForecastCard monthlyForecast={chart.monthlyForecast} />
+        </ClassicCard>
+      )}
+
+      {/* 4.15 M12 日级吉凶日历（当月每日） */}
+      {chart.dailyCalendar && (
+        <ClassicCard>
+          <SectionTitle
+            title="日级吉凶日历"
+            subtitle={`${chart.dailyCalendar.year}年${chart.dailyCalendar.month}月 · 每日干支 + 宜忌`}
+          />
+          <DailyCalendarCard dailyCalendar={chart.dailyCalendar} />
+        </ClassicCard>
+      )}
+
+      {/* 4.16 M14/M15 命书（结构化 + 自然语言 + 一键导出） */}
+      {chart.narrativeBook && (
+        <ClassicCard>
+          <SectionTitle
+            title="命书全文"
+            subtitle="14 章结构化命书 + Markdown 导出 + 自然语言长文"
+          />
+          <NarrativeBookCard narrativeBook={chart.narrativeBook} />
+        </ClassicCard>
+      )}
+
+      {/* 5. 用神分析 + 格局判定（左右双卡，对标设计稿 02） */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* 用神分析 */}
+        <ClassicCard>
+          <SectionTitle title="用神分析" />
+          <div className="flex gap-4 mt-2">
+            {/* 第一用神 */}
+            <div
+              className="flex-1 text-center"
+              style={{
+                border: '1px solid rgba(184, 55, 47, 0.2)',
+                borderRadius: 8,
+                padding: '16px 12px',
+              }}
+            >
+              <div className="font-classic text-xs mb-1" style={{ color: 'var(--color-cinnabar)', letterSpacing: '0.1em' }}>
+                第一用神
+              </div>
+              <div style={{ fontSize: 32, marginBottom: 4 }}>
+                {yongShen.primary[0] === '火' ? '🔥' : yongShen.primary[0] === '木' ? '🌳' : yongShen.primary[0] === '水' ? '💧' : yongShen.primary[0] === '金' ? '⚔️' : '⛰️'}
+              </div>
+              <div className="font-classic" style={{ fontSize: 28, fontWeight: 700, color: 'var(--color-ink)' }}>
+                {yongShen.primary[0]}
+              </div>
             </div>
-            <div className="space-y-2 text-sm">
-              <div className="flex items-center gap-2">
-                <span className="text-ink-light w-16">主用神：</span>
-                {yongShen.primary.map((w) => (
-                  <span key={w} className="px-2.5 py-0.5 bg-celadon/15 text-celadon rounded font-classic">{w}</span>
-                ))}
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-ink-light w-16">次用神：</span>
-                {yongShen.secondary.map((w) => (
-                  <span key={w} className="px-2.5 py-0.5 bg-gold/15 text-gold rounded font-classic">{w}</span>
-                ))}
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-ink-light w-16">忌神：</span>
-                {yongShen.ji.map((w) => (
-                  <span key={w} className="px-2.5 py-0.5 bg-cinnabar/10 text-cinnabar rounded font-classic">{w}</span>
-                ))}
-              </div>
-              <p className="text-ink-light text-sm leading-relaxed mt-2 mb-0">{yongShen.reason}</p>
-              {yongShen.convergence && (
-                <div className="convergence-methods">
-                  <div className="convergence-methods-title">— 多法同断 · 证据链 —</div>
-                  <ul>
-                    {yongShen.convergence.methods.map((m, i) => (
-                      <li key={i}>{m}</li>
-                    ))}
-                  </ul>
-                  <div className="text-xs text-gold mt-2 font-classic">
-                    ⊙⊙ 共同结论：{yongShen.convergence.conclusion}
-                  </div>
+            {/* 第二用神 */}
+            {yongShen.secondary.length > 0 && (
+              <div
+                className="flex-1 text-center"
+                style={{
+                  border: '1px solid var(--color-border-soft)',
+                  borderRadius: 8,
+                  padding: '16px 12px',
+                }}
+              >
+                <div className="font-classic text-xs mb-1" style={{ color: 'var(--color-ink-light)', letterSpacing: '0.1em' }}>
+                  第二用神
                 </div>
-              )}
+                <div style={{ fontSize: 32, marginBottom: 4 }}>
+                  {yongShen.secondary[0] === '火' ? '🔥' : yongShen.secondary[0] === '木' ? '🌳' : yongShen.secondary[0] === '水' ? '💧' : yongShen.secondary[0] === '金' ? '⚔️' : '⛰️'}
+                </div>
+                <div className="font-classic" style={{ fontSize: 28, fontWeight: 700, color: 'var(--color-ink)' }}>
+                  {yongShen.secondary[0]}
+                </div>
+              </div>
+            )}
+          </div>
+          <p className="text-sm leading-relaxed mt-3 mb-0" style={{ color: 'var(--color-ink-light)' }}>
+            {yongShen.reason}
+          </p>
+        </ClassicCard>
+
+        {/* 格局判定 */}
+        <ClassicCard>
+          <SectionTitle title="格局判定" />
+          <div className="text-center mt-2">
+            {/* 红色印章风格格局名 */}
+            <div
+              className="font-classic inline-block"
+              style={{
+                fontSize: 24,
+                fontWeight: 700,
+                color: 'var(--color-cinnabar)',
+                border: '2px solid var(--color-cinnabar)',
+                borderRadius: 8,
+                padding: '8px 24px',
+                letterSpacing: '0.15em',
+                boxShadow: 'inset 0 0 0 1px rgba(184, 55, 47, 0.15)',
+              }}
+            >
+              {geJu.name}（{geJu.type}）
+            </div>
+            <div className="font-classic mt-3 text-base" style={{ color: 'var(--color-ink)' }}>
+              格局层次：{geJu.level}
             </div>
           </div>
-          {/* 格局 */}
-          <div>
-            <h3 className="font-classic text-base text-cinnabar mb-3">格局判定</h3>
-            <div className="space-y-2 text-sm">
-              <div>
-                <span className="text-ink-light w-16">格局：</span>
-                <span className="font-classic text-base">{geJu.name}</span>
-                <span className="ml-2 text-xs px-2 py-0.5 bg-gold/15 text-gold rounded">{geJu.type}</span>
-              </div>
-              <div>
-                <span className="text-ink-light w-16">状态：</span>
-                <span className={geJu.status === '成格' ? 'text-celadon font-medium' : 'text-cinnabar'}>
-                  {geJu.status}
+          <p className="text-sm leading-relaxed mt-3 mb-0" style={{ color: 'var(--color-ink-light)' }}>
+            {geJu.description}
+          </p>
+        </ClassicCard>
+      </div>
+
+      {/* 6. 神煞一览（吉/凶分组横排标签，对标设计稿 02） */}
+      <ClassicCard>
+        <SectionTitle title="神煞一览" />
+        {/* 吉神 */}
+        <div className="flex items-start gap-3 mb-4 flex-wrap">
+          <span
+            className="font-classic flex-shrink-0"
+            style={{ color: '#6B8E23', fontSize: 15, fontWeight: 600, minWidth: 40 }}
+          >
+            吉神
+          </span>
+          <div className="flex flex-wrap gap-2">
+            {shenShas
+              .filter((s) => s.category === '吉神')
+              .map((s) => (
+                <span
+                  key={s.name}
+                  className="font-classic text-sm"
+                  style={{
+                    padding: '4px 12px',
+                    borderRadius: 4,
+                    background: 'rgba(107, 142, 35, 0.08)',
+                    border: '1px solid rgba(107, 142, 35, 0.25)',
+                    color: '#6B8E23',
+                  }}
+                  title={s.description}
+                >
+                  {s.name}
                 </span>
-                <span className="ml-3 text-ink-light w-16">层次：</span>
-                <span>{geJu.level}</span>
-              </div>
-              <p className="text-ink-light text-sm leading-relaxed mt-2 mb-0">{geJu.description}</p>
-            </div>
+              ))}
           </div>
         </div>
-      </ClassicCard>
-
-      {/* 6. 神煞 */}
-      <ClassicCard>
-        <SectionTitle title="神煞速查" />
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {shenShas.map((s) => {
-            const style = SHENSHA_STYLE[s.category];
-            return (
-              <div
-                key={s.name}
-                className="p-3 rounded border-l-3"
-                style={{ background: style.bg, borderLeft: `3px solid ${style.color}` }}
-              >
-                <div className="flex items-center justify-between mb-1">
-                  <span className="font-classic text-sm" style={{ color: style.color }}>{s.name}</span>
-                  <span className="text-xs px-1.5 py-0.5 rounded" style={{ background: style.color, color: '#fff' }}>
-                    {s.category}
-                  </span>
-                </div>
-                <div className="text-xs text-ink-light mb-1">来源：{s.source}</div>
-                <div className="text-xs text-ink leading-snug">{s.description}</div>
-              </div>
-            );
-          })}
+        {/* 凶神 */}
+        <div className="flex items-start gap-3 flex-wrap">
+          <span
+            className="font-classic flex-shrink-0"
+            style={{ color: '#C5392F', fontSize: 15, fontWeight: 600, minWidth: 40 }}
+          >
+            凶神
+          </span>
+          <div className="flex flex-wrap gap-2">
+            {shenShas
+              .filter((s) => s.category === '凶神')
+              .map((s) => (
+                <span
+                  key={s.name}
+                  className="font-classic text-sm"
+                  style={{
+                    padding: '4px 12px',
+                    borderRadius: 4,
+                    background: 'rgba(197, 57, 47, 0.06)',
+                    border: '1px solid rgba(197, 57, 47, 0.2)',
+                    color: '#C5392F',
+                  }}
+                  title={s.description}
+                >
+                  {s.name}
+                </span>
+              ))}
+          </div>
         </div>
       </ClassicCard>
 
@@ -185,53 +381,40 @@ export const ProfessionalView: React.FC<{ chart: BaziChart }> = ({ chart }) => {
         <DayunTimeline daYuns={daYuns} startAge={chart.startAge} direction={chart.qiYunDirection} />
       </ClassicCard>
 
-      {/* 8. 关键发现 */}
+      {/* 7.5 M2.8 新增：人生时间轴（80 年长河 + 黄金期/谨慎期标注） */}
       <ClassicCard>
-        <SectionTitle title="关键发现" subtitle="红黄绿三级 + 多法同断（金色印章）· 命理师审核要点" />
-        <div className="space-y-3">
+        <SectionTitle title="人生时间轴" subtitle="80 年长河 · 黄金期与谨慎期" />
+        <LifeTimeline data={chart.lifeTimeline} />
+      </ClassicCard>
+
+      {/* 8. 要点发现（横向卡片网格+icon，对标设计稿 02） */}
+      <ClassicCard>
+        <SectionTitle title="要点发现" />
+        <div
+          className="grid gap-3"
+          style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))' }}
+        >
           {keyFindings.map((f, i) => {
             const s = KEY_FINDING_STYLE[f.level];
-            const isConvergent = !!f.convergence;
+            const icons = ['🧠', '💼', '❤️', '💰', '🌿'];
             return (
               <div
                 key={i}
-                className={`p-3 rounded flex gap-3 items-start ${isConvergent ? 'convergence-card' : ''}`}
-                style={isConvergent ? undefined : { background: s.bg }}
+                style={{
+                  background: s.bg,
+                  borderRadius: 8,
+                  padding: '16px 14px',
+                  borderTop: `3px solid ${s.color}`,
+                }}
               >
-                <span
-                  className="flex-shrink-0 w-2 h-2 rounded-full mt-2"
-                  style={{ background: s.color }}
-                />
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1 flex-wrap">
-                    <span className="font-classic text-sm font-semibold" style={{ color: s.color }}>
-                      {f.title}
-                    </span>
-                    <span
-                      className="text-[10px] px-1.5 py-px rounded"
-                      style={{ color: s.color, border: `1px solid ${s.color}` }}
-                    >
-                      {s.label}
-                    </span>
-                    {isConvergent && (
-                      <span className="convergence-seal" title="多个独立分析路径指向同一结论 · 命理最高置信度">
-                        多法同断
-                      </span>
-                    )}
-                  </div>
-                  <div className="text-xs text-ink-light leading-relaxed">{f.description}</div>
-                  {f.convergence && (
-                    <div className="convergence-methods">
-                      <div className="convergence-methods-title">
-                        — 共 {f.convergence.methods.length} 法皆指向：{f.convergence.conclusion} —
-                      </div>
-                      <ul>
-                        {f.convergence.methods.map((m, idx) => (
-                          <li key={idx}>{m}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
+                <div className="flex items-center gap-2 mb-2">
+                  <span style={{ fontSize: 20 }}>{icons[i % icons.length]}</span>
+                  <span className="font-classic text-sm font-semibold" style={{ color: s.color }}>
+                    {f.title}
+                  </span>
+                </div>
+                <div className="text-xs leading-relaxed" style={{ color: 'var(--color-ink-light)' }}>
+                  {f.description}
                 </div>
               </div>
             );

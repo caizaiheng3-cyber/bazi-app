@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>我命由天挺好的 - 设计稿 v1.0</title>
+<style>
+:root {
+  --bg: #ffffff;
+  --bg-secondary: #f7f7f8;
+  --border: #e8e8ec;
+  --text-primary: #1a1a2e;
+  --text-secondary: #6b6b80;
+  --text-tertiary: #9b9baf;
+  --accent: #5b5fc7;
+  --accent-light: #ededff;
+  --success: #2d9d5c;
+  --success-light: #e8f8ef;
+  --warning: #d97706;
+  --warning-light: #fef3c7;
+  --error: #dc2626;
+  --error-light: #fef2f2;
+  --radius: 10px;
+  --radius-sm: 6px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
+  --font: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', sans-serif;
+  --max-width: 420px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: var(--font); background: #f0f0f3; color: var(--text-primary); line-height: 1.5; }
+
+.page-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  padding: 40px;
+  justify-content: center;
+}
+
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.page-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  letter-spacing: 0.5px;
+}
+
+.phone-frame {
+  width: var(--max-width);
+  height: 780px;
+  background: var(--bg);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.12);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* ===== 密码页 ===== */
+.login-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 40px 32px;
+  gap: 32px;
+}
+
+.login-title {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.login-subtitle {
+  font-size: 14px;
+  color: var(--text-tertiary);
+  margin-top: -20px;
+}
+
+.input-field {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.2s;
+  background: var(--bg);
+}
+
+.input-field:focus {
+  border-color: var(--accent);
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 14px;
+  background: var(--text-primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: 0.3px;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
+
+/* ===== 列表页 ===== */
+.list-page {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  padding: 20px 24px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+}
+
+.header-title {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+.btn-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border);
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--text-secondary);
+}
+
+.list-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.card {
+  padding: 16px 18px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  box-shadow: var(--shadow-md);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.card-name {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.card-status {
+  font-size: 12px;
+  padding: 3px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+}
+
+.status-done {
+  background: var(--success-light);
+  color: var(--success);
+}
+
+.status-pending {
+  background: var(--bg-secondary);
+  color: var(--text-tertiary);
+}
+
+.status-loading {
+  background: var(--warning-light);
+  color: var(--warning);
+}
+
+.card-meta {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* ===== 详情页 ===== */
+.detail-page {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-header {
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.back-btn {
+  font-size: 18px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 4px;
+}
+
+.detail-name {
+  font-size: 17px;
+  font-weight: 600;
+  flex: 1;
+}
+
+.tab-bar {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  padding: 0 20px;
+}
+
+.tab-item {
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.tab-item.active {
+  color: var(--text-primary);
+  border-bottom-color: var(--text-primary);
+}
+
+.tab-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+/* 信息 Tab */
+.info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--bg-secondary);
+}
+
+.info-label {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.info-value {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.btn-secondary {
+  width: 100%;
+  padding: 12px;
+  background: var(--bg);
+  color: var(--text-primary);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+/* 报告 Tab */
+.report-status {
+  padding: 16px;
+  border-radius: var(--radius);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.report-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 10px;
+}
+
+.report-item-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.report-item-icon {
+  font-size: 18px;
+}
+
+.report-item-name {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.report-item-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-sm {
+  padding: 5px 10px;
+  font-size: 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg);
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.btn-sm:hover {
+  background: var(--bg-secondary);
+}
+
+/* 问答 Tab */
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.message {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.message-user .message-bubble {
+  background: var(--text-primary);
+  color: white;
+  align-self: flex-end;
+  border-radius: 14px 14px 4px 14px;
+}
+
+.message-ai .message-bubble {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  align-self: flex-start;
+  border-radius: 14px 14px 14px 4px;
+}
+
+.message-bubble {
+  padding: 10px 14px;
+  max-width: 85%;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.message-time {
+  font-size: 11px;
+  color: var(--text-tertiary);
+  padding: 0 4px;
+}
+
+.message-user .message-time {
+  text-align: right;
+}
+
+.chat-input-bar {
+  display: flex;
+  gap: 8px;
+  padding: 12px 0 4px;
+  border-top: 1px solid var(--border);
+}
+
+.chat-input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 20px;
+  font-size: 14px;
+  outline: none;
+}
+
+.chat-input:focus {
+  border-color: var(--accent);
+}
+
+.btn-send {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--text-primary);
+  color: white;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== 建档页 ===== */
+.form-page {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-label .required {
+  color: var(--error);
+}
+
+.radio-group {
+  display: flex;
+  gap: 12px;
+}
+
+.radio-item {
+  padding: 8px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.radio-item.selected {
+  border-color: var(--accent);
+  background: var(--accent-light);
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.form-footer {
+  padding: 16px 20px;
+  border-top: 1px solid var(--border);
+}
+
+textarea.input-field {
+  min-height: 80px;
+  resize: none;
+}
+</style>
+</head>
+<body>
+
+<div class="page-container">
+
+  <!-- ===== 页面 1: 密码验证 ===== -->
+  <div class="page-wrapper">
+    <span class="page-label">密码验证页</span>
+    <div class="phone-frame">
+      <div class="login-page">
+        <div class="login-title">我命由天挺好的</div>
+        <div class="login-subtitle">八字一键排，命理自然来</div>
+        <input class="input-field" type="password" placeholder="请输入密码" value="••••••">
+        <button class="btn-primary">进入</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 页面 2: 命主列表 ===== -->
+  <div class="page-wrapper">
+    <span class="page-label">命主列表页</span>
+    <div class="phone-frame">
+      <div class="list-page">
+        <div class="header">
+          <span class="header-title">我命由天挺好的</span>
+          <div class="btn-icon">+</div>
+        </div>
+        <div class="list-content">
+          <div class="card">
+            <div class="card-header">
+              <span class="card-name">张三</span>
+              <span class="card-status status-done">已生成</span>
+            </div>
+            <div class="card-meta">男 · 1993-12-07 · 杭州</div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <span class="card-name">李四</span>
+              <span class="card-status status-pending">未生成</span>
+            </div>
+            <div class="card-meta">女 · 1988-05-20 · 北京</div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <span class="card-name">王五</span>
+              <span class="card-status status-loading">生成中</span>
+            </div>
+            <div class="card-meta">男 · 1975-10-26 · 上海</div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <span class="card-name">赵六</span>
+              <span class="card-status status-done">已生成</span>
+            </div>
+            <div class="card-meta">女 · 2001-03-15 · 成都</div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <span class="card-name">金杭乐</span>
+              <span class="card-status status-done">已生成</span>
+            </div>
+            <div class="card-meta">男 · 1999-06-28 · 杭州</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 页面 3: 新增命主 ===== -->
+  <div class="page-wrapper">
+    <span class="page-label">新增命主页</span>
+    <div class="phone-frame">
+      <div class="form-page">
+        <div class="detail-header">
+          <span class="back-btn">←</span>
+          <span class="detail-name">新增命主</span>
+        </div>
+        <div class="form-content">
+          <div class="form-group">
+            <span class="form-label">姓名 <span class="required">*</span></span>
+            <input class="input-field" placeholder="请输入姓名" value="蔡渣坡">
+          </div>
+          <div class="form-group">
+            <span class="form-label">性别 <span class="required">*</span></span>
+            <div class="radio-group">
+              <span class="radio-item selected">男</span>
+              <span class="radio-item">女</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <span class="form-label">日历类型 <span class="required">*</span></span>
+            <div class="radio-group">
+              <span class="radio-item selected">公历</span>
+              <span class="radio-item">农历</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <span class="form-label">出生日期 <span class="required">*</span></span>
+            <input class="input-field" value="1999-06-28">
+          </div>
+          <div class="form-group">
+            <span class="form-label">出生时间 <span class="required">*</span></span>
+            <input class="input-field" value="23:00">
+          </div>
+          <div class="form-group">
+            <span class="form-label">出生城市 <span class="required">*</span></span>
+            <input class="input-field" placeholder="请输入城市" value="杭州">
+          </div>
+          <div class="form-group">
+            <span class="form-label">备注</span>
+            <textarea class="input-field" placeholder="职业、婚姻状况、关注领域等辅助信息...">程序员，未婚，关注事业和感情</textarea>
+          </div>
+        </div>
+        <div class="form-footer">
+          <button class="btn-primary">保存</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 页面 4: 详情-信息Tab ===== -->
+  <div class="page-wrapper">
+    <span class="page-label">详情页 · 信息</span>
+    <div class="phone-frame">
+      <div class="detail-page">
+        <div class="detail-header">
+          <span class="back-btn">←</span>
+          <span class="detail-name">张三</span>
+        </div>
+        <div class="tab-bar">
+          <span class="tab-item active">信息</span>
+          <span class="tab-item">报告</span>
+          <span class="tab-item">问答</span>
+        </div>
+        <div class="tab-content">
+          <div class="info-section">
+            <div class="info-row">
+              <span class="info-label">姓名</span>
+              <span class="info-value">张三</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">性别</span>
+              <span class="info-value">男</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">出生日期</span>
+              <span class="info-value">1993-12-07 (公历)</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">出生时间</span>
+              <span class="info-value">06:00</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">出生城市</span>
+              <span class="info-value">杭州</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">备注</span>
+              <span class="info-value">程序员，已婚，关注事业</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">创建时间</span>
+              <span class="info-value" style="color:var(--text-tertiary)">2026-05-10</span>
+            </div>
+            <button class="btn-secondary">✏️ 编辑信息</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 页面 5: 详情-报告Tab ===== -->
+  <div class="page-wrapper">
+    <span class="page-label">详情页 · 报告</span>
+    <div class="phone-frame">
+      <div class="detail-page">
+        <div class="detail-header">
+          <span class="back-btn">←</span>
+          <span class="detail-name">张三</span>
+        </div>
+        <div class="tab-bar">
+          <span class="tab-item">信息</span>
+          <span class="tab-item active">报告</span>
+          <span class="tab-item">问答</span>
+        </div>
+        <div class="tab-content">
+          <div class="report-status" style="background: var(--success-light);">
+            <div>
+              <div style="font-size:14px;font-weight:600;color:var(--success);">✅ 报告已生成</div>
+              <div style="font-size:12px;color:var(--text-tertiary);margin-top:2px;">2026-05-12 16:30</div>
+            </div>
+            <button class="btn-sm" style="border-color:var(--text-tertiary);">🔄 重新生成</button>
+          </div>
+
+          <div class="report-item">
+            <div class="report-item-left">
+              <span class="report-item-icon">📄</span>
+              <span class="report-item-name">命理师版</span>
+            </div>
+            <div class="report-item-actions">
+              <button class="btn-sm">查看</button>
+              <button class="btn-sm">⬇</button>
+            </div>
+          </div>
+
+          <div class="report-item">
+            <div class="report-item-left">
+              <span class="report-item-icon">📄</span>
+              <span class="report-item-name">消费者版</span>
+            </div>
+            <div class="report-item-actions">
+              <button class="btn-sm">查看</button>
+              <button class="btn-sm">⬇</button>
+            </div>
+          </div>
+
+          <div class="report-item">
+            <div class="report-item-left">
+              <span class="report-item-icon">💬</span>
+              <span class="report-item-name">微信版</span>
+            </div>
+            <div class="report-item-actions">
+              <button class="btn-sm">查看</button>
+              <button class="btn-sm">📋</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 页面 6: 详情-问答Tab ===== -->
+  <div class="page-wrapper">
+    <span class="page-label">详情页 · 问答</span>
+    <div class="phone-frame">
+      <div class="detail-page">
+        <div class="detail-header">
+          <span class="back-btn">←</span>
+          <span class="detail-name">张三</span>
+        </div>
+        <div class="tab-bar">
+          <span class="tab-item">信息</span>
+          <span class="tab-item">报告</span>
+          <span class="tab-item active">问答</span>
+        </div>
+        <div class="tab-content" style="padding:16px 20px;display:flex;flex-direction:column;">
+          <div class="chat-container">
+            <div class="chat-messages">
+              <div class="message message-user">
+                <div class="message-bubble">今年适合跳槽吗？</div>
+                <span class="message-time">16:30</span>
+              </div>
+              <div class="message message-ai">
+                <div class="message-bubble">根据你的八字，今年丙午流年与你日主辛金形成了「正财」关系。翻译成人话 = 今年财运通道打开了，但也意味着消耗增大。<br><br>建议：下半年（立秋后金旺）再考虑跳槽，把握 8-10 月窗口期。</div>
+                <span class="message-time">16:31</span>
+              </div>
+              <div class="message message-user">
+                <div class="message-bubble">感情方面呢？</div>
+                <span class="message-time">16:35</span>
+              </div>
+              <div class="message message-ai">
+                <div class="message-bubble">从你的命局来看，日支代表婚姻宫，今年午火冲你日支子水 → 感情上会有「动荡」的体感。<br><br>→ 不是坏事，而是关系升级的契机。如果正在交往，今年容易出现「走向下一步」的推力。</div>
+                <span class="message-time">16:36</span>
+              </div>
+            </div>
+            <div class="chat-input-bar">
+              <input class="chat-input" placeholder="输入你的问题...">
+              <button class="btn-send">↑</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

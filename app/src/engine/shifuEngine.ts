@@ -1,3 +1,8 @@
+/**
+ * @deprecated 本文件为旧版前端 TS 引擎，已废弃。
+ * 主计算引擎已切换到 Python 后端 API（web/backend/app/api/engine.py）。
+ * 当前仅作为 fallback 保留，请勿新增逻辑。
+ */
 // "先生"对话引擎（M7.5）
 //
 // 输入：{ question, scene, chart, anchorDate? }
@@ -281,7 +286,8 @@ function buildSuggestionForDecision(
       lines.push(`② 关键时段建议放在 ${formatHour(todayBestHour)}；`);
       lines.push('③ 不必凡事求问，心安即是吉时。');
   }
-  return lines.join('\n');
+  return lines.join('
+');
 }
 
 // ===== 决策类生成 =====
@@ -398,7 +404,8 @@ function generateTimingReply(input: GenerateReplyInput, anchor: Date): ShifuRepl
   return {
     empathy: buildEmpathy(input),
     explanation: explainParts.join(' '),
-    suggestion: sugLines.join('\n'),
+    suggestion: sugLines.join('
+'),
     verdict,
     basis: {
       liuRi: top[0] ? `${top[0].forecast.ganZhi}日 · 当选最佳` : '14 日内无显著吉日',
@@ -444,7 +451,8 @@ function generateDailyTipsReply(input: GenerateReplyInput, anchor: Date): ShifuR
   return {
     empathy: buildEmpathy(input),
     explanation,
-    suggestion: sugLines.join('\n'),
+    suggestion: sugLines.join('
+'),
     verdict,
     basis: {
       liuRi: `${f.ganZhi}日 · ${getLiuRiBrief(f)}`,
@@ -552,7 +560,8 @@ function generateOpenReply(input: GenerateReplyInput, anchor: Date): ShifuReply 
   return {
     empathy: buildEmpathy(input),
     explanation,
-    suggestion: sugLines.join('\n'),
+    suggestion: sugLines.join('
+'),
     verdict,
     basis: {
       liuRi: `${f.ganZhi}日`,
