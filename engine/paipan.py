@@ -115,6 +115,7 @@ CITY_LONGITUDE = {
     "武汉": 114.3, "长沙": 113.0, "郑州": 113.7,
     # 西南
     "成都": 104.1, "昆明": 102.7, "贵阳": 106.7, "拉萨": 91.1,
+    "安顺": 105.9, "遵义": 106.9, "六盘水": 104.8,
     # 西北
     "西安": 108.9, "兰州": 103.8, "西宁": 101.8, "银川": 106.3,
     "乌鲁木齐": 87.6,
@@ -126,6 +127,19 @@ CITY_LONGITUDE = {
     "庐江": 117.3, "无锡": 120.3, "常州": 119.9,
 }
 
+# 省份/自治区 → 省会经度（当用户只输入省份时兜底匹配）
+PROVINCE_TO_LONGITUDE = {
+    "北京": 116.4, "天津": 117.2, "上海": 121.5, "重庆": 106.5,
+    "河北": 114.5, "山西": 112.5, "内蒙古": 111.7, "内蒙": 111.7,
+    "辽宁": 123.4, "吉林": 125.3, "黑龙江": 126.6,
+    "江苏": 118.8, "浙江": 120.2, "安徽": 117.3, "福建": 119.3,
+    "江西": 115.9, "山东": 117.0, "河南": 113.7,
+    "湖北": 114.3, "湖南": 113.0, "广东": 113.3, "广西": 108.3,
+    "海南": 110.3, "四川": 104.1, "贵州": 106.7, "云南": 102.7,
+    "西藏": 91.1, "陕西": 108.9, "甘肃": 103.8, "青海": 101.8,
+    "宁夏": 106.3, "新疆": 87.6, "台湾": 121.5,
+}
+
 # 标准经度（北京时间 = 东经120°）
 STANDARD_LONGITUDE = 120.0
 
@@ -135,20 +149,21 @@ def _fuzzy_match_city_longitude(birth_place: str) -> float:
 
     支持常见变体：'北京市'→'北京', '广东广州'→'广州', '新疆乌鲁木齐'→'乌鲁木齐'
     匹配策略（按优先级）：
-      1. 精确匹配
-      2. 去掉末尾'市/区/县'后匹配
-      3. 城市表中任一城市名是输入的子串（如 '广东广州' 包含 '广州'）
-      4. 输入是城市表中某城市名的子串（如 '乌市' 包含于 '乌鲁木齐' → 不做，太容易误匹）
+      1. 精确匹配城市表
+      2. 去掉末尾'市/区/县/省'后匹配城市表
+      3. 城市表中任一城市名是输入的子串（如 '贵州安顺' 包含 '安顺'）
+      4. 省份表精确匹配（如 '贵州' → 贵阳经度）
+      5. 去后缀后匹配省份表（如 '贵州省' → '贵州'）
     """
     if not birth_place:
         return None
 
-    # 1. 精确匹配
+    # 1. 精确匹配城市表
     if birth_place in CITY_LONGITUDE:
         return CITY_LONGITUDE[birth_place]
 
     # 2. 去掉末尾行政后缀
-    stripped = birth_place.rstrip("市区县")
+    stripped = birth_place.rstrip("市区县省")
     if stripped and stripped in CITY_LONGITUDE:
         return CITY_LONGITUDE[stripped]
 
@@ -157,6 +172,14 @@ def _fuzzy_match_city_longitude(birth_place: str) -> float:
     for city_name in candidates:
         if city_name in birth_place:
             return CITY_LONGITUDE[city_name]
+
+    # 4. 省份表精确匹配（用户只输入省份名时，用省会经度兜底）
+    if birth_place in PROVINCE_TO_LONGITUDE:
+        return PROVINCE_TO_LONGITUDE[birth_place]
+
+    # 5. 去后缀后匹配省份表
+    if stripped and stripped in PROVINCE_TO_LONGITUDE:
+        return PROVINCE_TO_LONGITUDE[stripped]
 
     return None
 
@@ -319,23 +342,25 @@ def paipan(birth_year: int, birth_month: int, birth_day: int,
         time_info["农历转公历"] = f"{solar_year}-{solar_month:02d}-{solar_day:02d}"
 
     # --- 真太阳时校正 ---
+    # 策略：当能匹配到出生地经度时，自动启用真太阳时校正（这是专业排盘的标准做法）
     actual_hour, actual_minute = birth_hour, birth_minute
-    if use_true_solar_time:
-        # 确定经度（支持模糊匹配城市名）
-        actual_longitude = longitude
-        if actual_longitude is None:
-            actual_longitude = _fuzzy_match_city_longitude(birth_place)
-        if actual_longitude is not None:
-            (solar_year, solar_month, solar_day,
-             actual_hour, actual_minute,
-             correction_minutes, detail_str) = calculate_true_solar_time(
-                solar_year, solar_month, solar_day,
-                birth_hour, birth_minute, actual_longitude)
-            time_info["真太阳时校正"] = detail_str
-            time_info["校正后时间"] = f"{solar_year}-{solar_month:02d}-{solar_day:02d} {actual_hour:02d}:{actual_minute:02d}"
-            time_info["经度"] = actual_longitude
-        else:
-            time_info["真太阳时校正"] = "未启用（未找到出生地经度）"
+    actual_longitude = longitude
+    if actual_longitude is None:
+        actual_longitude = _fuzzy_match_city_longitude(birth_place)
+
+    should_correct = use_true_solar_time or (actual_longitude is not None)
+
+    if should_correct and actual_longitude is not None:
+        (solar_year, solar_month, solar_day,
+         actual_hour, actual_minute,
+         correction_minutes, detail_str) = calculate_true_solar_time(
+            solar_year, solar_month, solar_day,
+            birth_hour, birth_minute, actual_longitude)
+        time_info["真太阳时校正"] = detail_str
+        time_info["校正后时间"] = f"{solar_year}-{solar_month:02d}-{solar_day:02d} {actual_hour:02d}:{actual_minute:02d}"
+        time_info["经度"] = actual_longitude
+    elif use_true_solar_time and actual_longitude is None:
+        time_info["真太阳时校正"] = "未启用（未找到出生地经度）"
 
     solar = Solar.fromYmdHms(solar_year, solar_month, solar_day,
                              actual_hour, actual_minute, 0)
