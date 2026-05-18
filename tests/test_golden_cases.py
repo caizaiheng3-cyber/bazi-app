@@ -868,16 +868,16 @@ class TestGejuOutputContract:
 # ============================================================
 
 YONGSHEN_CASES = [
-    # --- 食神格·身弱·格局用神为财星 ---
+    # --- 食神格·身弱微弱·格局用神(财星)降级，扶抑为主 ---
     {
         "id": "ys_shishen_weak",
         "name": "Vincy",
         "birth": (1998, 8, 9, 13, 50),
         "gender": "女",
-        "expected_method": "格局护格",
-        "expected_first_yongshen_shishen": "正财",
+        "expected_method": "扶抑为主",
+        "expected_first_yongshen_shishen": "印星",
         "expected_first_jishen_shishen": "偏印",
-        "source": "食神格用财(子平真诠)，忌枭夺食",
+        "source": "身弱微弱不胜财，扶抑优先于格局护格(滴天髓)",
     },
     # --- 正官格·身旺·格局用神为印星 ---
     {

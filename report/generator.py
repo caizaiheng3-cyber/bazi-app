@@ -229,14 +229,52 @@ def validate_report_quality(master_report: str, wechat_report: str,
             if "夫星有力" in all_reports or "正官有力" in all_reports:
                 issues.append(f"事实矛盾：报告写'夫星/正官有力'，但引擎数据力量仅{zhengguan_li}")
 
-    # 用忌未解释矛盾检测
+    # 用忌未解释矛盾检测（增强版）
     wuxing_list = ["木", "火", "土", "金", "水"]
+    wuxing_color_map = {
+        "木": ["绿色", "青色"],
+        "火": ["红色", "紫色", "橙色"],
+        "土": ["黄色", "棕色", "米色"],
+        "金": ["白色", "金色", "银色"],
+        "水": ["黑色", "蓝色", "深灰"],
+    }
+    wuxing_direction_map = {
+        "木": "东",
+        "火": "南",
+        "土": "中",
+        "金": "西",
+        "水": "北",
+    }
+
     for wx in wuxing_list:
+        # 原有检测：显式声明用神+忌神
         is_yongshen_claim = f"{wx}是用神" in all_reports or f"{wx}为用神" in all_reports
         is_jishen_claim = f"{wx}是忌神" in all_reports or f"{wx}为忌神" in all_reports
         has_condition = ("条件" in all_reports and wx in all_reports) or f"{wx}可用但" in all_reports
         if is_yongshen_claim and is_jishen_claim and not has_condition:
             issues.append(f"用忌矛盾：{wx}同时被称为用神和忌神，但无条件解释")
+
+        # 新增检测1：第N用神 + 忌X 矛盾
+        has_nth_yongshen = f"用神：{wx}" in all_reports or f"用神：**{wx}" in all_reports
+        has_ji_claim = f"忌{wx}" in all_reports
+        if has_nth_yongshen and has_ji_claim and not has_condition:
+            issues.append(f"用忌矛盾：报告中既有'{wx}'作为用神，又说'忌{wx}'，无条件解释")
+
+        # 新增检测2：多穿/少穿同色系矛盾
+        colors = wuxing_color_map.get(wx, [])
+        for color in colors:
+            has_duo_chuan = f"多穿{color}" in all_reports or f"多穿戴{color}" in all_reports
+            has_shao_chuan = f"少穿{color}" in all_reports
+            if has_duo_chuan and has_shao_chuan:
+                issues.append(f"建议矛盾：报告同时建议'多穿{color}'和'少穿{color}'")
+
+        # 新增检测3：同方向多往/少往矛盾
+        direction = wuxing_direction_map.get(wx, "")
+        if direction:
+            has_duo_wang = f"多往{direction}" in all_reports
+            has_shao_wang = f"少往{direction}" in all_reports
+            if has_duo_wang and has_shao_wang:
+                issues.append(f"建议矛盾：报告同时建议'多往{direction}方'和'少往{direction}方'")
 
     return issues
 
@@ -285,8 +323,19 @@ def extract_engine_summary(paipan_data: dict, rules_data: dict, name: str, gende
     wangshuai = rules_data.get("旺衰", {})
     geju = rules_data.get("格局", {})
     yongshen = rules_data.get("用神忌神", {})
-    yongshen_list = ", ".join(f"{y['五行']}({y['十神']})" for y in yongshen.get("用神", []))
-    jishen_list = ", ".join(f"{j['五行']}({j['十神']})" for j in yongshen.get("忌神", []))
+    # 使用仲裁后的主用神/条件用神（而非原始列表，避免矛盾信息混入AI上下文）
+    main_yongshen = yongshen.get("主用神", [])
+    conditional_yongshen = yongshen.get("条件用神", [])
+    yongshen_list = ", ".join(f"{y['五行']}({y.get('十神', '')})" for y in main_yongshen)
+    conditional_list = ", ".join(f"{y['五行']}({y.get('十神', '')}·条件)" for y in conditional_yongshen)
+    if conditional_list:
+        yongshen_list += f" | 条件用神: {conditional_list}"
+    # 忌神：排除已在条件用神中解释过的五行
+    conditional_wx = {y.get("五行") for y in conditional_yongshen}
+    jishen_list = ", ".join(
+        f"{j['五行']}({j['十神']})" for j in yongshen.get("忌神", [])
+        if j.get("五行") not in conditional_wx
+    )
 
     wuxing_score = paipan_data.get("五行统计", {}).get("得分", {})
     wuxing_pct = paipan_data.get("五行统计", {}).get("百分比", {})
@@ -347,6 +396,15 @@ def extract_engine_summary(paipan_data: dict, rules_data: dict, name: str, gende
         canggan_str = "/".join(f"{c['天干']}({c['十神']})" for c in canggan)
         sizhu_facts += f"- {pos}：天干{tiangan}({tiangan_shishen})透出，藏干={canggan_str}\n"
 
+    # 冲突解释摘要
+    conflicts = yongshen.get("冲突解释", [])
+    conflict_lines = ""
+    if conflicts:
+        conflict_lines = "\n### 用忌冲突仲裁结论\n\n"
+        for c in conflicts:
+            conflict_lines += f"- **{c.get('五行', '')}**：{c.get('仲裁结论', '')}\n"
+        conflict_lines += "\n**铁律**：报告中涉及以上冲突五行时，必须按仲裁结论表述，严禁自相矛盾。\n"
+
     return (
         f"## 已确定的核心事实（后续章节必须与以下事实保持一致，不得矛盾）\n\n"
         f"- 命主：{name}，{gender}，{birth_year}年生，当前虚岁{current_age}\n"
@@ -355,14 +413,16 @@ def extract_engine_summary(paipan_data: dict, rules_data: dict, name: str, gende
         f"- 旺衰：{wangshuai.get('结论', '未知')} {wangshuai.get('程度', '')}\n"
         f"- 五行得分：{wuxing_str}\n"
         f"- 格局：{geju.get('格局', '未知')}\n"
-        f"- 用神：{yongshen_list}\n"
-        f"- 忌神：{jishen_list}\n"
+        f"- 取用法：{yongshen.get('取用法', '未知')}\n"
+        f"- 主用神（仲裁后）：{yongshen_list}\n"
+        f"- 忌神（排除冲突项）：{jishen_list}\n"
         f"- 十神力量TOP3：{strongest}\n"
         f"- 当前大运：{current_dayun}\n\n"
         f"### 四柱透藏事实（严禁混淆透干与藏干）\n\n"
         f"{sizhu_facts}\n"
         f"**铁律**：只有天干才叫'透出'，藏干不能说'透出'。"
         f"'有力'需看力量值，力量≤5为微弱，≤10为较弱。\n"
+        f"{conflict_lines}"
         f"{strategy_lines}"
     )
 

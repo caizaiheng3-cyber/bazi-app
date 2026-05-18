@@ -2266,11 +2266,31 @@ def judge_yongshen(paipan_data: dict, wangshuai: dict, geju: dict | None = None)
     is_baige = geju.get("成败") == "败格"
     is_winter_summer = month_zhi in WINTER_MONTHS or month_zhi in SUMMER_MONTHS
 
+    # === Step 2.1: 身弱格局冲突检测 ===
+    # 原则：身弱（微弱/偏弱/太弱/极弱）时，如果格局用神是耗泄身的十神
+    # （财星/食伤/官杀），则格局护格法让位给扶抑法。
+    # 依据：滴天髓"身弱不胜财/官/食伤"—— 日主都撑不住了，
+    # 再取耗身之物为用只会雪上加霜。
+    wangshuai_level = wangshuai.get("程度", "")
+    is_significantly_weak = wangshuai_level in ("微弱", "偏弱", "太弱", "极弱")
+
+    # 检测格局用神是否与身弱冲突（耗泄身的十神类型）
+    geju_conflicts_with_weak = False
+    if is_significantly_weak and not is_congge and geju_ys.get("格局用神"):
+        haoshen_types = {"正财", "偏财", "食神", "伤官", "正官", "七杀",
+                         "财星", "食伤", "官杀"}
+        for shishen_name in geju_ys["格局用神"]:
+            if shishen_name in haoshen_types:
+                geju_conflicts_with_weak = True
+                break
+
     # 确定主取用法
     if is_congge:
         primary_method = "从格顺势"
-    elif geju_ys.get("格局用神"):
+    elif geju_ys.get("格局用神") and not geju_conflicts_with_weak:
         primary_method = geju_ys["取用法"]
+    elif is_significantly_weak:
+        primary_method = "扶抑为主"
     elif is_winter_summer:
         primary_method = "调候为主"
     else:
@@ -2282,7 +2302,8 @@ def judge_yongshen(paipan_data: dict, wangshuai: dict, geju: dict | None = None)
     priority = 1
 
     # 3a. 格局用神（或从格顺势）
-    if geju_ys.get("格局用神"):
+    # 如果身弱冲突，格局用神降级到扶抑之后（Step 3c 后补充）
+    if geju_ys.get("格局用神") and not geju_conflicts_with_weak:
         for shishen_name in geju_ys["格局用神"]:
             wx = _shishen_to_wuxing(shishen_name, dm_wuxing)
             yongshen_list.append({
@@ -2352,6 +2373,38 @@ def judge_yongshen(paipan_data: dict, wangshuai: dict, geju: dict | None = None)
                 })
                 existing_ji_wx.add(fuyi_ji["五行"])
                 ji_priority += 1
+
+    # 3c-extra. 身弱冲突时，格局用神降级补充（排在扶抑之后）
+    # 格局用神在身旺大运时仍可用，但当前身弱状态下不宜为主用神
+    if geju_conflicts_with_weak and geju_ys.get("格局用神"):
+        existing_wx = {item["五行"] for item in yongshen_list}
+        for shishen_name in geju_ys["格局用神"]:
+            wx = _shishen_to_wuxing(shishen_name, dm_wuxing)
+            if wx not in existing_wx:
+                yongshen_list.append({
+                    "五行": wx,
+                    "十神": shishen_name,
+                    "优先级": priority,
+                    "理由": f"格局用神(降级·身{wangshuai_level}不胜{shishen_name})·{geju['格局']}·{geju_ys['来源']}",
+                    "取用法": "格局护格(降级)",
+                })
+                existing_wx.add(wx)
+                priority += 1
+        # 格局忌神仍保留（如偏印枭神夺食仍为忌）
+        if geju_ys.get("格局忌神"):
+            existing_ji_wx = {item["五行"] for item in jishen_list}
+            ji_priority = len(jishen_list) + 1
+            for shishen_name in geju_ys["格局忌神"]:
+                wx = _shishen_to_wuxing(shishen_name, dm_wuxing)
+                if wx not in existing_ji_wx:
+                    jishen_list.append({
+                        "五行": wx,
+                        "十神": shishen_name,
+                        "优先级": ji_priority,
+                        "理由": f"格局忌神·{geju['格局']}·{geju_ys['来源']}",
+                    })
+                    existing_ji_wx.add(wx)
+                    ji_priority += 1
 
     # 3d. 通关用神（条件性补充）
     if tongguan:
@@ -3739,59 +3792,132 @@ YONGSHEN_DAILY = {
 
 
 def generate_yongshen_text(paipan_data: dict, yongshen_data: dict, wangshuai: dict) -> str:
-    """用神日常建议的确定性推演"""
+    """用神日常建议的确定性推演（v2：只消费仲裁后口径）
+
+    核心原则：只使用 主用神/条件用神/日常策略/冲突解释，
+    禁止直接遍历原始 用神/忌神 列表，避免同一五行
+    同时出现"多穿"和"少穿"的矛盾。
+    """
     dm_wuxing = paipan_data["日主"]["五行"]
     conclusion = wangshuai["结论"]
+    level = wangshuai.get("程度", "")
     lines = []
     lines.append("**用神深度解读与日常化建议：**\n")
 
     # 旺衰逻辑解释
     if conclusion == "身弱":
-        lines.append(f"日主{dm_wuxing}偏弱，核心策略是**补给**——给自己充电、找帮手、获取支持。\n")
+        lines.append(f"日主{dm_wuxing}偏弱（{level}），核心策略是**补给**——给自己充电、找帮手、获取支持。\n")
     elif conclusion == "身旺":
-        lines.append(f"日主{dm_wuxing}偏旺，核心策略是**释放**——输出才华、拓展事业、消耗多余能量。\n")
+        lines.append(f"日主{dm_wuxing}偏旺（{level}），核心策略是**释放**——输出才华、拓展事业、消耗多余能量。\n")
     else:
         lines.append(f"日主{dm_wuxing}中和，核心策略是**平衡**——根据季节和环境灵活调整。\n")
 
-    # 用神逐个解读
-    for ys in yongshen_data["用神"]:
-        wx = ys["五行"]
-        if wx == "需AI判读":
-            continue
-        shishen = ys["十神"]
-        priority = ys["优先级"]
-        reason = ys["理由"]
-        daily = YONGSHEN_DAILY.get(wx, {})
+    # 取用总论
+    zonglun = yongshen_data.get("取用总论", "")
+    if zonglun:
+        lines.append(f"**取用总论**：{zonglun}\n")
 
-        icon = "🥇" if priority == 1 else "🥈" if priority == 2 else "🥉"
-        lines.append(f"### {icon} 第{priority}用神：{wx}（{shishen}）\n")
-        lines.append(f"**命理依据**：{reason}\n")
+    # 日常策略（仲裁最终裁决）
+    daily_strategy = yongshen_data.get("日常策略", {})
+    main_strategy = daily_strategy.get("主策略", "")
+    wuxing_guide = daily_strategy.get("五行指导", {})
 
-        if daily:
-            lines.append("| 维度 | 建议 |")
-            lines.append("|---|---|")
-            lines.append(f"| ✅ 方位 | 多往{daily['方位']}方向发展 |")
-            lines.append(f"| ✅ 颜色 | 多穿戴{daily['颜色']} |")
-            lines.append(f"| ✅ 行业 | {daily['行业']} |")
-            lines.append(f"| ✅ 饮食 | 多吃{daily['食物']} |")
-            lines.append(f"| ✅ 日常 | {daily['习惯']} |")
-            lines.append(f"| ✅ 贵人 | 多接触{daily['贵人']} |")
+    if main_strategy:
+        lines.append(f"**日常主策略**：{main_strategy}\n")
+
+    # 主用神（仲裁后确认无冲突的用神）
+    main_yongshen = yongshen_data.get("主用神", [])
+    if main_yongshen:
+        lines.append("### 🎯 主用神（日常优先方向）\n")
+        for i, ys in enumerate(main_yongshen, 1):
+            wx = ys.get("五行", "")
+            if not wx or wx == "需AI判读":
+                continue
+            shishen = ys.get("十神", "")
+            reason = ys.get("理由", "")
+            daily = YONGSHEN_DAILY.get(wx, {})
+            guide = wuxing_guide.get(wx, {})
+            strategy_note = guide.get("策略", "") if guide else ""
+
+            icon = "🥇" if i == 1 else "🥈" if i == 2 else "🥉"
+            lines.append(f"#### {icon} {wx}（{shishen}）\n")
+            lines.append(f"**命理依据**：{reason}\n")
+            if strategy_note:
+                lines.append(f"**策略**：{strategy_note}\n")
+
+            if daily:
+                lines.append("| 维度 | 建议 |")
+                lines.append("|---|---|")
+                lines.append(f"| ✅ 方位 | 多往{daily['方位']}方向发展 |")
+                lines.append(f"| ✅ 颜色 | 多穿戴{daily['颜色']} |")
+                lines.append(f"| ✅ 行业 | {daily['行业']} |")
+                lines.append(f"| ✅ 饮食 | 多吃{daily['食物']} |")
+                lines.append(f"| ✅ 日常 | {daily['习惯']} |")
+                lines.append(f"| ✅ 贵人 | 多接触{daily['贵人']} |")
+                lines.append("")
+
+    # 条件用神（存在用忌冲突，需要条件性使用）
+    conditional_yongshen = yongshen_data.get("条件用神", [])
+    if conditional_yongshen:
+        lines.append("### ⚡ 条件用神（需特定条件下使用）\n")
+        for ys in conditional_yongshen:
+            wx = ys.get("五行", "")
+            if not wx or wx == "需AI判读":
+                continue
+            shishen = ys.get("十神", "")
+            reason = ys.get("理由", "")
+            guide = wuxing_guide.get(wx, {})
+            strategy_note = guide.get("策略", "") if guide else ""
+            lines.append(f"- **{wx}（{shishen}）**：{reason}")
+            if strategy_note:
+                lines.append(f"  - 💡 {strategy_note}")
             lines.append("")
 
-    # 忌神提示
-    lines.append("**忌神提醒**：\n")
-    for js in yongshen_data["忌神"]:
-        wx = js["五行"]
-        if wx == "需AI判读":
-            continue
-        shishen = js["十神"]
-        reason = js["理由"]
-        daily = YONGSHEN_DAILY.get(wx, {})
-        avoid_color = daily.get("颜色", "") if daily else ""
-        lines.append(f"- ⚠️ **忌{wx}（{shishen}）**：{reason}")
-        if avoid_color:
-            lines.append(f"  - ⚠️ 少穿{avoid_color}系衣物，少往{daily.get('方位', '')}方向发展")
+    # 冲突解释（同一五行同时有用/忌属性时的仲裁说明）
+    conflicts = yongshen_data.get("冲突解释", [])
+    if conflicts:
+        lines.append("### ⚠️ 用忌冲突说明\n")
+        for conflict in conflicts:
+            wx = conflict.get("五行", "")
+            conclusion_text = conflict.get("仲裁结论", "")
+            lines.append(f"- **{wx}**：{conclusion_text}")
         lines.append("")
+
+    # 忌神提醒（只使用日常策略中定性为"忌"的五行，避免与主用神矛盾）
+    lines.append("### 🚫 忌神提醒\n")
+    has_jishen = False
+    for wx, guide in wuxing_guide.items():
+        if guide.get("定性") == "忌":
+            has_jishen = True
+            shishen = guide.get("十神", "")
+            strategy_note = guide.get("策略", "")
+            daily = YONGSHEN_DAILY.get(wx, {})
+            avoid_color = daily.get("颜色", "") if daily else ""
+            avoid_direction = daily.get("方位", "") if daily else ""
+            lines.append(f"- ⚠️ **忌{wx}（{shishen}）**：{strategy_note}")
+            if avoid_color:
+                lines.append(f"  - 少穿{avoid_color}系衣物，少往{avoid_direction}方向发展")
+            lines.append("")
+
+    if not has_jishen:
+        # 兜底：如果日常策略中无忌神定性，从原始忌神列表中取（但排除已在主用神中的五行）
+        main_wx_set = {ys.get("五行") for ys in main_yongshen}
+        conditional_wx_set = {ys.get("五行") for ys in conditional_yongshen}
+        for js in yongshen_data.get("忌神", []):
+            wx = js.get("五行", "")
+            if not wx or wx == "需AI判读":
+                continue
+            if wx in main_wx_set or wx in conditional_wx_set:
+                continue  # 已在条件用神中解释过，不重复列为忌
+            shishen = js.get("十神", "")
+            reason = js.get("理由", "")
+            daily = YONGSHEN_DAILY.get(wx, {})
+            avoid_color = daily.get("颜色", "") if daily else ""
+            avoid_direction = daily.get("方位", "") if daily else ""
+            lines.append(f"- ⚠️ **忌{wx}（{shishen}）**：{reason}")
+            if avoid_color:
+                lines.append(f"  - 少穿{avoid_color}系衣物，少往{avoid_direction}方向发展")
+            lines.append("")
 
     return "\n".join(lines)
 
@@ -4870,9 +4996,12 @@ def aggregate_domain_profiles(paipan_data: dict, wangshuai: dict, yongshen: dict
                     })
 
     # 原局十神分析（增强版：天干+藏干+日支夫妻宫+合冲+空亡）
-    shishen_set = set()
+    # 区分透干集合和完整集合（含藏干），用于精确描述"透出"vs"藏干存在"
+    tiangan_shishen_set = set()  # 只有天干透出的十神
+    shishen_set = set()  # 天干+藏干的完整十神集合
     for pos in ["年柱", "月柱", "时柱"]:
         ss = get_shishen(day_master, sizhu[pos]["天干"])
+        tiangan_shishen_set.add(ss)
         shishen_set.add(ss)
 
     # 补充：扫描所有地支藏干的十神（含日支）
@@ -4960,9 +5089,11 @@ def aggregate_domain_profiles(paipan_data: dict, wangshuai: dict, yongshen: dict
     # --- 财运领域 ---
     wealth_events = domain_events["财运"]
     wealth_static = []
-    if "正财" in shishen_set or "偏财" in shishen_set:
+    if "正财" in tiangan_shishen_set or "偏财" in tiangan_shishen_set:
         wealth_static.append("原局有财星透出，财源有路")
-    if "劫财" in shishen_set or "比肩" in shishen_set:
+    elif "正财" in shishen_set or "偏财" in shishen_set:
+        wealth_static.append("原局藏干有财星，财源暗藏待引动")
+    if "劫财" in tiangan_shishen_set or "比肩" in tiangan_shishen_set:
         wealth_static.append("比劫透出，有争财之象，不宜合伙")
 
     wealth_advantages = [e["事件"] for e in wealth_events if "吉" in e["吉凶"]][:3]
@@ -4973,13 +5104,17 @@ def aggregate_domain_profiles(paipan_data: dict, wangshuai: dict, yongshen: dict
     # --- 事业领域 ---
     career_events = domain_events["事业"]
     career_static = []
-    if "正官" in shishen_set and gender == "男":
+    if "正官" in tiangan_shishen_set and gender == "男":
         career_static.append("正官透出，利仕途管理")
-    if "七杀" in shishen_set:
+    elif "正官" in shishen_set and gender == "男":
+        career_static.append("藏干有正官，暗含管理潜质")
+    if "七杀" in tiangan_shishen_set:
         career_static.append("七杀透出，有魄力但压力大")
-    if "食神" in shishen_set:
+    elif "七杀" in shishen_set:
+        career_static.append("藏干有七杀，暗含竞争压力")
+    if "食神" in tiangan_shishen_set:
         career_static.append("食神透出，利技术/创作/表达类工作")
-    if "伤官" in shishen_set:
+    if "伤官" in tiangan_shishen_set:
         career_static.append("伤官透出，才华出众但易与上级冲突")
 
     career_advantages = [e["事件"] for e in career_events if "吉" in e["吉凶"]][:3]

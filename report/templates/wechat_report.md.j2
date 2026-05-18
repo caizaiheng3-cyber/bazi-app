@@ -10,8 +10,10 @@
 日主: {{ paipan.日主.天干 }}{{ paipan.日主.五行 }}（{{ paipan.日主.阴阳 }}）
 旺衰: {{ rules.旺衰.结论 }} {{ rules.旺衰.程度 }}（总分{{ rules.旺衰.总分 }}）
 格局: {{ rules.格局.格局 }}
-用神: {% for ys in rules.用神忌神.用神 %}{{ ys.五行 }}({{ ys.十神 }}){% if not loop.last %} > {% endif %}{% endfor %}
-忌神: {% for js in rules.用神忌神.忌神 %}{{ js.五行 }}({{ js.十神 }}){% if not loop.last %} > {% endif %}{% endfor %}
+取用法: {{ rules.用神忌神.取用法 }}
+主用神（仲裁后）: {% for ys in rules.用神忌神.主用神 %}{{ ys.五行 }}({{ ys.十神 }}){% if not loop.last %} > {% endif %}{% endfor %}
+{% if rules.用神忌神.条件用神 %}条件用神: {% for ys in rules.用神忌神.条件用神 %}{{ ys.五行 }}({{ ys.十神 }}·条件){% if not loop.last %} > {% endif %}{% endfor %}{% endif %}
+{% if rules.用神忌神.日常策略 %}日常主策略: {{ rules.用神忌神.日常策略.主策略 }}{% endif %}
 缺失十神: {{ rules.十神分布.缺失十神 | join('、') }}
 #}
 

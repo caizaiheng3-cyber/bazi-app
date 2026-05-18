@@ -106,9 +106,12 @@
 {% endfor %}
 {% endif %}
 
-**忌神**：
+**忌神**（已排除冲突项，详见冲突解释）：
+{% set conditional_wx = rules.用神忌神.条件用神 | map(attribute='五行') | list %}
 {% for js in rules.用神忌神.忌神 %}
+{% if js.五行 not in conditional_wx %}
 - 第{{ js.优先级 }}忌神：**{{ js.五行 }}**（{{ js.十神 }}）→ {{ js.理由 }}
+{% endif %}
 {% endfor %}
 
 {% if rules.用神忌神.冲突解释 %}
