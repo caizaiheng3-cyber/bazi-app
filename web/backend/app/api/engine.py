@@ -34,7 +34,8 @@ def run_paipan(data: PaipanRequest):
     """
     birth_str = f"{data.birth_date} {data.birth_time}"
     try:
-        paipan_data = compute_paipan(data.name, birth_str, data.gender)
+        paipan_data = compute_paipan(data.name, birth_str, data.gender,
+                                         birth_place=data.birth_city)
         rules_data = compute_rules(paipan_data, gender=data.gender)
     except Exception as exc:
         raise HTTPException(status_code=500, detail=f"引擎计算失败: {str(exc)[:200]}")

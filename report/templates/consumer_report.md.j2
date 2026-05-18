@@ -39,8 +39,8 @@
 
 ### 1.4 用神/忌神
 
-**你最需要的**（用神）：
-{% for ys in rules.用神忌神.用神 %}
+**你最需要的**（用神）：{{ rules.用神忌神.取用总论 }}
+{% for ys in rules.用神忌神.主用神 %}
 - **{{ ys.五行 }}（{{ ys.十神 }}）**：{{ ys.理由 }}
 {% endfor %}
 
@@ -48,6 +48,13 @@
 {% for js in rules.用神忌神.忌神 %}
 - **{{ js.五行 }}（{{ js.十神 }}）**：{{ js.理由 }}
 {% endfor %}
+
+{% if rules.用神忌神.冲突解释 %}
+**⚠️ 特殊说明**：
+{% for conflict in rules.用神忌神.冲突解释 %}
+- {{ conflict.五行 }}：{{ conflict.仲裁结论 }}
+{% endfor %}
+{% endif %}
 
 {{ AI_JUDGE.yongshen_consumer }}
 
@@ -78,7 +85,33 @@
 
 ---
 
-## 板块 ④ · 你和你的事 · 6 张领域卡片
+## 板块 ④ · 你和你的事 · 4 张领域卡片
+
+{% for domain in ["婚恋", "财运", "事业", "健康"] %}
+{% set profile = rules.领域画像[domain] %}
+### {{ domain }} · {{ profile.吉凶定性 }}
+
+**核心结论**：{{ profile.核心结论 }}
+
+{% if profile.优势 %}
+✅ **红利**：{{ profile.优势 | join("、") }}
+{% endif %}
+{% if profile.风险 %}
+⚠️ **风险**：{{ profile.风险 | join("、") }}
+{% endif %}
+{% if profile.关键年份 %}
+📅 **关键年份**：{{ profile.关键年份 | join("、") }}
+{% endif %}
+{% if profile.行动建议 %}
+🎯 **建议**：
+{% for advice in profile.行动建议 %}
+- {{ advice.行动 }}
+{% endfor %}
+{% endif %}
+
+---
+
+{% endfor %}
 
 {{ AI_JUDGE.lingyu_kapian }}
 

@@ -54,15 +54,29 @@ def _noop_progress(msg: str):
 # ============================================================
 
 def compute_paipan(name: str, birth_str: str, gender: str,
-                   birth_place: str = "未知") -> dict:
-    """执行排盘计算，返回排盘 JSON"""
+                   birth_place: str = "未知",
+                   use_true_solar_time: bool = None,
+                   longitude: float = None) -> dict:
+    """执行排盘计算，返回排盘 JSON
+
+    Args:
+        use_true_solar_time: 是否启用真太阳时。None 时自动判断：有出生地则启用。
+        longitude: 经度（度）。None 时由引擎根据 birth_place 查表。
+    """
     parts = birth_str.split(" ")
     date_parts = parts[0].split("-")
     time_parts = parts[1].split(":")
     year, month, day = int(date_parts[0]), int(date_parts[1]), int(date_parts[2])
     hour, minute = int(time_parts[0]), int(time_parts[1])
+
+    # 自动决定是否启用真太阳时：有出生地且非"未知"/空串时启用
+    if use_true_solar_time is None:
+        use_true_solar_time = bool(birth_place and birth_place not in ("未知", ""))
+
     return run_paipan_engine(year, month, day, hour, minute, gender,
-                             birth_place=birth_place, name=name)
+                             birth_place=birth_place, name=name,
+                             use_true_solar_time=use_true_solar_time,
+                             longitude=longitude)
 
 
 def compute_rules(paipan_data: dict, gender: str = "男") -> dict:
@@ -144,6 +158,27 @@ def clean_repetitive_chars(text: str) -> str:
     text = re.sub(r'([░▓█▒]{20})[░▓█▒]+', r'\1', text)
     text = re.sub(r'(.)\1{50,}', lambda m: m.group(1) * 20, text)
     return text
+
+
+def validate_report_quality(master_report: str, wechat_report: str) -> list:
+    """
+    报告质量校验（P4）：检测占位文本是否泄漏到用户可见报告中。
+
+    返回质量问题列表，空列表表示通过。
+    """
+    forbidden_patterns = [
+        "待填充", "待分析", "待LLM", "待深化", "需AI判读",
+        "AI_JUDGE", "{{ AI_JUDGE", "【待填充", "待LLM深化",
+    ]
+    issues = []
+    for pattern in forbidden_patterns:
+        if master_report and pattern in master_report:
+            count = master_report.count(pattern)
+            issues.append(f"命理师版含'{pattern}' x{count}")
+        if wechat_report and pattern in wechat_report:
+            count = wechat_report.count(pattern)
+            issues.append(f"微信版含'{pattern}' x{count}")
+    return issues
 
 
 def clean_ai_preamble(text: str) -> str:
@@ -474,6 +509,77 @@ async def generate_master_report(
 
 
 # ============================================================
+# 消费者版生成（两次调用）
+# ============================================================
+
+async def generate_consumer_report(
+    judge_prompt: str, skeleton: str, master_report: str,
+    on_progress: ProgressCallback = None,
+) -> str:
+    """消费者版：基于命理师版+骨架，分两次调用生成"""
+    progress = on_progress or _noop_progress
+    progress("消费者版生成中：Part 1-3")
+
+    example_consumer = ""
+    example_path = EXAMPLES_PATH / "蔡命" / "蔡命-消费者版.md"
+    if example_path.exists():
+        example_consumer = example_path.read_text(encoding="utf-8")[:6000]
+
+    # 第1次：板块①②③（基础事实+人格画像+六亲卡片）
+    prompt_part1 = (
+        f"请基于以下命理师版报告和消费者版骨架，填充消费者版报告的前半部分。\n\n"
+        f"## 消费者版定义\n\n"
+        f"给命主本人看的白话命书——所有术语翻译成日常语言。\n"
+        f"用户3分钟内能读懂'我是谁、我该做什么、我别碰什么'。\n\n"
+        f"## 你需要填充的槽位\n\n"
+        f"- juanshou_sanjuhua: 卷首三句话（你是谁/你的命门/你的红利）\n"
+        f"- wangshuai_consumer: 旺衰白话翻译（一段话说明命主强弱特点）\n"
+        f"- yongshen_consumer: 用神白话（日常怎么做，不超过200字）\n"
+        f"- geju_yijuhua: 格局一句话定性（白话）\n"
+        f"- renge_huaxiang: 4维人格画像（性格/处事/天赋/代价）\n"
+        f"- liuqin_kapian: 6张六亲卡片（父/母/兄弟姐妹/伴侣/子女/贵人）\n\n"
+        f"## 铁律\n"
+        f"1. 所有事实必须与命理师版一致，不能无中生有\n"
+        f"2. 不允许输出'待分析'/'待LLM深化'\n"
+        f"3. 每张卡片150-200字，有温度有干货\n\n"
+        f"## 优质案例范本（写作风格标杆）\n\n{example_consumer[:3000]}\n\n"
+        f"## 命理师版报告（事实来源）\n\n{master_report[:6000]}\n\n"
+        f"## 消费者版骨架\n\n{skeleton}"
+    )
+    result_part1 = await call_deepseek(judge_prompt, prompt_part1)
+    result_part1 = clean_ai_preamble(result_part1)
+
+    progress("消费者版生成中：Part 4-5")
+
+    # 第2次：板块④⑤+卷尾（领域卡片补充+时间指南+行动清单+卷尾信）
+    prompt_part2 = (
+        f"请继续填充消费者版报告的后半部分。\n\n"
+        f"## 你需要填充的槽位\n\n"
+        f"- lingyu_kapian: 领域卡片补充解读（基于已渲染的领域画像数据，添加白话解读）\n"
+        f"- dangxia_consumer: 当下定位白话（200字）\n"
+        f"- liunian_consumer: 近6年流年简报（每年3-5句红绿灯标注）\n"
+        f"- liuyue_consumer: 逐月指南（本年12个月红绿灯）\n"
+        f"- sannian_qingdan: 近3年行动清单（必做+禁做各5条）\n"
+        f"- rensheng_siduan: 人生四段ASCII图\n"
+        f"- juanwei_xin: 卷尾一封信（有温度，200字）\n\n"
+        f"## 铁律\n"
+        f"1. 所有事实与命理师版一致\n"
+        f"2. 流年用🟢🟡🔴标注好坏\n"
+        f"3. 行动清单具体到骨头里（时间窗口+具体行动）\n"
+        f"4. 不允许输出'待分析'/'待LLM深化'\n\n"
+        f"## 命理师版报告（事实来源）\n\n{master_report[6000:12000]}\n\n"
+        f"## 前半部分已生成内容\n\n{result_part1[:3000]}"
+    )
+    result_part2 = await call_deepseek(judge_prompt, prompt_part2)
+    result_part2 = clean_ai_preamble(result_part2)
+
+    # 拼接
+    full_consumer = result_part1.rstrip() + "\n\n" + result_part2
+    progress(f"消费者版完成：{len(full_consumer)} 字")
+    return full_consumer
+
+
+# ============================================================
 # 微信版生成（一次调用）
 # ============================================================
 
@@ -531,6 +637,7 @@ async def generate_reports(
     name: str,
     birth_str: str,
     gender: str,
+    birth_place: str = "未知",
     skip_consumer: bool = True,
     on_progress: ProgressCallback = None,
 ) -> dict:
@@ -541,6 +648,7 @@ async def generate_reports(
         name: 命主姓名
         birth_str: 出生时间 "YYYY-MM-DD HH:MM"
         gender: "男" 或 "女"
+        birth_place: 出生城市（用于真太阳时修正）
         skip_consumer: 是否跳过消费者版生成（WEB层默认跳过）
         on_progress: 进度回调函数，接受一个字符串参数
 
@@ -557,7 +665,7 @@ async def generate_reports(
 
     # Phase 1: 排盘
     progress("排盘计算中")
-    paipan_data = compute_paipan(name, birth_str, gender)
+    paipan_data = compute_paipan(name, birth_str, gender, birth_place=birth_place)
 
     # Phase 2: 规则分析
     progress("规则分析中")
@@ -581,17 +689,21 @@ async def generate_reports(
     consumer_report = None
     if not skip_consumer:
         progress("AI判读中：消费者版")
-        master_insights = await generate_ai_insight_summary(
-            judge_prompt, master_report[:8000]
+        consumer_report = await generate_consumer_report(
+            judge_prompt, skeletons["consumer"], master_report, on_progress
         )
-        # 消费者版生成逻辑预留，当前不实现
-        consumer_report = None
 
     # Phase 6: 微信版
     progress("AI判读中：微信版")
     wechat_report = await generate_wechat_report(
         judge_prompt, skeletons["wechat"], master_report, on_progress
     )
+
+    # Phase 7: 报告质量校验（P4：禁止占位文本进入用户可见报告）
+    progress("质量校验中")
+    quality_issues = validate_report_quality(master_report, wechat_report)
+    if quality_issues:
+        progress(f"⚠️ 质量警告：{len(quality_issues)}处占位文本未替换")
 
     progress("报告生成完成")
     return {
@@ -600,4 +712,5 @@ async def generate_reports(
         "wechat": wechat_report,
         "paipan_json": paipan_data,
         "rules_json": rules_data,
+        "quality_issues": quality_issues,
     }

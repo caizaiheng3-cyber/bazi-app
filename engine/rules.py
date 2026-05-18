@@ -2387,6 +2387,101 @@ def judge_yongshen(paipan_data: dict, wangshuai: dict, geju: dict | None = None)
     }
 
 
+def arbitrate_yongshen(yongshen_result: dict) -> dict:
+    """
+    用神仲裁层（P2：冲突检测+解释，不强制压缩）
+
+    检测同一五行同时出现在用神和忌神中的情况，产出冲突解释。
+    保留四法融合的完整信息，但对用户可见报告标注冲突原因。
+
+    输出在原有结果上增加：
+        - "冲突解释": [{五行, 用神理由, 忌神理由, 仲裁结论}]
+        - "取用总论": 一句话概括取用逻辑
+        - "主用神": 经仲裁后的主要行动方向（不强制限制数量）
+        - "条件用神": 有前提条件的用神
+    """
+    yongshen_list = yongshen_result.get("用神", [])
+    jishen_list = yongshen_result.get("忌神", [])
+    primary_method = yongshen_result.get("取用法", "")
+
+    # 收集用神五行 → 理由映射
+    yongshen_wx_map = {}
+    for item in yongshen_list:
+        wx = item.get("五行", "")
+        if wx:
+            if wx not in yongshen_wx_map:
+                yongshen_wx_map[wx] = []
+            yongshen_wx_map[wx].append(item.get("理由", ""))
+
+    # 收集忌神五行 → 理由映射
+    jishen_wx_map = {}
+    for item in jishen_list:
+        wx = item.get("五行", "")
+        if wx:
+            if wx not in jishen_wx_map:
+                jishen_wx_map[wx] = []
+            jishen_wx_map[wx].append(item.get("理由", ""))
+
+    # 检测冲突：同一五行同时出现在用神和忌神中
+    conflicts = []
+    overlap_wuxing = set(yongshen_wx_map.keys()) & set(jishen_wx_map.keys())
+
+    for wx in overlap_wuxing:
+        ys_reasons = yongshen_wx_map[wx]
+        js_reasons = jishen_wx_map[wx]
+
+        # 仲裁逻辑：按取用法优先级判定
+        # 格局用神 > 调候用神 > 扶抑用神；格局忌神 > 扶抑忌神
+        ys_items = [item for item in yongshen_list if item.get("五行") == wx]
+        js_items = [item for item in jishen_list if item.get("五行") == wx]
+
+        # 判断哪一方优先级更高
+        ys_min_priority = min(item.get("优先级", 99) for item in ys_items)
+        js_min_priority = min(item.get("优先级", 99) for item in js_items)
+
+        # 仲裁结论
+        if ys_min_priority <= js_min_priority:
+            conclusion = f"{wx}以用神论（取用法优先级更高），但需注意其忌神面：{'; '.join(js_reasons)}"
+            action = "条件用神"
+        else:
+            conclusion = f"{wx}以忌神论为主（忌神优先级更高），但特定条件下有用：{'; '.join(ys_reasons)}"
+            action = "条件忌神"
+
+        conflicts.append({
+            "五行": wx,
+            "用神理由": ys_reasons,
+            "忌神理由": js_reasons,
+            "仲裁结论": conclusion,
+            "最终归属": action,
+        })
+
+    # 分类：主用神 vs 条件用神
+    conflict_wuxing = {c["五行"] for c in conflicts}
+    main_yongshen = [item for item in yongshen_list
+                     if item.get("五行") not in conflict_wuxing]
+    conditional_yongshen = [item for item in yongshen_list
+                            if item.get("五行") in conflict_wuxing]
+
+    # 生成取用总论
+    main_wx_list = [item["五行"] for item in main_yongshen[:3]]
+    if main_wx_list:
+        zonglun = f"以{primary_method}取用，主取{'、'.join(main_wx_list)}"
+        if conflicts:
+            zonglun += f"；{'、'.join(c['五行'] for c in conflicts)}存在用忌冲突，需条件性使用"
+    else:
+        zonglun = f"以{primary_method}取用"
+        if conditional_yongshen:
+            zonglun += f"，{'、'.join(item['五行'] for item in conditional_yongshen)}为条件用神"
+
+    # 合并输出
+    result = dict(yongshen_result)
+    result["冲突解释"] = conflicts
+    result["取用总论"] = zonglun
+    result["主用神"] = main_yongshen
+    result["条件用神"] = conditional_yongshen
+    return result
+
+
 def _shishen_to_wuxing(shishen_name: str, dm_wuxing: str) -> str:
     """十神名称转五行（来源：十神定义）"""
     mapping = {
@@ -4649,6 +4744,204 @@ def generate_monthly_events_text(paipan_data: dict, wangshuai: dict, yongshen: d
     return "\n".join(lines)
 
 
+def aggregate_domain_profiles(paipan_data: dict, wangshuai: dict, yongshen: dict,
+                              geju: dict, relationships: dict, gender: str = "男",
+                              year_count: int = 6) -> dict:
+    """
+    领域决策引擎（P3：在事件推理结果上聚合四大领域结论）
+
+    基于 analyze_events() 的事件候选，按婚恋/财运/事业/健康四大领域聚合，
+    输出每个领域的结构化结论，供报告模板和用户问答直接引用。
+
+    输出结构：
+        {
+            "婚恋": {核心结论, 吉凶定性, 关键证据[], 优势[], 风险[], 关键年份[], 行动建议[]},
+            "财运": {...},
+            "事业": {...},
+            "健康": {...},
+        }
+    """
+    from engine.paipan import get_shishen
+
+    events = analyze_events(paipan_data, wangshuai, yongshen, geju,
+                            relationships, gender, year_count)
+
+    day_master = paipan_data["日主"]["天干"]
+    dm_wuxing = paipan_data["日主"]["五行"]
+    sizhu = paipan_data["四柱"]
+
+    # 用神忌神信息
+    main_yongshen = yongshen.get("主用神", yongshen.get("用神", []))
+    ys_wuxing_set = {item.get("五行") for item in main_yongshen if item.get("五行")}
+    zonglun = yongshen.get("取用总论", yongshen.get("取用法", ""))
+
+    # 四大领域映射
+    domain_mapping = {
+        "婚恋": ["婚恋"],
+        "财运": ["财运"],
+        "事业": ["事业", "学业"],
+        "健康": ["健康"],
+    }
+
+    # 按领域收集事件
+    domain_events = {d: [] for d in domain_mapping}
+    for year_data in events:
+        year = year_data["公历年"]
+        for evt in year_data["事件候选"]:
+            for domain, source_domains in domain_mapping.items():
+                if evt["领域"] in source_domains:
+                    domain_events[domain].append({
+                        "年份": year,
+                        "事件": evt["事件"],
+                        "吉凶": evt["吉凶"],
+                        "强度": evt["强度"],
+                        "证据": evt["证据"],
+                        "触发源": evt["触发源"],
+                    })
+
+    # 原局十神分析（用于静态领域判断）
+    shishen_set = set()
+    for pos in ["年柱", "月柱", "时柱"]:
+        ss = get_shishen(day_master, sizhu[pos]["天干"])
+        shishen_set.add(ss)
+
+    # 吉凶定性函数
+    def compute_domain_disposition(events_list):
+        if not events_list:
+            return "中"
+        ji_count = sum(1 for e in events_list if "吉" in e["吉凶"])
+        xiong_count = sum(1 for e in events_list if "凶" in e["吉凶"])
+        total = len(events_list)
+        ratio = ji_count / total if total > 0 else 0.5
+        if ratio >= 0.7:
+            return "吉"
+        elif ratio >= 0.5:
+            return "中偏吉"
+        elif ratio >= 0.3:
+            return "中"
+        elif ratio >= 0.15:
+            return "中偏凶"
+        else:
+            return "凶"
+
+    # --- 婚恋领域 ---
+    marriage_events = domain_events["婚恋"]
+    marriage_static = []
+    if "正财" in shishen_set and gender == "男":
+        marriage_static.append("原局透正财，妻星有力")
+    if "正官" in shishen_set and gender == "女":
+        marriage_static.append("原局透正官，夫星有力")
+    if "伤官" in shishen_set and gender == "女":
+        marriage_static.append("原局伤官透出，克官不利婚姻")
+    if "劫财" in shishen_set and gender == "男":
+        marriage_static.append("原局劫财透出，有争妻之象")
+
+    marriage_advantages = [e["事件"] for e in marriage_events if "吉" in e["吉凶"]][:3]
+    marriage_risks = [e["事件"] for e in marriage_events if "凶" in e["吉凶"] or "中" == e["吉凶"]][:3]
+    marriage_key_years = sorted(set(e["年份"] for e in marriage_events
+                                    if e["强度"] >= 60), reverse=True)[:5]
+
+    # --- 财运领域 ---
+    wealth_events = domain_events["财运"]
+    wealth_static = []
+    if "正财" in shishen_set or "偏财" in shishen_set:
+        wealth_static.append("原局有财星透出，财源有路")
+    if "劫财" in shishen_set or "比肩" in shishen_set:
+        wealth_static.append("比劫透出，有争财之象，不宜合伙")
+
+    wealth_advantages = [e["事件"] for e in wealth_events if "吉" in e["吉凶"]][:3]
+    wealth_risks = [e["事件"] for e in wealth_events if "凶" in e["吉凶"]][:3]
+    wealth_key_years = sorted(set(e["年份"] for e in wealth_events
+                                   if e["强度"] >= 60), reverse=True)[:5]
+
+    # --- 事业领域 ---
+    career_events = domain_events["事业"]
+    career_static = []
+    if "正官" in shishen_set and gender == "男":
+        career_static.append("正官透出，利仕途管理")
+    if "七杀" in shishen_set:
+        career_static.append("七杀透出，有魄力但压力大")
+    if "食神" in shishen_set:
+        career_static.append("食神透出，利技术/创作/表达类工作")
+    if "伤官" in shishen_set:
+        career_static.append("伤官透出，才华出众但易与上级冲突")
+
+    career_advantages = [e["事件"] for e in career_events if "吉" in e["吉凶"]][:3]
+    career_risks = [e["事件"] for e in career_events if "凶" in e["吉凶"]][:3]
+    career_key_years = sorted(set(e["年份"] for e in career_events
+                                   if e["强度"] >= 60), reverse=True)[:5]
+
+    # --- 健康领域 ---
+    health_events = domain_events["健康"]
+    health_static = []
+    conclusion_text = wangshuai.get("结论", "")
+    if "过旺" in conclusion_text:
+        health_static.append("身过旺，易有气血上涌/高血压之象")
+    elif "极弱" in conclusion_text or "偏弱" in conclusion_text:
+        health_static.append("身偏弱，需注意免疫力和体力")
+
+    health_advantages = [e["事件"] for e in health_events if "吉" in e["吉凶"]][:3]
+    health_risks = [e["事件"] for e in health_events if "凶" in e["吉凶"]][:3]
+    health_key_years = sorted(set(e["年份"] for e in health_events
+                                   if e["强度"] >= 50), reverse=True)[:5]
+
+    # 构建输出
+    profiles = {}
+
+    for domain, events_list, static, advantages, risks, key_years in [
+        ("婚恋", marriage_events, marriage_static, marriage_advantages, marriage_risks, marriage_key_years),
+        ("财运", wealth_events, wealth_static, wealth_advantages, wealth_risks, wealth_key_years),
+        ("事业", career_events, career_static, career_advantages, career_risks, career_key_years),
+        ("健康", health_events, health_static, health_advantages, health_risks, health_key_years),
+    ]:
+        disposition = compute_domain_disposition(events_list)
+
+        # 核心结论：合并静态原局分析 + 动态事件趋势
+        static_text = "；".join(static) if static else "原局此领域无特殊标志"
+        dynamic_summary = f"近{year_count}年{len(events_list)}条事件候选，整体{disposition}"
+        core_conclusion = f"{static_text}。{dynamic_summary}。"
+
+        # 关键证据：取强度最高的3条
+        top_evidence = sorted(events_list, key=lambda x: x["强度"], reverse=True)[:3]
+        evidence_list = [
+            {"类型": e["触发源"].split("(")[0] if "(" in e["触发源"] else "流年",
+             "文本": e["证据"],
+             "强度": e["强度"]}
+            for e in top_evidence
+        ]
+
+        # 行动建议
+        action_items = []
+        if key_years:
+            action_items.append({
+                "优先级": "P0",
+                "行动": f"{domain}关键年份为{'、'.join(str(y) for y in key_years[:3])}，需重点关注",
+                "时间窗口": f"{min(key_years)}-{max(key_years)}年",
+                "依据": f"基于{len(events_list)}条事件推理结果",
+            })
+        if risks:
+            action_items.append({
+                "优先级": "P1",
+                "行动": f"规避：{risks[0]}",
+                "时间窗口": "持续关注",
+                "依据": "事件推理风险项",
+            })
+
+        profiles[domain] = {
+            "核心结论": core_conclusion,
+            "吉凶定性": disposition,
+            "关键证据": evidence_list,
+            "优势": advantages,
+            "风险": risks,
+            "关键年份": key_years,
+            "行动建议": action_items,
+            "原局特征": static,
+            "事件总数": len(events_list),
+        }
+
+    return profiles
+
+
 def generate_events_text(paipan_data: dict, wangshuai: dict, yongshen: dict,
                          geju: dict, relationships: dict, gender: str = "男",
                          year_count: int = 6) -> str:
@@ -4702,7 +4995,8 @@ def full_analysis(paipan_data: dict, gender: str = "男") -> dict:
     geju = judge_geju(paipan_data, wangshuai)
     shishen = analyze_shishen(paipan_data)
     relationships = analyze_relationships(paipan_data)
-    yongshen = judge_yongshen(paipan_data, wangshuai, geju)
+    yongshen_raw = judge_yongshen(paipan_data, wangshuai, geju)
+    yongshen = arbitrate_yongshen(yongshen_raw)
     shenshas = analyze_shenshas(paipan_data)
 
     # P2-1: 合冲刑害对用神净影响标注（来源：子平真诠·用神成败论）
@@ -4723,6 +5017,10 @@ def full_analysis(paipan_data: dict, gender: str = "男") -> dict:
     # P3.1: 流月级事件推理（当前年份12个月）
     monthly_events = analyze_monthly_events(paipan_data, wangshuai, yongshen,
                                             geju, relationships, gender)
+
+    # P3.2: 四大领域聚合画像（婚恋/财运/事业/健康）
+    domain_profiles = aggregate_domain_profiles(paipan_data, wangshuai, yongshen,
+                                                geju, relationships, gender, 6)
 
     # 生成确定性推演文本（下沉到引擎层，替代AI判读）
     engine_texts = {
@@ -4770,6 +5068,7 @@ def full_analysis(paipan_data: dict, gender: str = "男") -> dict:
         "人生四段": rensheng,
         "事件推理": events,
         "流月事件": monthly_events,
+        "领域画像": domain_profiles,
         "推演文本": engine_texts,
     }
 

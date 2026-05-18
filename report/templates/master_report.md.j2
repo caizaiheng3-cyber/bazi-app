@@ -89,15 +89,34 @@
 
 ### 1.2 用神 / 忌神 ｜ 权重 100/100
 
-**用神**：
-{% for ys in rules.用神忌神.用神 %}
-- 第{{ ys.优先级 }}用神：**{{ ys.五行 }}**（{{ ys.十神 }}）→ {{ ys.理由 }}
+**取用总论**：{{ rules.用神忌神.取用总论 }}
+
+**主用神**（经仲裁确定的行动方向）：
+{% for ys in rules.用神忌神.主用神 %}
+- **{{ ys.五行 }}**（{{ ys.十神 }}）→ {{ ys.理由 }}
 {% endfor %}
+{% if not rules.用神忌神.主用神 %}
+- （主用神均有条件限制，见下方条件用神）
+{% endif %}
+
+{% if rules.用神忌神.条件用神 %}
+**条件用神**（存在用忌冲突，需条件性使用）：
+{% for ys in rules.用神忌神.条件用神 %}
+- **{{ ys.五行 }}**（{{ ys.十神 }}）→ {{ ys.理由 }}
+{% endfor %}
+{% endif %}
 
 **忌神**：
 {% for js in rules.用神忌神.忌神 %}
 - 第{{ js.优先级 }}忌神：**{{ js.五行 }}**（{{ js.十神 }}）→ {{ js.理由 }}
 {% endfor %}
+
+{% if rules.用神忌神.冲突解释 %}
+**⚠️ 用忌冲突解释**：
+{% for conflict in rules.用神忌神.冲突解释 %}
+- **{{ conflict.五行 }}**：{{ conflict.仲裁结论 }}
+{% endfor %}
+{% endif %}
 
 {{ rules.推演文本.yongshen_detail }}
 
@@ -221,7 +240,50 @@
 
 ---
 
-## Part 4 · 六领域深度分析
+## Part 4 · 四大领域深度分析
+
+{% for domain in ["婚恋", "财运", "事业", "健康"] %}
+{% set profile = rules.领域画像[domain] %}
+### 4.{{ loop.index }} {{ domain }}领域 ｜ {{ profile.吉凶定性 }}
+
+**核心结论**：{{ profile.核心结论 }}
+
+{% if profile.原局特征 %}
+**原局特征**：
+{% for feat in profile.原局特征 %}
+- {{ feat }}
+{% endfor %}
+{% endif %}
+
+{% if profile.关键证据 %}
+**关键证据**（按强度排序）：
+{% for ev in profile.关键证据 %}
+- 【{{ ev.类型 }}】{{ ev.文本 }}（强度{{ ev.强度 }}）
+{% endfor %}
+{% endif %}
+
+{% if profile.优势 %}
+**优势信号**：{{ profile.优势 | join("、") }}
+{% endif %}
+
+{% if profile.风险 %}
+**风险信号**：{{ profile.风险 | join("、") }}
+{% endif %}
+
+{% if profile.关键年份 %}
+**关键年份**：{{ profile.关键年份 | join("、") }}
+{% endif %}
+
+{% if profile.行动建议 %}
+**行动建议**：
+{% for advice in profile.行动建议 %}
+- 【{{ advice.优先级 }}】{{ advice.行动 }}（{{ advice.时间窗口 }}）
+{% endfor %}
+{% endif %}
+
+---
+
+{% endfor %}
 
 {{ AI_JUDGE.liulingyu }}
 

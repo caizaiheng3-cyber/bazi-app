@@ -24,7 +24,9 @@ from report.generator import generate_reports, compute_paipan, compute_rules
 def run_paipan(subject: Subject) -> dict:
     """执行排盘计算"""
     birth_str = f"{subject.birth_date} {subject.birth_time}"
-    return compute_paipan(subject.name, birth_str, subject.gender)
+    birth_city = getattr(subject, "birth_city", "") or ""
+    return compute_paipan(subject.name, birth_str, subject.gender,
+                          birth_place=birth_city)
 
 
 def run_rules(paipan_data: dict, gender: str = "男") -> dict:
@@ -253,10 +255,12 @@ async def generate_full_report(subject_id: int, db: Session):
             db.commit()
 
         # 调用报告层的唯一接口
+        birth_city = getattr(subject, "birth_city", "") or ""
         results = await generate_reports(
             name=subject.name,
             birth_str=birth_str,
             gender=subject.gender,
+            birth_place=birth_city,
             skip_consumer=True,
             on_progress=update_progress,
         )
