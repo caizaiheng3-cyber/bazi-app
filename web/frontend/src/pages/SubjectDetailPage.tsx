@@ -239,7 +239,7 @@ function ReportTab({ report, loading, onGenerate, onRegenerate, infoUpdated }: {
   report: Report | null; loading: boolean; onGenerate: () => void; onRegenerate: () => void; infoUpdated: boolean;
 }) {
   const status = report?.status || "未生成";
-  const [reportType, setReportType] = useState<"master" | "wechat" | "html">("master");
+  const [reportType, setReportType] = useState<"master" | "consumer" | "wechat" | "html">("html");
   const [copied, setCopied] = useState(false);
 
   const handleDownload = () => {
@@ -255,9 +255,11 @@ function ReportTab({ report, loading, onGenerate, onRegenerate, infoUpdated }: {
       URL.revokeObjectURL(url);
       return;
     }
-    const reportContent = reportType === "master" ? report?.master_report : report?.wechat_report;
+    const reportContent = reportType === "master" ? report?.master_report
+      : reportType === "consumer" ? report?.consumer_report
+      : report?.wechat_report;
     if (!reportContent) return;
-    const typeName = reportType === "master" ? "命理师版" : "微信版";
+    const typeName = reportType === "master" ? "命理师版" : reportType === "consumer" ? "精读决策版" : "微信版";
     const blob = new Blob([reportContent], { type: "text/markdown;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
@@ -306,10 +308,11 @@ function ReportTab({ report, loading, onGenerate, onRegenerate, infoUpdated }: {
   }
 
   const reportContent = reportType === "master" ? report?.master_report
+    : reportType === "consumer" ? report?.consumer_report
     : reportType === "wechat" ? report?.wechat_report : null;
 
   const tabLabels: Record<string, string> = {
-    html: "精读版", master: "命理师版", wechat: "微信版",
+    html: "精读版", consumer: "精读决策版", master: "命理师版", wechat: "微信版",
   };
 
   return (
@@ -321,7 +324,7 @@ function ReportTab({ report, loading, onGenerate, onRegenerate, infoUpdated }: {
       )}
 
       <div className="flex gap-2 mb-4 flex-wrap">
-        {(["html", "master", "wechat"] as const).map((t) => (
+        {(["html", "consumer", "master", "wechat"] as const).map((t) => (
           <button key={t} onClick={() => setReportType(t)}
             className={"px-3 py-1.5 rounded text-xs font-medium transition-colors " + (reportType === t ? "text-white" : "")}
             style={{ backgroundColor: reportType === t ? "var(--accent)" : "var(--bg-secondary)", color: reportType === t ? "white" : "var(--text-secondary)" }}>

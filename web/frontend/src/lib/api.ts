@@ -40,6 +40,7 @@ export interface Report {
   subject_id: number;
   status: string;
   master_report: string | null;
+  consumer_report: string | null;
   wechat_report: string | null;
   html_report: string | null;
   generated_at: string | null;

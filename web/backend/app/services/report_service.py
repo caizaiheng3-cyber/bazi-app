@@ -263,7 +263,7 @@ async def generate_full_report(subject_id: int, db: Session):
             gender=subject.gender,
             birth_place=birth_city,
             calendar_type=calendar_type,
-            skip_consumer=True,
+            skip_consumer=False,
             on_progress=update_progress,
         )
 
@@ -276,6 +276,7 @@ async def generate_full_report(subject_id: int, db: Session):
         report.paipan_json = json.dumps(results["paipan_json"], ensure_ascii=False)
         report.rules_json = json.dumps(results["rules_json"], ensure_ascii=False)
         report.master_report = results["master"]
+        report.consumer_report = results["consumer"] or ""
         report.wechat_report = results["wechat"]
         report.html_report = render_html_report(results["master"], subject)
         report.generated_at = datetime.utcnow()

@@ -1,150 +1,54 @@
-{# 消费者版报告模板 - Jinja2 #}
-# {{ name }} · 八字命理完整分析（消费者版）
+{# 精读决策版报告模板 - Jinja2 #}
+{# 定位：付费决策报告。回答"我是谁、卡在哪、怎么走、什么能做什么不能做" #}
+{# 内部字段名仍为 consumer_report，对外展示为"精读决策版" #}
+# {{ name }} · 人生策略报告
 
-> **版本**：v2.0 ｜ **生成时间**：{{ gen_time }}
-> **使用说明**：本文件是给命主本人看的"白话命书"——所有命理术语均已翻译成日常语言。
-> **关联文件**：命理师版 → `{{ name_short }}-命理师版.md` / 索引 → `{{ name_short }}-索引.md`
-
----
-
-## 卷首 · 三句话讲完你的命
-
-{{ AI_JUDGE.juanshou_sanjuhua }}
+> **生成时间**：{{ gen_time }} ｜ **报告类型**：精读决策版
 
 ---
 
-## 板块 ① · 命书底牌 · 6 个基础事实
+## 一、核心判决
 
-### 1.1 四柱排盘
-
-| 柱位 | 天干 | 地支 | 你需要知道的 |
-|---|---|---|---|
-{% for pos in ["年柱", "月柱", "日柱", "时柱"] %}
-| {{ pos }} | {{ paipan.四柱[pos].天干 }}（{{ paipan.四柱[pos].天干五行 }}） | {{ paipan.四柱[pos].地支 }}（{{ paipan.四柱[pos].地支五行 }}） | {{ paipan.四柱[pos].天干十神 }}{% for cg in paipan.四柱[pos].藏干 %}+{{ cg.十神 }}{% endfor %} |
-{% endfor %}
-
-### 1.2 五行能量分布
-
-```
-{% for wx in ["木", "火", "土", "金", "水"] %}
-{{ wx }} {{ "█" * (paipan.五行统计.百分比[wx] | int // 3) }}{{ "░" * (10 - paipan.五行统计.百分比[wx] | int // 3) }}  {{ paipan.五行统计.百分比[wx] }}%
-{% endfor %}
-```
-
-### 1.3 旺衰判定
-
-> **结论：{{ rules.旺衰.结论 }} · {{ rules.旺衰.程度 }}**
-
-{{ AI_JUDGE.wangshuai_consumer }}
-
-### 1.4 用神/忌神
-
-**你最需要的**（用神）：{{ rules.用神忌神.取用总论 }}
-{% for ys in rules.用神忌神.主用神 %}
-- **{{ ys.五行 }}（{{ ys.十神 }}）**：{{ ys.理由 }}
-{% endfor %}
-
-**你最需要避开的**（忌神）：
-{% for js in rules.用神忌神.忌神 %}
-- **{{ js.五行 }}（{{ js.十神 }}）**：{{ js.理由 }}
-{% endfor %}
-
-{% if rules.用神忌神.冲突解释 %}
-**⚠️ 特殊说明**：
-{% for conflict in rules.用神忌神.冲突解释 %}
-- {{ conflict.五行 }}：{{ conflict.仲裁结论 }}
-{% endfor %}
-{% endif %}
-
-{{ AI_JUDGE.yongshen_consumer }}
-
-### 1.5 大运轨迹
-
-```
-{% for dy in paipan.大运.大运列表[:7] %}
-{{ dy.起始虚岁 }}岁 {{ dy.干支 }}({{ dy.天干十神 }}){% if not loop.last %} → {% endif %}
-{% endfor %}
-```
-
-### 1.6 命格一句话定性
-
-> **专业结论**：{{ rules.格局.格局 }} · {{ rules.旺衰.结论 }}
-> **白话翻译**：{{ AI_JUDGE.geju_yijuhua }}
+{{ AI_JUDGE.core_verdict }}
 
 ---
 
-## 板块 ② · 你这个人 · 4 维人格画像
+## 二、命主底层模型
 
-{{ AI_JUDGE.renge_huaxiang }}
-
----
-
-## 板块 ③ · 你和你的人 · 6 张六亲卡片
-
-{{ AI_JUDGE.liuqin_kapian }}
+{{ AI_JUDGE.underlying_model }}
 
 ---
 
-## 板块 ④ · 你和你的事 · 4 张领域卡片
+## 三、当前三年决策地图
 
-{% for domain in ["婚恋", "财运", "事业", "健康"] %}
-{% set profile = rules.领域画像[domain] %}
-### {{ domain }} · {{ profile.吉凶定性 }}
-
-**核心结论**：{{ profile.核心结论 }}
-
-{% if profile.优势 %}
-✅ **红利**：{{ profile.优势 | join("、") }}
-{% endif %}
-{% if profile.风险 %}
-⚠️ **风险**：{{ profile.风险 | join("、") }}
-{% endif %}
-{% if profile.关键年份 %}
-📅 **关键年份**：{{ profile.关键年份 | join("、") }}
-{% endif %}
-{% if profile.行动建议 %}
-🎯 **建议**：
-{% for advice in profile.行动建议 %}
-- {{ advice.行动 }}
-{% endfor %}
-{% endif %}
+{{ AI_JUDGE.three_year_map }}
 
 ---
 
-{% endfor %}
+## 四、事业决策
 
-{{ AI_JUDGE.lingyu_kapian }}
-
----
-
-## 板块 ⑤ · 你的时间 · 近期指南 + 人生路线图
-
-### 5.1 🎯 当下定位
-
-{{ AI_JUDGE.dangxia_consumer }}
-
-### 5.2 近6年流年简报
-
-{{ AI_JUDGE.liunian_consumer }}
-
-### 5.3 逐月指南（{{ current_year }}年）
-
-{{ AI_JUDGE.liuyue_consumer }}
-
-### 5.4 近3年行动清单
-
-{{ AI_JUDGE.sannian_qingdan }}
-
-### 5.5 人生四段总览
-
-{{ AI_JUDGE.rensheng_siduan }}
+{{ AI_JUDGE.career_decision }}
 
 ---
 
-## 卷尾 · 一封信
+## 五、财富决策
 
-{{ AI_JUDGE.juanwei_xin }}
+{{ AI_JUDGE.wealth_decision }}
 
 ---
 
-> **本文件为消费者版白话命书** ｜ 完整命理推演 → `{{ name_short }}-命理师版.md` ｜ 文件索引 → `{{ name_short }}-索引.md`
+## 六、感情决策
+
+{{ AI_JUDGE.relationship_decision }}
+
+---
+
+## 七、健康与能量管理
+
+{{ AI_JUDGE.health_energy }}
+
+---
+
+## 八、行动清单
+
+{{ AI_JUDGE.action_list }}

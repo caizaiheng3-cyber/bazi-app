@@ -61,6 +61,7 @@ class ReportResponse(BaseModel):
     subject_id: int
     status: str
     master_report: Optional[str] = None
+    consumer_report: Optional[str] = None
     wechat_report: Optional[str] = None
     html_report: Optional[str] = None
     generated_at: Optional[str] = None

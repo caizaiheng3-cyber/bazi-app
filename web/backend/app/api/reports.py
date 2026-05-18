@@ -26,6 +26,7 @@ def get_report(subject_id: int, db: Session = Depends(get_db)):
         subject_id=subject_id,
         status=subject.report_status or "未生成",
         master_report=report.master_report if report else None,
+        consumer_report=report.consumer_report if report else None,
         wechat_report=report.wechat_report if report else None,
         html_report=report.html_report if report else None,
         generated_at=report.generated_at.strftime("%Y-%m-%d %H:%M") if report and report.generated_at else None,
