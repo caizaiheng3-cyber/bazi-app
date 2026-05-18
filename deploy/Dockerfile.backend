@@ -14,8 +14,8 @@ COPY web/backend/ ./web/backend/
 
 # 复制排盘引擎、模板、prompt（后端依赖这些路径）
 COPY engine/ ./engine/
-COPY templates/ ./templates/
-COPY prompts/ ./prompts/
+COPY report/templates/ ./templates/
+COPY report/prompts/ ./prompts/
 
 # 确保 data 目录存在
 RUN mkdir -p /app/web/backend/data
