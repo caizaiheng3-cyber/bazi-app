@@ -24,6 +24,8 @@ class PaipanRequest(BaseModel):
     birth_date: str = Field(description="出生日期，格式 YYYY-MM-DD")
     birth_time: str = Field(description="出生时间，格式 HH:MM")
     birth_city: str = Field(default="", description="出生城市（用于真太阳时修正）")
+    calendar_type: str = Field(default="公历", description="历法：公历/农历")
+    is_leap_month: bool = Field(default=False, description="农历是否闰月")
 
 
 @router.post("/paipan")
@@ -35,7 +37,9 @@ def run_paipan(data: PaipanRequest):
     birth_str = f"{data.birth_date} {data.birth_time}"
     try:
         paipan_data = compute_paipan(data.name, birth_str, data.gender,
-                                         birth_place=data.birth_city)
+                                         birth_place=data.birth_city,
+                                         calendar_type=data.calendar_type,
+                                         is_leap_month=data.is_leap_month)
         rules_data = compute_rules(paipan_data, gender=data.gender)
     except Exception as exc:
         raise HTTPException(status_code=500, detail=f"引擎计算失败: {str(exc)[:200]}")

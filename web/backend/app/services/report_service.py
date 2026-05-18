@@ -256,11 +256,13 @@ async def generate_full_report(subject_id: int, db: Session):
 
         # 调用报告层的唯一接口
         birth_city = getattr(subject, "birth_city", "") or ""
+        calendar_type = getattr(subject, "calendar_type", "公历") or "公历"
         results = await generate_reports(
             name=subject.name,
             birth_str=birth_str,
             gender=subject.gender,
             birth_place=birth_city,
+            calendar_type=calendar_type,
             skip_consumer=True,
             on_progress=update_progress,
         )

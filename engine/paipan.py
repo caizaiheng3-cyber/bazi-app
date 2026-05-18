@@ -130,6 +130,37 @@ CITY_LONGITUDE = {
 STANDARD_LONGITUDE = 120.0
 
 
+def _fuzzy_match_city_longitude(birth_place: str) -> float:
+    """模糊匹配城市经度。
+
+    支持常见变体：'北京市'→'北京', '广东广州'→'广州', '新疆乌鲁木齐'→'乌鲁木齐'
+    匹配策略（按优先级）：
+      1. 精确匹配
+      2. 去掉末尾'市/区/县'后匹配
+      3. 城市表中任一城市名是输入的子串（如 '广东广州' 包含 '广州'）
+      4. 输入是城市表中某城市名的子串（如 '乌市' 包含于 '乌鲁木齐' → 不做，太容易误匹）
+    """
+    if not birth_place:
+        return None
+
+    # 1. 精确匹配
+    if birth_place in CITY_LONGITUDE:
+        return CITY_LONGITUDE[birth_place]
+
+    # 2. 去掉末尾行政后缀
+    stripped = birth_place.rstrip("市区县")
+    if stripped and stripped in CITY_LONGITUDE:
+        return CITY_LONGITUDE[stripped]
+
+    # 3. 城市表中的城市名作为子串出现在输入中（从长到短匹配，避免歧义）
+    candidates = sorted(CITY_LONGITUDE.keys(), key=len, reverse=True)
+    for city_name in candidates:
+        if city_name in birth_place:
+            return CITY_LONGITUDE[city_name]
+
+    return None
+
+
 def calculate_equation_of_time(year: int, month: int, day: int,
                                 hour: int = 12, minute: int = 0) -> float:
     """
@@ -290,10 +321,10 @@ def paipan(birth_year: int, birth_month: int, birth_day: int,
     # --- 真太阳时校正 ---
     actual_hour, actual_minute = birth_hour, birth_minute
     if use_true_solar_time:
-        # 确定经度
+        # 确定经度（支持模糊匹配城市名）
         actual_longitude = longitude
         if actual_longitude is None:
-            actual_longitude = CITY_LONGITUDE.get(birth_place)
+            actual_longitude = _fuzzy_match_city_longitude(birth_place)
         if actual_longitude is not None:
             (solar_year, solar_month, solar_day,
              actual_hour, actual_minute,

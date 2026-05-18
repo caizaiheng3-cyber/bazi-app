@@ -55,11 +55,16 @@ def _noop_progress(msg: str):
 
 def compute_paipan(name: str, birth_str: str, gender: str,
                    birth_place: str = "未知",
+                   calendar_type: str = "公历",
+                   is_leap_month: bool = False,
                    use_true_solar_time: bool = None,
                    longitude: float = None) -> dict:
     """执行排盘计算，返回排盘 JSON
 
     Args:
+        birth_place: 出生城市（用于真太阳时修正）
+        calendar_type: "公历" 或 "农历"
+        is_leap_month: 农历是否闰月（仅农历时有效）
         use_true_solar_time: 是否启用真太阳时。None 时自动判断：有出生地则启用。
         longitude: 经度（度）。None 时由引擎根据 birth_place 查表。
     """
@@ -75,6 +80,8 @@ def compute_paipan(name: str, birth_str: str, gender: str,
 
     return run_paipan_engine(year, month, day, hour, minute, gender,
                              birth_place=birth_place, name=name,
+                             calendar_type=calendar_type,
+                             is_leap_month=is_leap_month,
                              use_true_solar_time=use_true_solar_time,
                              longitude=longitude)
 
@@ -463,46 +470,27 @@ async def generate_master_report(
     ai_insights += "\n" + liunian_insight
     context_summary = build_context_summary(engine_summary, ai_insights)
 
-    # --- 第4次：Part4 上半 ---
-    progress("命理师版生成中：Part4-上")
-    prompt_part4_upper = (
-        f"请撰写命理师版报告 Part4 六领域深度分析的前3个领域。\n\n"
+    # --- 第4次：Part4（确定性领域画像 + LLM润色展开）---
+    progress("命理师版生成中：Part4")
+    part4_skeleton = skeleton_parts.get("part4", "")
+    prompt_part4 = (
+        f"请基于以下已由引擎确定的四大领域画像骨架，为每个领域补充 L1/L2/L3 三层深度展开。\n\n"
         f"{context_summary}\n\n"
-        f"{PART4_DOMAIN_RULES}\n"
-        f"请输出以下3个领域，每个领域包含 L1/L2/L3 三层：\n\n"
-        f"## Part 4 · 六领域深度分析\n\n"
-        f"### 4.1 婚姻·感情\n"
-        f"（分析配偶宫、配偶星、桃花、合冲对婚姻的影响，给出婚期窗口和择偶方向）\n\n"
-        f"### 4.2 财富·收入\n"
-        f"（分析财星力量、劫财对财的影响、求财方式和财运走势）\n\n"
-        f"### 4.3 事业·职业发展\n"
-        f"（分析官杀印食对事业的影响、适合的行业方向、升迁时间窗口）\n"
+        f"## Part4 填充铁律\n"
+        f"1. 骨架中的**核心结论、吉凶定性、关键证据、优势/风险信号、关键年份、行动建议**"
+        f"是引擎的确定性输出，**绝对禁止修改、删除或与之矛盾**\n"
+        f"2. 你的任务是在每个领域标题之后、骨架数据之间，插入三层分析：\n"
+        f"   - L1 事实层：用命理术语解释骨架中的证据为什么成立\n"
+        f"   - L2 影响层：翻译成人话，对命主生活的具体影响\n"
+        f"   - L3 趋利避害：可执行建议 + 时间窗口（必须与骨架行动建议一致）\n"
+        f"3. 每个领域展开不少于600字，四大领域总计不少于2500字\n"
+        f"4. 直接从骨架标题开始输出，保留骨架中所有原有内容（表格、列表等）\n"
+        f"5. 如果骨架有 AI_JUDGE.liulingyu 占位符，填充为六领域总结性卷首语\n\n"
+        f"## 骨架\n\n{part4_skeleton}"
     )
-    result_part4_upper = await call_deepseek(judge_prompt, prompt_part4_upper)
-    result_part4_upper = clean_ai_preamble(result_part4_upper)
-
-    # --- 第5次：Part4 下半 ---
-    progress("命理师版生成中：Part4-下")
-    prompt_part4_lower = (
-        f"请继续撰写命理师版报告 Part4 六领域深度分析的后3个领域。\n\n"
-        f"{context_summary}\n\n"
-        f"{PART4_DOMAIN_RULES}\n"
-        f"前3个领域（婚姻/财富/事业）已完成，摘要供参考：\n"
-        f"{result_part4_upper[:2000]}\n\n"
-        f"请输出以下3个领域，每个领域包含 L1/L2/L3 三层：\n\n"
-        f"### 4.4 健康·身体\n"
-        f"（分析五行偏枯对健康的影响、易感部位、养生建议+时间窗口）\n\n"
-        f"### 4.5 六亲·人际\n"
-        f"（分析父母星/兄弟星/子女星的力量、六亲关系的命理底色）\n\n"
-        f"### 4.6 自我·心性成长\n"
-        f"（分析日主特质、性格优劣势、成长路径建议）\n"
-    )
-    result_part4_lower = await call_deepseek(judge_prompt, prompt_part4_lower)
-    result_part4_lower = clean_ai_preamble(result_part4_lower)
-
-    # 拼接 Part4
-    part4_combined = result_part4_upper.rstrip() + "\n\n" + result_part4_lower
-    accumulated_report += "\n\n" + part4_combined
+    result_part4 = await call_deepseek(judge_prompt, prompt_part4)
+    result_part4 = clean_ai_preamble(result_part4)
+    accumulated_report += "\n\n" + result_part4
 
     progress(f"命理师版完成：{len(accumulated_report)} 字")
     return accumulated_report
@@ -638,6 +626,8 @@ async def generate_reports(
     birth_str: str,
     gender: str,
     birth_place: str = "未知",
+    calendar_type: str = "公历",
+    is_leap_month: bool = False,
     skip_consumer: bool = True,
     on_progress: ProgressCallback = None,
 ) -> dict:
@@ -649,6 +639,8 @@ async def generate_reports(
         birth_str: 出生时间 "YYYY-MM-DD HH:MM"
         gender: "男" 或 "女"
         birth_place: 出生城市（用于真太阳时修正）
+        calendar_type: "公历" 或 "农历"
+        is_leap_month: 农历是否闰月
         skip_consumer: 是否跳过消费者版生成（WEB层默认跳过）
         on_progress: 进度回调函数，接受一个字符串参数
 
@@ -665,7 +657,10 @@ async def generate_reports(
 
     # Phase 1: 排盘
     progress("排盘计算中")
-    paipan_data = compute_paipan(name, birth_str, gender, birth_place=birth_place)
+    paipan_data = compute_paipan(name, birth_str, gender,
+                                 birth_place=birth_place,
+                                 calendar_type=calendar_type,
+                                 is_leap_month=is_leap_month)
 
     # Phase 2: 规则分析
     progress("规则分析中")
@@ -703,7 +698,7 @@ async def generate_reports(
     progress("质量校验中")
     quality_issues = validate_report_quality(master_report, wechat_report)
     if quality_issues:
-        progress(f"⚠️ 质量警告：{len(quality_issues)}处占位文本未替换")
+        progress(f"⚠️ 质量阻断：{len(quality_issues)}处占位文本未替换 → 报告标记为需人工审核")
 
     progress("报告生成完成")
     return {
@@ -713,4 +708,5 @@ async def generate_reports(
         "paipan_json": paipan_data,
         "rules_json": rules_data,
         "quality_issues": quality_issues,
+        "quality_passed": len(quality_issues) == 0,
     }

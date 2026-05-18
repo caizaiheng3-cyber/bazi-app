@@ -4799,11 +4799,40 @@ def aggregate_domain_profiles(paipan_data: dict, wangshuai: dict, yongshen: dict
                         "触发源": evt["触发源"],
                     })
 
-    # 原局十神分析（用于静态领域判断）
+    # 原局十神分析（增强版：天干+藏干+日支夫妻宫+合冲+空亡）
     shishen_set = set()
     for pos in ["年柱", "月柱", "时柱"]:
         ss = get_shishen(day_master, sizhu[pos]["天干"])
         shishen_set.add(ss)
+
+    # 补充：扫描所有地支藏干的十神（含日支）
+    from engine.paipan import CANGGAN
+    canggan_shishen = {}  # {宫位: [(十神, 气)]}
+    for pos in ["年柱", "月柱", "日柱", "时柱"]:
+        zhi = sizhu[pos]["地支"]
+        canggan_shishen[pos] = []
+        for gan, qi, _weight in CANGGAN.get(zhi, []):
+            ss = get_shishen(day_master, gan)
+            canggan_shishen[pos].append((ss, qi))
+            shishen_set.add(ss)
+
+    # 日支夫妻宫藏干十神
+    spouse_palace_shishen = [ss for ss, qi in canggan_shishen.get("日柱", []) if qi == "本气"]
+    spouse_palace_main = spouse_palace_shishen[0] if spouse_palace_shishen else ""
+
+    # 合冲信息
+    rels = relationships if relationships else {}
+    liuhe_list = rels.get("六合", [])
+    chong_list = rels.get("六冲", [])
+
+    # 日支相关合冲
+    day_zhi = sizhu["日柱"]["地支"]
+    day_zhi_is_he = any(day_zhi in str(item) for item in liuhe_list) if liuhe_list else False
+    day_zhi_is_chong = any(day_zhi in str(item) for item in chong_list) if chong_list else False
+
+    # 空亡信息
+    kongwang = paipan_data.get("空亡", [])
+    day_zhi_kongwang = day_zhi in kongwang if kongwang else False
 
     # 吉凶定性函数
     def compute_domain_disposition(events_list):
@@ -4827,6 +4856,7 @@ def aggregate_domain_profiles(paipan_data: dict, wangshuai: dict, yongshen: dict
     # --- 婚恋领域 ---
     marriage_events = domain_events["婚恋"]
     marriage_static = []
+    # 天干透出配偶星
     if "正财" in shishen_set and gender == "男":
         marriage_static.append("原局透正财，妻星有力")
     if "正官" in shishen_set and gender == "女":
@@ -4835,6 +4865,22 @@ def aggregate_domain_profiles(paipan_data: dict, wangshuai: dict, yongshen: dict
         marriage_static.append("原局伤官透出，克官不利婚姻")
     if "劫财" in shishen_set and gender == "男":
         marriage_static.append("原局劫财透出，有争妻之象")
+    # 日支夫妻宫分析
+    if spouse_palace_main:
+        if gender == "男" and spouse_palace_main in ("正财", "偏财"):
+            marriage_static.append(f"日支夫妻宫藏{spouse_palace_main}，配偶星坐宫位正")
+        elif gender == "女" and spouse_palace_main in ("正官", "七杀"):
+            marriage_static.append(f"日支夫妻宫藏{spouse_palace_main}，夫星坐宫位正")
+        elif spouse_palace_main in ("比肩", "劫财"):
+            marriage_static.append(f"日支夫妻宫藏{spouse_palace_main}，婚姻易有竞争/第三者之象")
+    # 日支合冲
+    if day_zhi_is_chong:
+        marriage_static.append("日支被冲，夫妻宫动荡，婚姻不稳定")
+    if day_zhi_is_he:
+        marriage_static.append("日支逢合，配偶缘分较重，但合化须看五行")
+    # 空亡
+    if day_zhi_kongwang:
+        marriage_static.append("日支落空亡，婚姻迟成或感情多虚")
 
     marriage_advantages = [e["事件"] for e in marriage_events if "吉" in e["吉凶"]][:3]
     marriage_risks = [e["事件"] for e in marriage_events if "凶" in e["吉凶"] or "中" == e["吉凶"]][:3]
@@ -4874,11 +4920,14 @@ def aggregate_domain_profiles(paipan_data: dict, wangshuai: dict, yongshen: dict
     # --- 健康领域 ---
     health_events = domain_events["健康"]
     health_static = []
-    conclusion_text = wangshuai.get("结论", "")
-    if "过旺" in conclusion_text:
+    # Fix5：旺衰判断同时读 "结论"(身旺/身弱/中和) + "程度"(太旺/极旺/偏弱/极弱等)
+    conclusion_text = wangshuai.get("结论", "") + wangshuai.get("程度", "")
+    if any(k in conclusion_text for k in ("过旺", "太旺", "极旺")):
         health_static.append("身过旺，易有气血上涌/高血压之象")
-    elif "极弱" in conclusion_text or "偏弱" in conclusion_text:
+    elif any(k in conclusion_text for k in ("极弱", "太弱", "偏弱")):
         health_static.append("身偏弱，需注意免疫力和体力")
+    elif "身弱" in conclusion_text:
+        health_static.append("身弱，体质偏虚，需注意作息调养")
 
     health_advantages = [e["事件"] for e in health_events if "吉" in e["吉凶"]][:3]
     health_risks = [e["事件"] for e in health_events if "凶" in e["吉凶"]][:3]
