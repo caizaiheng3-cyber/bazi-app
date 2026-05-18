@@ -502,9 +502,15 @@ async def generate_master_report(
 
 async def generate_consumer_report(
     judge_prompt: str, skeleton: str, master_report: str,
+    rules_data: dict = None, paipan_data: dict = None,
     on_progress: ProgressCallback = None,
 ) -> str:
-    """消费者版：基于命理师版+骨架，分两次调用生成"""
+    """消费者版：基于命理师版+骨架，分两次调用生成
+    
+    Args:
+        rules_data: 规则分析数据（用于注入引擎原始旺衰数据）
+        paipan_data: 排盘原始数据（用于注入引擎原始五行数据）
+    """
     progress = on_progress or _noop_progress
     progress("消费者版生成中：Part 1-3")
 
@@ -513,23 +519,58 @@ async def generate_consumer_report(
     if example_path.exists():
         example_consumer = example_path.read_text(encoding="utf-8")[:6000]
 
+    # 构建引擎原始数据摘要（强制 LLM 使用这些数据）
+    engine_facts = ""
+    if rules_data and paipan_data:
+        wangshuai = rules_data.get("旺衰", {})
+        sizhu = paipan_data.get("四柱", {})
+        day_master = sizhu['日柱']['天干']
+        
+        wuxing_score = paipan_data.get("五行统计", {}).get("得分", {})
+        wuxing_pct = paipan_data.get("五行统计", {}).get("百分比", {})
+        if wuxing_score and wuxing_pct:
+            wuxing_str = ", ".join(
+                f"{k}{v}({wuxing_pct.get(k, '?')}%)" for k, v in wuxing_score.items()
+            )
+        elif wuxing_score:
+            wuxing_str = ", ".join(f"{k}{v}" for k, v in wuxing_score.items())
+        else:
+            wuxing_str = "未知"
+        
+        # 构建用神/忌神字符串（避免在 f-string 中使用转义字符）
+        yongshen_list = ', '.join(f"{y['五行']}({y['十神']})" for y in rules_data.get('用神忌神', {}).get('用神', []))
+        jishen_list = ', '.join(f"{j['五行']}({j['十神']})" for j in rules_data.get('用神忌神', {}).get('忌神', []))
+        
+        engine_facts = (
+            f"## ⚠️ 引擎原始数据（绝对事实，必须严格遵守，不得矛盾）\n\n"
+            f"- 日主：{day_master}\n"
+            f"- 旺衰结论：**{wangshuai.get('结论', '未知')} · {wangshuai.get('程度', '')}**\n"
+            f"- 旺衰总分：{wangshuai.get('总分', '未知')}\n"
+            f"- 五行得分：{wuxing_str}\n"
+            f"- 用神：{yongshen_list}\n"
+            f"- 忌神：{jishen_list}\n\n"
+            f"**铁律**：填充 `wangshuai_consumer` 时，必须基于上述旺衰结论展开白话翻译，**严禁自行判断旺衰**。\n\n"
+        )
+
     # 第1次：板块①②③（基础事实+人格画像+六亲卡片）
     prompt_part1 = (
         f"请基于以下命理师版报告和消费者版骨架，填充消费者版报告的前半部分。\n\n"
+        f"{engine_facts}"
         f"## 消费者版定义\n\n"
         f"给命主本人看的白话命书——所有术语翻译成日常语言。\n"
         f"用户3分钟内能读懂'我是谁、我该做什么、我别碰什么'。\n\n"
         f"## 你需要填充的槽位\n\n"
         f"- juanshou_sanjuhua: 卷首三句话（你是谁/你的命门/你的红利）\n"
-        f"- wangshuai_consumer: 旺衰白话翻译（一段话说明命主强弱特点）\n"
+        f"- wangshuai_consumer: 旺衰白话翻译（一段话说明命主强弱特点）**必须基于引擎原始数据的旺衰结论**\n"
         f"- yongshen_consumer: 用神白话（日常怎么做，不超过200字）\n"
         f"- geju_yijuhua: 格局一句话定性（白话）\n"
         f"- renge_huaxiang: 4维人格画像（性格/处事/天赋/代价）\n"
         f"- liuqin_kapian: 6张六亲卡片（父/母/兄弟姐妹/伴侣/子女/贵人）\n\n"
         f"## 铁律\n"
         f"1. 所有事实必须与命理师版一致，不能无中生有\n"
-        f"2. 不允许输出'待分析'/'待LLM深化'\n"
-        f"3. 每张卡片150-200字，有温度有干货\n\n"
+        f"2. **旺衰白话翻译必须严格基于引擎原始数据的旺衰结论，不得自行判断**\n"
+        f"3. 不允许输出'待分析'/'待LLM深化'\n"
+        f"4. 每张卡片150-200字，有温度有干货\n\n"
         f"## 优质案例范本（写作风格标杆）\n\n{example_consumer[:3000]}\n\n"
         f"## 命理师版报告（事实来源）\n\n{master_report[:6000]}\n\n"
         f"## 消费者版骨架\n\n{skeleton}"
@@ -685,7 +726,9 @@ async def generate_reports(
     if not skip_consumer:
         progress("AI判读中：消费者版")
         consumer_report = await generate_consumer_report(
-            judge_prompt, skeletons["consumer"], master_report, on_progress
+            judge_prompt, skeletons["consumer"], master_report,
+            rules_data=rules_data, paipan_data=paipan_data,
+            on_progress=on_progress,
         )
 
     # Phase 6: 微信版
