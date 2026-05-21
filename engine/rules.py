@@ -473,11 +473,20 @@ def judge_wangshuai(paipan_data: dict) -> dict:
     }
     month_factor_desc = MONTH_FACTOR_DESC.get(month_status, "")
 
+    # 空亡对通根的影响（来源：三命通会·论空亡"空亡之支，虚而不实"）
+    # 保守策略：仅当空亡支的藏干无天干透出时减力（"有透干则不空"）
+    kongwang = paipan_data.get("空亡", [])
+    KONGWANG_FACTOR = 0.7
+
+    # 确定哪些藏干五行有天干透出（有透干则不空）
+    tiangan_wuxing_set = set(WUXING_OF_TIANGAN_V3.get(tg, "") for tg in tiangan_list)
+
     tongen_total = 0.0
     for i, pos in enumerate(pillars):
         dizhi = dizhi_list[i]
         canggan_scores = DIZHI_CANGGAN_SCORE.get(dizhi, {})
         distance = abs(i - day_pillar_index)
+        is_kongwang = dizhi in kongwang
 
         for cang_gan, base_score in canggan_scores.items():
             cang_wx = WUXING_OF_TIANGAN_V3.get(cang_gan)
@@ -495,13 +504,18 @@ def judge_wangshuai(paipan_data: dict) -> dict:
                 dist_factor = TONGEN_DISTANCE_FACTOR.get(distance, 0.4)
                 dist_desc = f"距离{distance}×{dist_factor}"
 
-            root_score = base_score * dist_factor * month_tongen_factor
+            # 空亡修正：仅当该五行无天干透出时生效
+            kw_apply = is_kongwang and (cang_wx not in tiangan_wuxing_set)
+            kw_factor = KONGWANG_FACTOR if kw_apply else 1.0
+            kw_desc = "·空亡减力" if kw_apply else ""
+
+            root_score = base_score * dist_factor * month_tongen_factor * kw_factor
             tongen_total += root_score
             details.append({
                 "步骤": "Step3·日主通根",
-                "来源": f"{pos}·{dizhi}藏{cang_gan}({cang_wx}·{dist_desc}·{base_score}分{month_factor_desc})",
+                "来源": f"{pos}·{dizhi}藏{cang_gan}({cang_wx}·{dist_desc}·{base_score}分{month_factor_desc}{kw_desc})",
                 "得分": round(root_score, 1),
-                "说明": f"{base_score}×{dist_factor}×{month_tongen_factor}={root_score:.1f}",
+                "说明": f"{base_score}×{dist_factor}×{month_tongen_factor}{'×0.7' if kw_apply else ''}={root_score:.1f}",
             })
 
     # ====== Step 4: 汇总日主方总力量 ======
@@ -567,6 +581,7 @@ def judge_wangshuai(paipan_data: dict) -> dict:
     for i, pos in enumerate(pillars):
         dizhi = dizhi_list[i]
         canggan_scores = DIZHI_CANGGAN_SCORE.get(dizhi, {})
+        is_kongwang = dizhi in kongwang
         for cang_gan, base_score in canggan_scores.items():
             cang_wx = WUXING_OF_TIANGAN_V3.get(cang_gan)
             if cang_wx not in opposing_wuxings:
@@ -588,7 +603,6 @@ def judge_wangshuai(paipan_data: dict) -> dict:
                 dist_factor = TONGEN_DISTANCE_FACTOR.get(dist, 0.4)
                 dist_desc = f"距{dist}×{dist_factor}"
             else:
-                # 无透干 = 暗藏散布，不做距离衰减
                 dist_factor = 1.0
                 dist_desc = "散布"
 
@@ -702,6 +716,269 @@ def judge_wangshuai(paipan_data: dict) -> dict:
         "得生": {"得分": round(tiangan_help_total + yinxing_bonus, 2), "详情": desheng_details},
         "受克": {"得分": round(-opposing_score, 2), "原始分": round(opposing_score, 2), "详情": opposing_details},
     }
+
+
+# ============================================================
+# 旺衰合冲力量修正（P0: 基于 analyze_relationships 结果回调修正）
+# ============================================================
+
+def adjust_wangshuai_by_relationships(wangshuai: dict, relationships: dict,
+                                       paipan_data: dict) -> dict:
+    """
+    基于合冲刑害结果修正旺衰得分
+
+    原理（来源：子平真诠·论合冲对旺衰的影响）：
+    - 六合合绊：被合支藏干力量被锁住，对外输出减弱
+    - 六冲冲散：败方地支根基动摇
+    - 半合/三合加力：合化五行通根加强
+    - 旺而无制升档：opposing有效力量极低时，按"旺极无制"原则升档
+
+    优先级规则（来源：子平真诠·合冲并见论）：
+    - 紧邻合 > 隔柱冲（合优先，冲不再重复扣减同一支）
+    - 紧邻冲 > 隔柱合
+    - 同为紧邻时合优先
+
+    调用时机：full_analysis() 中，wangshuai 和 relationships 都计算完之后
+    """
+    dm_wuxing = paipan_data["日主"]["五行"]
+    pillars = ["年柱", "月柱", "日柱", "时柱"]
+    dizhi_list = [paipan_data["四柱"][p]["地支"] for p in pillars]
+    pillar_indices = {"年柱": 0, "月柱": 1, "日柱": 2, "时柱": 3}
+
+    ke_wuxing = WUXING_KE_WO.get(dm_wuxing)
+    xie_wuxing = WUXING_SHENG.get(dm_wuxing)
+    hao_wuxing = WUXING_KE.get(dm_wuxing)
+    opposing_wuxings = set(filter(None, [ke_wuxing, xie_wuxing, hao_wuxing]))
+
+    # 第一步：收集所有合冲事件，按力量排序，标记每个地支的最强效应
+    # key = (支, 柱位索引), value = (效应类型, 减力比例, 来源描述)
+    zhi_effects = {}  # 每个支只取最强效应，不重复计算
+
+    # 六合事件
+    FORCE_REDUCE = {"强": 0.60, "中": 0.40, "弱": 0.20}
+    FORCE_PRIORITY = {"强": 3, "中": 2, "弱": 1}
+
+    for he in relationships.get("六合", []):
+        force = he.get("力量", "中")
+        reduce_ratio = FORCE_REDUCE.get(force, 0.40)
+        priority = FORCE_PRIORITY.get(force, 2)
+        dizhi_pair = he.get("地支", "")
+        zhi_a = dizhi_pair[0] if len(dizhi_pair) >= 2 else ""
+        zhi_b = dizhi_pair[1] if len(dizhi_pair) >= 2 else ""
+
+        for zhi in [zhi_a, zhi_b]:
+            if not zhi:
+                continue
+            for i, dz in enumerate(dizhi_list):
+                if dz != zhi:
+                    continue
+                key = (zhi, i)
+                existing = zhi_effects.get(key)
+                if not existing or priority > existing[0]:
+                    zhi_effects[key] = (priority, "六合", reduce_ratio, dizhi_pair)
+
+    # 六冲事件
+    for chong in relationships.get("六冲", []):
+        winner = chong.get("胜方", "")
+        loser = chong.get("败方", "")
+        force = chong.get("力量", "中")
+        priority = FORCE_PRIORITY.get(force, 2)
+        dizhi_pair = chong.get("地支", "")
+        zhi_a = dizhi_pair[0] if len(dizhi_pair) >= 2 else ""
+        zhi_b = dizhi_pair[1] if len(dizhi_pair) >= 2 else ""
+
+        for zhi in [zhi_a, zhi_b]:
+            if not zhi:
+                continue
+            if winner and zhi == winner:
+                continue
+            reduce_ratio = 0.50 if (winner and zhi == loser) else 0.30
+            for i, dz in enumerate(dizhi_list):
+                if dz != zhi:
+                    continue
+                key = (zhi, i)
+                existing = zhi_effects.get(key)
+                if not existing or priority > existing[0]:
+                    zhi_effects[key] = (priority, "六冲", reduce_ratio, dizhi_pair)
+
+    # 第二步：按最强效应计算修正量
+    dm_adjustment = 0.0
+    opposing_adjustment = 0.0
+    adjustment_details = []
+
+    for (zhi, pillar_idx), (_, effect_type, reduce_ratio, dizhi_pair) in zhi_effects.items():
+        canggan_scores = DIZHI_CANGGAN_SCORE.get(zhi, {})
+        for cang_gan, base_score in canggan_scores.items():
+            cang_wx = WUXING_OF_TIANGAN_V3.get(cang_gan)
+            if cang_wx == dm_wuxing:
+                loss = base_score * reduce_ratio
+                dm_adjustment -= loss
+                adjustment_details.append(
+                    f"{effect_type}({dizhi_pair}){zhi}藏{cang_gan}({cang_wx})→日主方-{loss:.1f}"
+                )
+            elif cang_wx in opposing_wuxings:
+                loss = base_score * reduce_ratio
+                opposing_adjustment -= loss
+                adjustment_details.append(
+                    f"{effect_type}({dizhi_pair}){zhi}藏{cang_gan}({cang_wx})→克泄耗方-{loss:.1f}"
+                )
+
+    # 第三步：半合/三合加力（不冲突，独立累加）
+    for he_type in ["半合", "三合"]:
+        for he in relationships.get(he_type, []):
+            hua_wuxing = he.get("合化五行", "")
+            if not hua_wuxing:
+                continue
+            if not he.get("是否化成", False) and he_type == "三合":
+                continue
+            boost_ratio = 0.30 if he_type == "三合" else 0.20
+            dizhi_str = he.get("地支", "")
+            involved_zhis = [c for c in dizhi_str if c in DIZHI_CANGGAN_SCORE]
+            for zhi in involved_zhis:
+                # 已被合/冲消耗的支不再参与加力
+                consumed = any((zhi, i) in zhi_effects for i, dz in enumerate(dizhi_list) if dz == zhi)
+                if consumed:
+                    continue
+                canggan_scores = DIZHI_CANGGAN_SCORE.get(zhi, {})
+                for cang_gan, base_score in canggan_scores.items():
+                    cang_wx = WUXING_OF_TIANGAN_V3.get(cang_gan)
+                    if cang_wx != hua_wuxing:
+                        continue
+                    boost = base_score * boost_ratio
+                    if cang_wx == dm_wuxing:
+                        dm_adjustment += boost
+                        adjustment_details.append(
+                            f"{he_type}({dizhi_str})化{hua_wuxing}→日主方+{boost:.1f}"
+                        )
+                    elif cang_wx in opposing_wuxings:
+                        opposing_adjustment += boost
+                        adjustment_details.append(
+                            f"{he_type}({dizhi_str})化{hua_wuxing}→克泄耗方+{boost:.1f}"
+                        )
+
+    # 第三步·B：天干合对旺衰的修正（来源：子平真诠·论天干合）
+    # 天干被合绊后，该干对日主的帮助/克制力量减弱
+    TIANGAN_HE_REDUCE = {"紧邻": 0.40, "隔柱": 0.20, "遥隔": 0.10}
+    from engine.paipan import WUXING_OF_TIANGAN as TIANGAN_WX_MAP
+    tiangan_list_raw = [paipan_data["四柱"][p]["天干"] for p in pillars]
+
+    for he in relationships.get("天干合", []):
+        force_desc = he.get("远近", "隔柱")
+        reduce_ratio = TIANGAN_HE_REDUCE.get(force_desc, 0.20)
+        is_huacheng = he.get("是否化成", False)
+        tiangan_str = he.get("天干", "")
+        gan_a = tiangan_str[0] if len(tiangan_str) >= 2 else ""
+        gan_b = tiangan_str[1] if len(tiangan_str) >= 2 else ""
+
+        for gan in [gan_a, gan_b]:
+            if not gan or gan == paipan_data["日主"]["天干"]:
+                continue
+            gan_wx = TIANGAN_WX_MAP.get(gan, "")
+            if is_huacheng:
+                hua_wx = he.get("合化五行", "")
+                if hua_wx == dm_wuxing:
+                    dm_adjustment += 10 * 0.30
+                    adjustment_details.append(f"天干合化{hua_wx}→日主方+3.0")
+                elif hua_wx in opposing_wuxings:
+                    opposing_adjustment += 10 * 0.30
+                    adjustment_details.append(f"天干合化{hua_wx}→克泄耗方+3.0")
+            else:
+                if gan_wx == dm_wuxing:
+                    loss = 10 * reduce_ratio
+                    dm_adjustment -= loss
+                    adjustment_details.append(
+                        f"天干合绊({tiangan_str}){gan}({gan_wx})→日主方-{loss:.1f}"
+                    )
+                elif gan_wx in opposing_wuxings:
+                    loss = 10 * reduce_ratio
+                    opposing_adjustment -= loss
+                    adjustment_details.append(
+                        f"天干合绊({tiangan_str}){gan}({gan_wx})→克泄耗方-{loss:.1f}"
+                    )
+
+    # 第四步：应用修正，重新计算旺衰结论
+    if dm_adjustment == 0 and opposing_adjustment == 0:
+        wangshuai["合冲修正"] = {"修正量_日主方": 0, "修正量_克泄耗方": 0,
+                              "明细": [], "结论变化": False}
+        return wangshuai
+
+    original_total = wangshuai["助力总分"]
+    original_opposing = wangshuai["泄耗总分"]
+    original_conclusion = wangshuai["结论"]
+    original_level = wangshuai["程度"]
+
+    new_total = max(original_total + dm_adjustment, 0)
+    new_opposing = max(original_opposing + opposing_adjustment, 0)
+    new_ratio = new_total / (new_total + new_opposing) if (new_total + new_opposing) > 0 else 0.5
+
+    # 重新判定旺衰档位
+    if new_ratio >= 0.55:
+        if new_total >= 435:
+            new_conclusion, new_level = "身旺", "极旺"
+        elif new_total >= 272:
+            new_conclusion, new_level = "身旺", "太旺"
+        elif new_total >= 163:
+            new_conclusion, new_level = "身旺", "偏旺"
+        else:
+            new_conclusion, new_level = "身旺", "微旺"
+    elif new_ratio <= 0.42:
+        if new_total <= 45:
+            new_conclusion, new_level = "身弱", "太弱"
+        elif new_total <= 88:
+            new_conclusion, new_level = "身弱", "偏弱"
+        else:
+            new_conclusion, new_level = "身弱", "微弱"
+    else:
+        new_conclusion = "中和"
+        new_level = "中和"
+        for threshold, conc, lev in WANGSHUAI_THRESHOLDS:
+            if new_total >= threshold:
+                new_conclusion = conc
+                new_level = lev
+                break
+
+    # 第五步："旺而无制"升档规则（来源：子平真诠"旺极无制化=从旺论"）
+    # 当克泄耗方有效力量极低，日主面临的制约几乎为零时，应升档
+    if new_opposing < 20 and new_total >= 109:
+        effective_opposition_ratio = new_opposing / (new_total + new_opposing) if (new_total + new_opposing) > 0 else 0
+        if effective_opposition_ratio < 0.08:
+            # 几乎无制 → 极旺
+            new_conclusion, new_level = "身旺", "极旺"
+            adjustment_details.append(f"旺极无制升档：opposing仅{new_opposing:.1f}(<8%有效制约)→极旺")
+        elif effective_opposition_ratio < 0.15:
+            # 制约极弱 → 至少太旺
+            if new_level in ("偏旺", "微旺"):
+                new_conclusion, new_level = "身旺", "太旺"
+                adjustment_details.append(f"无制升档：opposing仅{new_opposing:.1f}(<15%有效制约)→太旺")
+
+    conclusion_changed = (new_level != original_level)
+
+    # 更新 wangshuai dict
+    wangshuai["助力总分"] = round(new_total, 2)
+    wangshuai["总分"] = round(new_total, 2)
+    wangshuai["泄耗总分"] = round(new_opposing, 2)
+    wangshuai["旺衰比"] = round(new_ratio, 4)
+    wangshuai["结论"] = new_conclusion
+    wangshuai["程度"] = new_level
+    wangshuai["分层"]["Step5·克泄耗方"] = round(new_opposing, 2)
+    wangshuai["合冲修正"] = {
+        "修正量_日主方": round(dm_adjustment, 2),
+        "修正量_克泄耗方": round(opposing_adjustment, 2),
+        "修正前_日主方": round(original_total, 2),
+        "修正前_克泄耗方": round(original_opposing, 2),
+        "修正前_旺衰比": round(original_total / (original_total + original_opposing), 4) if (original_total + original_opposing) > 0 else 0.5,
+        "修正前_结论": original_conclusion,
+        "修正前_程度": original_level,
+        "明细": adjustment_details,
+        "结论变化": conclusion_changed,
+    }
+
+    if abs(new_ratio - 0.5) > 0.1:
+        wangshuai["置信度"] = "高"
+    else:
+        wangshuai["置信度"] = "中"
+
+    return wangshuai
 
 
 # ============================================================
@@ -1268,6 +1545,51 @@ def _take_zhengge(paipan_data: dict) -> dict:
     }
 
 
+def _refine_zage(paipan_data: dict, geju: dict) -> dict:
+    """
+    杂格细化命名：在正格基础上检查是否满足特殊格局组合条件
+
+    来源：子平真诠·论伤官/食神/偏官
+    """
+    from engine.paipan import get_shishen
+    geju_name = geju.get("格局", "")
+    day_master = paipan_data["日主"]["天干"]
+    sizhu = paipan_data["四柱"]
+
+    tiangan_shishen = set()
+    for pos in ["年柱", "月柱", "时柱"]:
+        tiangan_shishen.add(get_shishen(day_master, sizhu[pos]["天干"]))
+
+    all_shishen = set(tiangan_shishen)
+    from engine.paipan import CANGGAN
+    for pos in ["年柱", "月柱", "日柱", "时柱"]:
+        zhi = sizhu[pos]["地支"]
+        for gan, qi, _ in CANGGAN.get(zhi, []):
+            all_shishen.add(get_shishen(day_master, gan))
+
+    if geju_name == "伤官格":
+        if "正印" in tiangan_shishen or "偏印" in tiangan_shishen:
+            geju["格局"] = "伤官配印格"
+            geju["杂格细化"] = "伤官透出+印星有力制衡"
+    elif geju_name == "食神格":
+        if "七杀" in tiangan_shishen and "偏印" not in tiangan_shishen:
+            geju["格局"] = "食神制杀格"
+            geju["杂格细化"] = "食神透出+七杀透出+无偏印夺食"
+    elif geju_name == "七杀格":
+        if "正印" in tiangan_shishen or "偏印" in tiangan_shishen:
+            geju["格局"] = "杀印相生格"
+            geju["杂格细化"] = "七杀透出+印星化杀"
+        elif "食神" in tiangan_shishen:
+            geju["格局"] = "食神制杀格"
+            geju["杂格细化"] = "七杀在局+食神透出制杀"
+    elif geju_name == "正财格":
+        if "正官" in tiangan_shishen and "伤官" not in tiangan_shishen:
+            geju["格局"] = "财官双美格"
+            geju["杂格细化"] = "正财透出+正官有力+无伤官破格"
+
+    return geju
+
+
 def _judge_chengbai(paipan_data: dict, geju: dict, wangshuai: dict = None) -> dict:
     """格局成败判定（子平真诠八格成败体系）
 
@@ -1491,6 +1813,9 @@ def judge_geju(paipan_data: dict, wangshuai: dict = None) -> dict:
     # Step 5: 正格取格
     geju = _take_zhengge(paipan_data)
 
+    # Step 5.5: 杂格细化命名（在成败判定前，基于正格基础细化格局名称）
+    geju = _refine_zage(paipan_data, geju)
+
     # Step 6: 成败判定
     geju = _judge_chengbai(paipan_data, geju, wangshuai)
 
@@ -1701,6 +2026,31 @@ def analyze_relationships(paipan_data: dict) -> dict:
                 "效应": f"三合成{wuxing}局（化力最强）",
                 "来源": "三命通会·三合局",
             })
+
+    # 三刑检查（来源：三命通会·论三刑）
+    for z1, z2, z3, xing_type in SANXING:
+        if z3:
+            if z1 in dizhi_set and z2 in dizhi_set and z3 in dizhi_set:
+                pos_list = [pos for pos, zhi in dizhi_list if zhi in (z1, z2, z3)]
+                results["三刑"].append({
+                    "柱位": "+".join(pos_list),
+                    "地支": f"{z1}{z2}{z3}",
+                    "刑型": xing_type,
+                    "力量": "强",
+                    "效应": f"{xing_type}·三方矛盾冲突",
+                    "来源": "三命通会·三刑",
+                })
+        else:
+            if z1 in dizhi_set and z2 in dizhi_set:
+                pos_list = [pos for pos, zhi in dizhi_list if zhi in (z1, z2)]
+                results["三刑"].append({
+                    "柱位": "+".join(pos_list),
+                    "地支": f"{z1}{z2}",
+                    "刑型": xing_type,
+                    "力量": "中",
+                    "效应": f"{xing_type}·礼义缺失",
+                    "来源": "三命通会·三刑",
+                })
 
     # 天干合检查
     for i in range(len(tiangan_list)):
@@ -2046,24 +2396,65 @@ WINTER_MONTHS = {"亥", "子", "丑"}  # 冬月：调候急需丙火
 SUMMER_MONTHS = {"巳", "午", "未"}  # 夏月：调候急需壬水
 
 
-def _get_tiaohuo_yongshen(day_gan: str, month_zhi: str) -> dict:
+def _get_tiaohuo_yongshen(day_gan: str, month_zhi: str,
+                          paipan_data: dict = None) -> dict:
     """
     查询穷通宝鉴调候用神表（来源：穷通宝鉴·余春台编订）
 
-    返回: {"调候用神": [天干列表], "急需度": "高/中/低", "来源": "穷通宝鉴"}
+    返回: {"调候用神": [天干列表], "急需度": "高/中/低", "来源": "穷通宝鉴",
+           "调候满足": True/False, "满足度": "完全/部分/缺失", "满足来源": "..."}
     """
     tiaohuo_list = TIAOHUO_TABLE.get(day_gan, {}).get(month_zhi, [])
     if not tiaohuo_list:
-        return {"调候用神": [], "急需度": "低", "来源": "穷通宝鉴"}
+        return {"调候用神": [], "急需度": "低", "来源": "穷通宝鉴",
+                "调候满足": True, "满足度": "无需调候", "满足来源": ""}
 
     if month_zhi in WINTER_MONTHS or month_zhi in SUMMER_MONTHS:
         urgency = "高"
     elif month_zhi in {"辰", "戌"}:
-        urgency = "中"  # 辰戌为季月，调候需求中等
+        urgency = "中"
     else:
         urgency = "低"
 
-    return {"调候用神": tiaohuo_list, "急需度": urgency, "来源": "穷通宝鉴"}
+    # 评估调候满足度
+    satisfied = False
+    satisfaction_level = "缺失"
+    satisfaction_source = ""
+
+    if paipan_data:
+        sizhu = paipan_data["四柱"]
+        tiangan_set = {sizhu[p]["天干"] for p in ["年柱", "月柱", "时柱"]}
+        from engine.paipan import CANGGAN
+        canggan_benqi = set()
+        for p in ["年柱", "月柱", "日柱", "时柱"]:
+            zhi = sizhu[p]["地支"]
+            for gan, qi, _ in CANGGAN.get(zhi, []):
+                if qi == "本气":
+                    canggan_benqi.add(gan)
+
+        found_touguan = [tg for tg in tiaohuo_list if tg in tiangan_set]
+        found_canggan = [tg for tg in tiaohuo_list if tg in canggan_benqi and tg not in tiangan_set]
+
+        if found_touguan:
+            satisfied = True
+            satisfaction_level = "完全"
+            positions = []
+            for tg in found_touguan:
+                for p in ["年柱", "月柱", "时柱"]:
+                    if sizhu[p]["天干"] == tg:
+                        positions.append(f"{p}天干{tg}透出")
+            satisfaction_source = "；".join(positions)
+        elif found_canggan:
+            satisfied = True
+            satisfaction_level = "部分"
+            satisfaction_source = f"藏干有{'/'.join(found_canggan)}（未透出，力弱）"
+        else:
+            satisfied = False
+            satisfaction_level = "缺失"
+            satisfaction_source = f"原局无{'/'.join(tiaohuo_list)}，需大运/流年补"
+
+    return {"调候用神": tiaohuo_list, "急需度": urgency, "来源": "穷通宝鉴",
+            "调候满足": satisfied, "满足度": satisfaction_level, "满足来源": satisfaction_source}
 
 
 def _get_geju_yongshen(geju: dict, dm_wuxing: str) -> dict:
@@ -2255,7 +2646,7 @@ def judge_yongshen(paipan_data: dict, wangshuai: dict, geju: dict | None = None)
         geju = judge_geju(paipan_data, wangshuai)
 
     # === Step 1: 收集四法结果 ===
-    tiaohuo = _get_tiaohuo_yongshen(day_gan, month_zhi)
+    tiaohuo = _get_tiaohuo_yongshen(day_gan, month_zhi, paipan_data)
     geju_ys = _get_geju_yongshen(geju, dm_wuxing)
     fuyi = _get_fuyi_yongshen(dm_wuxing, conclusion)
     tongguan = _check_tongguan(paipan_data, wangshuai)
@@ -2440,6 +2831,118 @@ def judge_yongshen(paipan_data: dict, wangshuai: dict, geju: dict | None = None)
     }
 
 
+def _build_yongshen_strategy(main_yongshen: list, conditional_yongshen: list,
+                             jishen_list: list, conflicts: list,
+                             ws_conclusion: str, dm_wuxing: str,
+                             main_strategy: str) -> dict:
+    """
+    生成用神策略总论（P3: 面向决策的高层策略摘要）
+
+    输出一个结构化的"终身策略卡"，可直接用于消费者报告。
+    """
+    # 核心方向
+    is_weak = "弱" in ws_conclusion
+    is_strong = "旺" in ws_conclusion
+
+    # 做什么（用神方向）
+    do_items = []
+    for item in main_yongshen[:3]:
+        wx = item.get("五行", "")
+        shishen = item.get("十神", "")
+        reason = item.get("理由", "")
+        do_items.append({
+            "五行": wx,
+            "十神": shishen,
+            "动作": _yongshen_to_action(wx, shishen, is_weak, dm_wuxing),
+        })
+
+    # 不做什么（忌神方向）
+    dont_items = []
+    conflict_wuxing = {c["五行"] for c in conflicts}
+    pure_jishen = [item for item in jishen_list
+                   if item.get("五行") and item["五行"] not in conflict_wuxing]
+    for item in pure_jishen[:3]:
+        wx = item.get("五行", "")
+        shishen = item.get("十神", "")
+        dont_items.append({
+            "五行": wx,
+            "十神": shishen,
+            "回避": _jishen_to_avoidance(wx, shishen, is_weak, dm_wuxing),
+        })
+
+    # 条件策略
+    conditional_items = []
+    for item in conditional_yongshen[:2]:
+        wx = item.get("五行", "")
+        condition = item.get("使用条件", "")
+        conditional_items.append({
+            "五行": wx,
+            "条件": condition,
+        })
+
+    # 一句话总结（去重）
+    do_wx = list(dict.fromkeys(d["五行"] for d in do_items if d["五行"]))
+    dont_wx = list(dict.fromkeys(d["五行"] for d in dont_items if d["五行"]))
+    if is_weak:
+        one_liner = f"身弱需养，先补{'、'.join(do_wx[:2])}蓄力，远离{'、'.join(dont_wx[:2])}消耗"
+    elif is_strong:
+        one_liner = f"身旺宜泄，主动用{'、'.join(do_wx[:2])}输出变现，控制{'、'.join(dont_wx[:2])}过旺"
+    else:
+        one_liner = f"中和取用，善用{'、'.join(do_wx[:2])}，回避{'、'.join(dont_wx[:2])}"
+
+    return {
+        "一句话": one_liner,
+        "做": do_items,
+        "不做": dont_items,
+        "条件性": conditional_items,
+        "底层逻辑": main_strategy,
+    }
+
+
+def _yongshen_to_action(wx: str, shishen: str, is_weak: bool, dm_wuxing: str) -> str:
+    """将用神转为可执行动作描述"""
+    ACTION_MAP = {
+        "比肩": "找同类/合伙人/同行社群，借助团队力量",
+        "劫财": "寻找竞争环境/合作伙伴，抱团取暖",
+        "比劫": "找同类/合伙人/同行社群，借助团队力量",
+        "食神": "输出才华/写作/教学/创作/表达，让天赋变现",
+        "伤官": "大胆创新/自由发挥/突破规则，才华外露",
+        "食伤": "输出才华/写作/教学/创作/表达，让天赋变现",
+        "正财": "经营稳定收入/管理资产/踏实理财",
+        "偏财": "投资/副业/社交变现/人脉整合",
+        "财星": "主动求财/投资理财/经营人脉",
+        "正官": "进入体制/接受管理/考编/规则内晋升",
+        "七杀": "接受高压挑战/竞争上位/开拓新赛道",
+        "官杀": "承担责任/进入管理层/体制化发展",
+        "正印": "学习深造/考证/找导师/依靠资质和平台",
+        "偏印": "研究冷门领域/独立思考/技术钻研",
+        "印星": "学习/找贵人/提升学历资质",
+    }
+    return ACTION_MAP.get(shishen, f"多接触{wx}相关事物")
+
+
+def _jishen_to_avoidance(wx: str, shishen: str, is_weak: bool, dm_wuxing: str) -> str:
+    """将忌神转为应回避行为描述"""
+    AVOID_MAP = {
+        "比肩": "避免过度社交/借钱给人/合伙投资",
+        "劫财": "避免合伙/被人争利/冲动投资",
+        "比劫": "避免过度社交/借钱给人/合伙投资",
+        "食神": "避免过度享乐/懒散/精力分散",
+        "伤官": "避免口舌是非/顶撞上级/狂妄",
+        "食伤": "避免口舌是非/精力分散/过度表达",
+        "正财": "避免为钱操劳/超出能力的投资/被财所困",
+        "偏财": "避免赌博/高风险投机/烂桃花",
+        "财星": "避免超出能力的大投资/借贷",
+        "正官": "避免过度承担/被规则束缚/不适合的管理岗",
+        "七杀": "避免高压环境/得罪权贵/无谓竞争",
+        "官杀": "避免高压岗位/权力斗争/被人管制",
+        "正印": "避免过度依赖他人/死读书/思想僵化",
+        "偏印": "避免钻牛角尖/封闭/偏执",
+        "印星": "避免过度依赖/懒惰/不行动",
+    }
+    return AVOID_MAP.get(shishen, f"减少{wx}相关事物的投入")
+
+
 def arbitrate_yongshen(yongshen_result: dict) -> dict:
     """
     用神仲裁层（P2：冲突检测+解释，不强制压缩）
@@ -2515,6 +3018,43 @@ def arbitrate_yongshen(yongshen_result: dict) -> dict:
     conditional_yongshen = [item for item in yongshen_list
                             if item.get("五行") in conflict_wuxing]
 
+    # 为条件用神生成具体的「使用条件」描述
+    wangshuai_jielun = yongshen_result.get("旺衰结论", "")
+    is_weak = "弱" in wangshuai_jielun
+    for item in conditional_yongshen:
+        wx = item.get("五行", "")
+        shishen = item.get("十神", "")
+        conflict = next((c for c in conflicts if c["五行"] == wx), None)
+        if not conflict:
+            continue
+        final_role = conflict.get("最终归属", "")
+        js_reasons = conflict.get("忌神理由", [])
+
+        # 根据十神类型+旺衰+冲突原因生成具体使用条件
+        if shishen == "印星":
+            if "格局忌神" in str(js_reasons):
+                item["使用条件"] = "可用于学习深造、找贵人指点；但不宜过度依赖他人、不宜印星太重压制食神才华（会变得想多做少、缺乏行动力）"
+            elif is_weak:
+                item["使用条件"] = "身弱时印星生身，日常可用；但注意不要同时大量用印又用食伤，二者相克"
+            else:
+                item["使用条件"] = "身旺时印星再生身会过旺，仅在需要贵人扶持或学习场景下短期借用"
+        elif shishen == "财星":
+            if is_weak:
+                item["使用条件"] = "身弱时求财容易被财反噬（精力不够驾驭大财），须等身旺年运（比劫/印星大运）时才主动求财；日常小财可取，大投资/创业须谨慎"
+            else:
+                item["使用条件"] = "身旺时可主动求财，但需注意财多招忌、见好就收"
+        elif shishen == "官杀":
+            if is_weak:
+                item["使用条件"] = "身弱时官杀克身加重压力，须有印星化杀（有贵人/学历/资质护体）时才能承接高压工作或领导管束；裸面官杀（无印化）时应回避"
+            else:
+                item["使用条件"] = "身旺时官杀制身为吉，可主动承担责任、进入体制、接受管理"
+        else:
+            # 兜底
+            if final_role == "条件用神":
+                item["使用条件"] = f"有用但有副作用，须在身能承载时使用；忌神面：{'; '.join(js_reasons)}"
+            else:
+                item["使用条件"] = f"总体应回避，仅在{'; '.join(conflict.get('用神理由', []))}场景下短期借用"
+
     # 生成取用总论
     main_wx_list = [item["五行"] for item in main_yongshen[:3]]
     if main_wx_list:
@@ -2583,7 +3123,7 @@ def arbitrate_yongshen(yongshen_result: dict) -> dict:
             }
 
     # 生成主策略一句话
-    main_wx = [item["五行"] for item in main_yongshen[:2]]
+    main_wx = list(dict.fromkeys(item["五行"] for item in main_yongshen if item.get("五行")))[:2]
     wangshuai_jielun = yongshen_result.get("旺衰结论", "")
     if wangshuai_jielun and "弱" in wangshuai_jielun:
         main_strategy = f"先补身蓄力，再图变现。日常优先：{'、'.join(main_wx)}。"
@@ -2591,6 +3131,12 @@ def arbitrate_yongshen(yongshen_result: dict) -> dict:
         main_strategy = f"身强宜泄秀生财。日常优先：{'、'.join(main_wx)}。"
     else:
         main_strategy = f"日常优先：{'、'.join(main_wx)}。"
+
+    # 生成用神策略总论（P3: 面向决策的高层策略输出）
+    strategy_summary = _build_yongshen_strategy(
+        main_yongshen, conditional_yongshen, jishen_list,
+        conflicts, wangshuai_jielun, dm_wuxing, main_strategy
+    )
 
     # 合并输出
     result = dict(yongshen_result)
@@ -2602,6 +3148,7 @@ def arbitrate_yongshen(yongshen_result: dict) -> dict:
         "主策略": main_strategy,
         "五行指导": wuxing_strategy,
     }
+    result["策略总论"] = strategy_summary
     return result
 
 
@@ -2682,6 +3229,67 @@ WANGSHEN = {
     "子": "亥", "丑": "申", "寅": "巳", "卯": "寅",
     "辰": "亥", "巳": "申", "午": "巳", "未": "寅",
     "申": "亥", "酉": "申", "戌": "巳", "亥": "寅",
+}
+
+# 桃花（咸池）查表：以日支（或年支）查地支
+TAOHUA = {
+    "子": "酉", "丑": "午", "寅": "卯", "卯": "子",
+    "辰": "酉", "巳": "午", "午": "卯", "未": "子",
+    "申": "酉", "酉": "午", "戌": "卯", "亥": "子",
+}
+
+# 文昌查表：以日干查地支
+WENCHANG = {
+    "甲": "巳", "乙": "午", "丙": "申", "丁": "酉",
+    "戊": "申", "己": "酉", "庚": "亥", "辛": "子",
+    "壬": "寅", "癸": "卯",
+}
+
+# 将星查表：以日支（或年支）查地支（三合局帝旺位）
+JIANGXING = {
+    "子": "子", "丑": "酉", "寅": "午", "卯": "卯",
+    "辰": "子", "巳": "酉", "午": "午", "未": "卯",
+    "申": "子", "酉": "酉", "戌": "午", "亥": "卯",
+}
+
+# 劫煞查表：以日支（或年支）查地支
+JIESHA = {
+    "子": "巳", "丑": "寅", "寅": "亥", "卯": "申",
+    "辰": "巳", "巳": "寅", "午": "亥", "未": "申",
+    "申": "巳", "酉": "寅", "戌": "亥", "亥": "申",
+}
+
+# 孤辰/寡宿查表：以年支查地支
+GUCHEN = {
+    "子": "寅", "丑": "寅", "寅": "巳", "卯": "巳",
+    "辰": "巳", "巳": "申", "午": "申", "未": "申",
+    "申": "亥", "酉": "亥", "戌": "亥", "亥": "寅",
+}
+GUASU = {
+    "子": "戌", "丑": "戌", "寅": "丑", "卯": "丑",
+    "辰": "丑", "巳": "辰", "午": "辰", "未": "辰",
+    "申": "未", "酉": "未", "戌": "未", "亥": "戌",
+}
+
+# 天医查表：以月支查地支
+TIANYI_STAR = {
+    "寅": "丑", "卯": "寅", "辰": "卯", "巳": "辰",
+    "午": "巳", "未": "午", "申": "未", "酉": "申",
+    "戌": "酉", "亥": "戌", "子": "亥", "丑": "子",
+}
+
+# 月德贵人查表：以月支查天干
+YUEDE = {
+    "寅": "丙", "卯": "甲", "辰": "壬", "巳": "庚",
+    "午": "丙", "未": "甲", "申": "壬", "酉": "庚",
+    "戌": "丙", "亥": "甲", "子": "壬", "丑": "庚",
+}
+
+# 天德贵人查表：以月支查天干
+TIANDE = {
+    "寅": "丁", "卯": "申", "辰": "壬", "巳": "辛",
+    "午": "亥", "未": "甲", "申": "癸", "酉": "寅",
+    "戌": "丙", "亥": "乙", "子": "巳", "丑": "庚",
 }
 
 
@@ -2793,6 +3401,138 @@ def analyze_shenshas(paipan_data: dict) -> list:
         "大运来源": found_in_dayun[:3] if found_in_dayun else [],
         "吉凶": "凶",
         "效应": "判断力下降·聪明反被聪明误",
+    })
+
+    # 8. 桃花/咸池（日支查地支）
+    taohua_target = TAOHUA.get(day_zhi, "")
+    found_in = [pos for pos, zhi in all_zhi.items() if zhi == taohua_target]
+    found_in_dayun = [pos for pos, zhi in dayun_zhi.items() if zhi == taohua_target]
+    results.append({
+        "名称": "桃花",
+        "查法": f"日支{day_zhi}见{taohua_target}",
+        "原局来源": found_in if found_in else ["原局无"],
+        "大运来源": found_in_dayun[:3] if found_in_dayun else [],
+        "吉凶": "中性",
+        "效应": "异性缘·人际魅力·风流·桃花劫(凶时)",
+    })
+
+    # 9. 文昌（日干查地支）
+    wenchang_target = WENCHANG.get(day_gan, "")
+    found_in = [pos for pos, zhi in all_zhi.items() if zhi == wenchang_target]
+    results.append({
+        "名称": "文昌",
+        "查法": f"日干{day_gan}见{wenchang_target}",
+        "原局来源": found_in if found_in else ["原局无"],
+        "吉凶": "吉",
+        "效应": "学业聪颖·考试有利·文职贵人",
+    })
+
+    # 10. 将星（日支查地支）
+    jiangxing_target = JIANGXING.get(day_zhi, "")
+    found_in = [pos for pos, zhi in all_zhi.items() if zhi == jiangxing_target]
+    results.append({
+        "名称": "将星",
+        "查法": f"日支{day_zhi}见{jiangxing_target}",
+        "原局来源": found_in if found_in else ["原局无"],
+        "吉凶": "吉",
+        "效应": "领导力·掌权·号令他人·组织能力强",
+    })
+
+    # 11. 劫煞（日支查地支）
+    jiesha_target = JIESHA.get(day_zhi, "")
+    found_in = [pos for pos, zhi in all_zhi.items() if zhi == jiesha_target]
+    results.append({
+        "名称": "劫煞",
+        "查法": f"日支{day_zhi}见{jiesha_target}",
+        "原局来源": found_in if found_in else ["原局无"],
+        "吉凶": "凶",
+        "效应": "意外破财·劫夺·冲动决策",
+    })
+
+    # 12. 孤辰（年支查地支）
+    guchen_target = GUCHEN.get(year_zhi, "")
+    found_in = [pos for pos, zhi in all_zhi.items() if zhi == guchen_target]
+    results.append({
+        "名称": "孤辰",
+        "查法": f"年支{year_zhi}见{guchen_target}",
+        "原局来源": found_in if found_in else ["原局无"],
+        "吉凶": "凶",
+        "效应": "孤独倾向·六亲缘薄·婚迟(男命尤忌)",
+    })
+
+    # 13. 寡宿（年支查地支）
+    guasu_target = GUASU.get(year_zhi, "")
+    found_in = [pos for pos, zhi in all_zhi.items() if zhi == guasu_target]
+    results.append({
+        "名称": "寡宿",
+        "查法": f"年支{year_zhi}见{guasu_target}",
+        "原局来源": found_in if found_in else ["原局无"],
+        "吉凶": "凶",
+        "效应": "孤寡倾向·独处·婚迟(女命尤忌)",
+    })
+
+    # 14. 天医（月支查地支）
+    month_zhi = pillars["月柱"]["地支"]
+    tianyi_target = TIANYI_STAR.get(month_zhi, "")
+    found_in = [pos for pos, zhi in all_zhi.items() if zhi == tianyi_target]
+    results.append({
+        "名称": "天医",
+        "查法": f"月支{month_zhi}见{tianyi_target}",
+        "原局来源": found_in if found_in else ["原局无"],
+        "吉凶": "吉",
+        "效应": "医药养生天赋·治病救人·健康敏感度高",
+    })
+
+    # 15. 禄神（日干查地支，已有TIANGAN_LU表）
+    lu_target = TIANGAN_LU.get(day_gan, "")
+    found_in = [pos for pos, zhi in all_zhi.items() if zhi == lu_target]
+    results.append({
+        "名称": "禄神",
+        "查法": f"日干{day_gan}禄在{lu_target}",
+        "原局来源": found_in if found_in else ["原局无"],
+        "吉凶": "吉",
+        "效应": "自给自足·财禄稳定·独立能力强",
+    })
+
+    # 16. 羊刃（日干查地支，已有TIANGAN_REN表）
+    ren_target = TIANGAN_REN.get(day_gan, "")
+    found_in = [pos for pos, zhi in all_zhi.items() if zhi == ren_target]
+    results.append({
+        "名称": "羊刃",
+        "查法": f"日干{day_gan}刃在{ren_target}",
+        "原局来源": found_in if found_in else ["原局无"],
+        "吉凶": "凶",
+        "效应": "刚强好胜·血光之灾·争竞激烈·驾刃有权",
+    })
+
+    # 17. 月德贵人（月支查天干）
+    yuede_target = YUEDE.get(month_zhi, "")
+    all_gan = {
+        "年干": pillars["年柱"]["天干"],
+        "月干": pillars["月柱"]["天干"],
+        "日干": day_gan,
+        "时干": pillars["时柱"]["天干"],
+    }
+    found_in = [pos for pos, gan in all_gan.items() if gan == yuede_target]
+    results.append({
+        "名称": "月德贵人",
+        "查法": f"月支{month_zhi}见{yuede_target}",
+        "原局来源": found_in if found_in else ["原局无"],
+        "吉凶": "吉",
+        "效应": "逢凶化吉·祖德庇佑·灾厄减轻",
+    })
+
+    # 18. 天德贵人（月支查天干/地支混合）
+    tiande_target = TIANDE.get(month_zhi, "")
+    found_in_gan = [pos for pos, gan in all_gan.items() if gan == tiande_target]
+    found_in_zhi = [pos for pos, zhi in all_zhi.items() if zhi == tiande_target]
+    found_in = found_in_gan + found_in_zhi
+    results.append({
+        "名称": "天德贵人",
+        "查法": f"月支{month_zhi}见{tiande_target}",
+        "原局来源": found_in if found_in else ["原局无"],
+        "吉凶": "吉",
+        "效应": "天德护命·逢凶化吉·行善积德",
     })
 
     return results
@@ -2958,18 +3698,19 @@ def _check_dizhi_relation(zhi_a: str, zhi_b: str) -> list:
 
 def _check_tiangan_relation(gan_a: str, gan_b: str) -> list:
     """检查两个天干之间的关系（五合/相克）"""
+    from engine.paipan import WUXING_OF_TIANGAN
     relations = []
     he_info = TIANGAN_WUHE.get(gan_a)
-    if he_info and he_info[0] == gan_b:
+    has_he = he_info and he_info[0] == gan_b
+    if has_he:
         relations.append(f"天干合({he_info[1]})")
-    # 天干相克
-    from engine.paipan import WUXING_OF_TIANGAN
-    wx_a = WUXING_OF_TIANGAN[gan_a]
-    wx_b = WUXING_OF_TIANGAN[gan_b]
-    if WUXING_KE.get(wx_a) == wx_b:
-        relations.append(f"{gan_a}克{gan_b}")
-    elif WUXING_KE.get(wx_b) == wx_a:
-        relations.append(f"{gan_b}克{gan_a}")
+    if not has_he:
+        wx_a = WUXING_OF_TIANGAN[gan_a]
+        wx_b = WUXING_OF_TIANGAN[gan_b]
+        if WUXING_KE.get(wx_a) == wx_b:
+            relations.append(f"{gan_a}克{gan_b}")
+        elif WUXING_KE.get(wx_b) == wx_a:
+            relations.append(f"{gan_b}克{gan_a}")
     return relations
 
 
@@ -3055,6 +3796,24 @@ def analyze_liunian(paipan_data: dict, year_count: int = 6) -> list:
                 current_dayun = dy
                 break
 
+        # 大运与流年的互作用
+        dayun_liunian_rels = []
+        if current_dayun:
+            dy_tg = current_dayun["天干"]
+            dy_dz = current_dayun["地支"]
+            tg_rels = _check_tiangan_relation(tg, dy_tg)
+            for r in tg_rels:
+                dayun_liunian_rels.append(f"流年{tg}与大运{dy_tg}：{r}")
+            dz_rels = _check_dizhi_relation(dz, dy_dz)
+            for r in dz_rels:
+                dayun_liunian_rels.append(f"流年{dz}与大运{dy_dz}：{r}")
+            # 天克地冲（极重要转折信号）
+            dy_tg_wx = WUXING_OF_TIANGAN.get(dy_tg, "")
+            ln_tg_wx = WUXING_OF_TIANGAN.get(tg, "")
+            if (WUXING_KE.get(ln_tg_wx) == dy_tg_wx or WUXING_KE.get(dy_tg_wx) == ln_tg_wx):
+                if LIUCHONG.get(dz) == dy_dz:
+                    dayun_liunian_rels.append(f"天克地冲！流年{tg}{dz}与大运{dy_tg}{dy_dz}形成天克地冲（重大转折信号）")
+
         results.append({
             "公历年": year,
             "干支": ln["干支"],
@@ -3067,6 +3826,7 @@ def analyze_liunian(paipan_data: dict, year_count: int = 6) -> list:
             "虚岁": xu_sui,
             "天干关系": tiangan_relations,
             "地支关系": dizhi_relations,
+            "大运流年互作用": dayun_liunian_rels,
             "所在大运": {
                 "干支": current_dayun["干支"],
                 "天干十神": current_dayun["天干十神"],
@@ -4297,6 +5057,335 @@ EVENT_RULES = [
         "基础强度": 60,
         "来源": "滴天髓·冲之旺衰论·子女宫",
     },
+
+    # ========== P1扩充：财运深化 ==========
+    {
+        "领域": "财运",
+        "事件": "比劫夺财·大额破财",
+        "触发十神": ["比肩", "劫财"],
+        "gender_filter": None,
+        "地支触发": None,
+        "原局条件": "偏财",
+        "证据模板": "流年比劫透出且原局有偏财（财星被夺），投资/合伙/借贷高危{extra}",
+        "基础强度": 75,
+        "来源": "滴天髓·劫财与偏财交战",
+    },
+    {
+        "领域": "财运",
+        "事件": "伤官生财·创业窗口",
+        "触发十神": ["伤官"],
+        "gender_filter": None,
+        "地支触发": None,
+        "原局条件": "正财",
+        "证据模板": "流年伤官透出且原局有正财（伤官生财格局活化），适合创业/自由职业{extra}",
+        "基础强度": 70,
+        "来源": "子平真诠·论伤官生财",
+    },
+    {
+        "领域": "财运",
+        "事件": "财库逢冲·大额资金变动",
+        "触发十神": None,
+        "gender_filter": None,
+        "地支触发": ["六冲"],
+        "冲位要求": None,
+        "目标藏干五行": "财",
+        "证据模板": "流年冲开原局财库（辰戌丑未中含财星藏干），大额资金进出{extra}",
+        "基础强度": 70,
+        "来源": "三命通会·论库冲开",
+    },
+    {
+        "领域": "财运",
+        "事件": "印星制食·财路受阻",
+        "触发十神": ["偏印"],
+        "gender_filter": None,
+        "地支触发": None,
+        "原局条件": "食神",
+        "证据模板": "流年偏印透出克制原局食神（枭神夺食），生财渠道被堵{extra}",
+        "基础强度": 70,
+        "来源": "子平真诠·论偏印夺食",
+    },
+
+    # ========== P1扩充：事业深化 ==========
+    {
+        "领域": "事业",
+        "事件": "官杀混杂·多头管理/职场斗争",
+        "触发十神": ["七杀"],
+        "gender_filter": None,
+        "地支触发": None,
+        "原局条件": "正官",
+        "证据模板": "流年七杀透出且原局有正官（官杀混杂），职场权力斗争/多头领导{extra}",
+        "基础强度": 75,
+        "来源": "子平真诠·官杀混杂论",
+    },
+    {
+        "领域": "事业",
+        "事件": "食伤制杀·以技术/才华突围",
+        "触发十神": ["食神", "伤官"],
+        "gender_filter": None,
+        "地支触发": None,
+        "原局条件": "七杀",
+        "证据模板": "流年食伤透出制原局七杀，以专业能力/技术/创意解决压力{extra}",
+        "基础强度": 70,
+        "来源": "子平真诠·论食神制杀",
+    },
+    {
+        "领域": "事业",
+        "事件": "印绶化杀·贵人解围",
+        "触发十神": ["正印", "偏印"],
+        "gender_filter": None,
+        "地支触发": None,
+        "原局条件": "七杀",
+        "证据模板": "流年印星透出化原局七杀（杀印相生），上级/导师/体制为靠山{extra}",
+        "基础强度": 70,
+        "来源": "子平真诠·论杀印相生",
+    },
+    {
+        "领域": "事业",
+        "事件": "比劫争位·同辈竞争白热化",
+        "触发十神": ["比肩", "劫财"],
+        "gender_filter": None,
+        "地支触发": None,
+        "原局条件": "正官",
+        "证据模板": "流年比劫透出且原局有正官（争官），晋升竞争激烈/被分权{extra}",
+        "基础强度": 65,
+        "来源": "子平真诠·论比劫见官",
+    },
+    {
+        "领域": "事业",
+        "事件": "伤官见官·与上级冲突/离职",
+        "触发十神": ["伤官"],
+        "gender_filter": None,
+        "地支触发": None,
+        "原局条件": "正官",
+        "证据模板": "流年伤官透出克原局正官，顶撞上司/体制内不适/离职冲动{extra}",
+        "基础强度": 80,
+        "来源": "子平真诠·伤官见官为祸百端",
+    },
+
+    # ========== P1扩充：健康深化 ==========
+    {
+        "领域": "健康",
+        "事件": "忌神当值·精力低迷",
+        "触发十神": None,
+        "gender_filter": None,
+        "地支触发": None,
+        "忌神触发": True,
+        "证据模板": "流年天干/地支为忌神五行，精力不济/免疫下降/慢性病加重{extra}",
+        "基础强度": 60,
+        "来源": "穷通宝鉴·忌神当值论",
+    },
+    {
+        "领域": "健康",
+        "事件": "伏吟·旧疾复发/情绪低落",
+        "触发十神": None,
+        "gender_filter": None,
+        "地支触发": ["伏吟"],
+        "证据模板": "流年地支与原局某支相同（伏吟），旧事重提/旧疾复发/情绪循环{extra}",
+        "基础强度": 55,
+        "来源": "滴天髓·伏吟反吟论",
+    },
+    {
+        "领域": "健康",
+        "事件": "反吟·突发变动/意外",
+        "触发十神": None,
+        "gender_filter": None,
+        "地支触发": ["六冲"],
+        "冲位要求": "日支",
+        "证据模板": "流年冲日支形成反吟，生活突发变动/身体突发状况{extra}",
+        "基础强度": 65,
+        "来源": "滴天髓·反吟论",
+    },
+
+    # ========== P1扩充：婚恋深化 ==========
+    {
+        "领域": "婚恋",
+        "事件": "男命·劫财夺妻信号",
+        "触发十神": ["劫财"],
+        "gender_filter": "男",
+        "地支触发": None,
+        "原局条件": "正财",
+        "证据模板": "男命流年劫财透出且原局有正财（妻星被夺），第三者/感情竞争{extra}",
+        "基础强度": 70,
+        "来源": "子平真诠·论劫财克正财",
+    },
+    {
+        "领域": "婚恋",
+        "事件": "女命·官杀混杂·桃花劫",
+        "触发十神": ["七杀"],
+        "gender_filter": "女",
+        "地支触发": None,
+        "原局条件": "正官",
+        "证据模板": "女命流年七杀透出且原局有正官（官杀混杂），烂桃花/非正缘纠缠{extra}",
+        "基础强度": 75,
+        "来源": "子平真诠·论官杀混杂·女命",
+    },
+    {
+        "领域": "婚恋",
+        "事件": "桃花星动·异性缘旺",
+        "触发十神": None,
+        "gender_filter": None,
+        "地支触发": ["六合"],
+        "神煞触发": "桃花",
+        "证据模板": "流年地支合动桃花星，异性缘旺盛/社交活跃{extra}",
+        "基础强度": 60,
+        "来源": "三命通会·桃花论",
+    },
+
+    # ========== P1扩充：综合/转折类 ==========
+    {
+        "领域": "事业",
+        "事件": "大运交脱·判断力低谷",
+        "触发十神": None,
+        "gender_filter": None,
+        "地支触发": None,
+        "大运交脱": True,
+        "证据模板": "处于大运交脱期（旧运尾/新运头2年），决策能力低谷，不宜重大变动{extra}",
+        "基础强度": 65,
+        "来源": "子平真诠·大运交脱论",
+    },
+    {
+        "领域": "财运",
+        "事件": "身弱财旺·有财无力取",
+        "触发十神": ["正财", "偏财"],
+        "gender_filter": None,
+        "地支触发": None,
+        "旺衰条件": "身弱",
+        "证据模板": "身弱遇流年财星透出，财机虽来但力不从心/被财所累/为钱操劳{extra}",
+        "基础强度": 65,
+        "来源": "滴天髓·身弱不胜财",
+    },
+    {
+        "领域": "事业",
+        "事件": "身旺逢官·掌权机遇",
+        "触发十神": ["正官"],
+        "gender_filter": None,
+        "地支触发": None,
+        "旺衰条件": "身旺",
+        "证据模板": "身旺遇流年正官透出，有能力担当重任/升职掌权{extra}",
+        "基础强度": 70,
+        "来源": "子平真诠·身旺任官论",
+    },
+    # ========== 学业深化类 ==========
+    {
+        "领域": "学业",
+        "事件": "印星旺年·利深造/进修",
+        "触发十神": ["正印"],
+        "gender_filter": None,
+        "地支触发": None,
+        "证据模板": "流年正印透出，学习力强、利深造/证照/晋升资格{extra}",
+        "基础强度": 65,
+        "来源": "子平真诠·论印绶",
+    },
+    {
+        "领域": "学业",
+        "事件": "偏印旺年·利研究/冷门学问",
+        "触发十神": ["偏印"],
+        "gender_filter": None,
+        "地支触发": None,
+        "证据模板": "流年偏印透出，利研究/冷门学科/宗教哲学/独到见解{extra}",
+        "基础强度": 60,
+        "来源": "滴天髓·偏印性情",
+    },
+    {
+        "领域": "学业",
+        "事件": "食伤旺年·利创作/表达",
+        "触发十神": ["食神", "伤官"],
+        "gender_filter": None,
+        "地支触发": None,
+        "证据模板": "流年食伤透出，文思泉涌/利创作/演讲/艺术表达{extra}",
+        "基础强度": 60,
+        "来源": "子平真诠·论食伤生财",
+    },
+    {
+        "领域": "学业",
+        "事件": "偏印夺食·考试不利",
+        "触发十神": ["偏印"],
+        "gender_filter": None,
+        "地支触发": None,
+        "原局条件": "食神",
+        "证据模板": "原局食神被流年偏印夺食，考试/竞赛/答辩易失常{extra}",
+        "基础强度": 70,
+        "来源": "子平真诠·枭神夺食",
+    },
+    # ========== 人际关系类 ==========
+    {
+        "领域": "事业",
+        "事件": "比劫旺年·人脉广但争端多",
+        "触发十神": ["比肩", "劫财"],
+        "gender_filter": None,
+        "地支触发": None,
+        "证据模板": "流年比劫透出，社交活跃但竞争/口舌/争端增多{extra}",
+        "基础强度": 60,
+        "来源": "滴天髓·比劫论",
+    },
+    {
+        "领域": "事业",
+        "事件": "正印旺年·贵人运强",
+        "触发十神": ["正印"],
+        "gender_filter": None,
+        "地支触发": None,
+        "旺衰条件": "身弱",
+        "证据模板": "身弱逢流年正印，有贵人/长辈/上司提携照顾{extra}",
+        "基础强度": 70,
+        "来源": "子平真诠·印为护身之神",
+    },
+    {
+        "领域": "事业",
+        "事件": "劫财争财·朋友破财",
+        "触发十神": ["劫财"],
+        "gender_filter": None,
+        "地支触发": None,
+        "原局条件": "正财",
+        "证据模板": "原局有正财被流年劫财争夺，合伙/借贷/朋友相关破财{extra}",
+        "基础强度": 70,
+        "来源": "子平真诠·劫财论",
+    },
+    # ========== 搬迁出行类 ==========
+    {
+        "领域": "事业",
+        "事件": "驿马冲动·搬迁/远行",
+        "触发十神": None,
+        "gender_filter": None,
+        "地支触发": ["六冲"],
+        "神煞触发": "驿马",
+        "证据模板": "流年冲动驿马或驿马位被冲，有搬家/出差/调动之象{extra}",
+        "基础强度": 70,
+        "来源": "三命通会·驿马论",
+    },
+    {
+        "领域": "事业",
+        "事件": "冲年支·离乡动荡",
+        "触发十神": None,
+        "gender_filter": None,
+        "地支触发": ["六冲"],
+        "冲位要求": "年支",
+        "证据模板": "流年地支冲年支（祖根/故乡），有背井离乡/搬迁/家族变动之象{extra}",
+        "基础强度": 65,
+        "来源": "滴天髓·冲之旺衰论",
+    },
+    {
+        "领域": "事业",
+        "事件": "食伤生财·自主创业",
+        "触发十神": ["食神", "伤官"],
+        "gender_filter": None,
+        "地支触发": None,
+        "原局条件": "偏财",
+        "旺衰条件": "身旺",
+        "证据模板": "身旺原局有偏财，流年食伤生财通路打开，利自主经营/创业{extra}",
+        "基础强度": 65,
+        "来源": "子平真诠·食伤生财论",
+    },
+    {
+        "领域": "健康",
+        "事件": "印绶护身·逢凶化吉",
+        "触发十神": ["正印", "偏印"],
+        "gender_filter": None,
+        "地支触发": None,
+        "旺衰条件": "身弱",
+        "证据模板": "身弱逢流年印星护身，虽遇险阻亦有贵人化解/身体恢复{extra}",
+        "基础强度": 60,
+        "来源": "子平真诠·印为护身",
+    },
 ]
 
 
@@ -4435,6 +5524,39 @@ def analyze_events(paipan_data: dict, wangshuai: dict, yongshen: dict,
             if rule.get("原局条件"):
                 if rule["原局条件"] not in yuanju_shishen_set:
                     triggered = False  # 原局不满足，取消触发
+
+            # --- 条件4：忌神触发（流年五行为忌神） ---
+            if rule.get("忌神触发"):
+                if ln_tg_wx in jishen_wuxing_set or ln_dz_wx in jishen_wuxing_set:
+                    triggered = True
+                    if ln_tg_wx in jishen_wuxing_set:
+                        evidence_parts.append(f"流年天干{ln_tg}({ln_tg_wx})为忌神")
+                    if ln_dz_wx in jishen_wuxing_set:
+                        evidence_parts.append(f"流年地支{ln_dz}({ln_dz_wx})为忌神")
+                else:
+                    triggered = False
+
+            # --- 条件5：旺衰条件 ---
+            if rule.get("旺衰条件"):
+                if rule["旺衰条件"] not in ws_conclusion:
+                    triggered = False
+
+            # --- 条件6：大运交脱判定 ---
+            if rule.get("大运交脱"):
+                is_jiaotuo = False
+                if dayun_info:
+                    dy_start_year = dayun_info.get("起始公历年", 0)
+                    dy_end_year = dayun_info.get("结束公历年", 0)
+                    if dy_end_year and (year >= dy_end_year - 1):
+                        is_jiaotuo = True
+                        evidence_parts.append(f"{year}年处于大运尾声(结束{dy_end_year})")
+                    elif dy_start_year and (year <= dy_start_year + 1):
+                        is_jiaotuo = True
+                        evidence_parts.append(f"{year}年处于新大运初始(起始{dy_start_year})")
+                if is_jiaotuo:
+                    triggered = True
+                else:
+                    triggered = False
 
             if not triggered:
                 continue
@@ -4965,6 +6087,8 @@ def aggregate_domain_profiles(paipan_data: dict, wangshuai: dict, yongshen: dict
     day_master = paipan_data["日主"]["天干"]
     dm_wuxing = paipan_data["日主"]["五行"]
     sizhu = paipan_data["四柱"]
+    pillars = ["年柱", "月柱", "日柱", "时柱"]
+    dizhi_list = [sizhu[p]["地支"] for p in pillars]
 
     # 用神忌神信息
     main_yongshen = yongshen.get("主用神", yongshen.get("用神", []))
@@ -5093,8 +6217,30 @@ def aggregate_domain_profiles(paipan_data: dict, wangshuai: dict, yongshen: dict
         wealth_static.append("原局有财星透出，财源有路")
     elif "正财" in shishen_set or "偏财" in shishen_set:
         wealth_static.append("原局藏干有财星，财源暗藏待引动")
+    else:
+        wealth_static.append("原局无财星，需靠大运流年引动财缘")
     if "劫财" in tiangan_shishen_set or "比肩" in tiangan_shishen_set:
         wealth_static.append("比劫透出，有争财之象，不宜合伙")
+    # 财库分析（辰戌丑未为四库）
+    cai_wuxing = WUXING_KE.get(dm_wuxing, "")  # 我克者=财
+    KU_OF_WUXING = {"木": "未", "火": "戌", "土": "辰", "金": "丑", "水": "辰"}
+    cai_ku = KU_OF_WUXING.get(cai_wuxing, "")
+    if cai_ku and cai_ku in dizhi_list:
+        ku_pos = pillars[dizhi_list.index(cai_ku)]
+        wealth_static.append(f"原局有财库({cai_ku}在{ku_pos})，储蓄能力强，逢冲则财出入大")
+    # 身旺/身弱对财运的结构性影响
+    ws_level = wangshuai.get("程度", "")
+    if ws_level in ("太旺", "极旺"):
+        wealth_static.append("身极旺能担财，财来不怕多")
+    elif ws_level in ("偏旺", "微旺"):
+        wealth_static.append("身旺担财有余力，正财稳定")
+    elif ws_level in ("偏弱", "微弱"):
+        wealth_static.append("身弱财重则被财所累，宜稳不宜激进")
+    elif ws_level in ("太弱", "极弱"):
+        wealth_static.append("身极弱不胜财，见财反为灾")
+    # 食伤生财结构
+    if ("食神" in shishen_set or "伤官" in shishen_set) and ("正财" in shishen_set or "偏财" in shishen_set):
+        wealth_static.append("食伤生财格局：才华可变现，创业/自由职业有优势")
 
     wealth_advantages = [e["事件"] for e in wealth_events if "吉" in e["吉凶"]][:3]
     wealth_risks = [e["事件"] for e in wealth_events if "凶" in e["吉凶"]][:3]
@@ -5104,18 +6250,35 @@ def aggregate_domain_profiles(paipan_data: dict, wangshuai: dict, yongshen: dict
     # --- 事业领域 ---
     career_events = domain_events["事业"]
     career_static = []
-    if "正官" in tiangan_shishen_set and gender == "男":
-        career_static.append("正官透出，利仕途管理")
-    elif "正官" in shishen_set and gender == "男":
+    if "正官" in tiangan_shishen_set:
+        career_static.append("正官透出，利仕途/管理/体制内")
+    elif "正官" in shishen_set:
         career_static.append("藏干有正官，暗含管理潜质")
     if "七杀" in tiangan_shishen_set:
-        career_static.append("七杀透出，有魄力但压力大")
+        career_static.append("七杀透出，有魄力但压力大，利开拓型事业")
     elif "七杀" in shishen_set:
         career_static.append("藏干有七杀，暗含竞争压力")
     if "食神" in tiangan_shishen_set:
         career_static.append("食神透出，利技术/创作/表达类工作")
     if "伤官" in tiangan_shishen_set:
-        career_static.append("伤官透出，才华出众但易与上级冲突")
+        career_static.append("伤官透出，才华出众但易与上级冲突，利自由/创业")
+    # 官杀制化结构判断
+    if "七杀" in shishen_set and "食神" in shishen_set:
+        career_static.append("食神制杀格局：有能力驾驭压力，以技术/专业立身")
+    elif "七杀" in shishen_set and ("正印" in shishen_set or "偏印" in shishen_set):
+        career_static.append("杀印相生格局：压力转化为权力，利管理/从政")
+    elif "七杀" in shishen_set and "七杀" not in tiangan_shishen_set:
+        pass  # 杀藏不透，影响较小
+    elif "七杀" in tiangan_shishen_set and "食神" not in shishen_set and "正印" not in shishen_set:
+        career_static.append("七杀无制化，职场压力持续且无明显出路")
+    # 官杀混杂
+    if "正官" in shishen_set and "七杀" in shishen_set:
+        career_static.append("官杀混杂：多头管理/权力关系复杂，宜选一官（去杀或去官）")
+    # 身旺身弱对事业格局的影响
+    if ws_level in ("太旺", "极旺") and "正官" not in shishen_set and "七杀" not in shishen_set:
+        career_static.append("身极旺无官杀制约，自主意识强但缺乏外部约束，宜创业/自由职业")
+    elif ws_level in ("偏弱", "太弱") and "七杀" in tiangan_shishen_set:
+        career_static.append("身弱杀旺，职场压力超负荷，宜寻印星贵人庇护")
 
     career_advantages = [e["事件"] for e in career_events if "吉" in e["吉凶"]][:3]
     career_risks = [e["事件"] for e in career_events if "凶" in e["吉凶"]][:3]
@@ -5125,14 +6288,31 @@ def aggregate_domain_profiles(paipan_data: dict, wangshuai: dict, yongshen: dict
     # --- 健康领域 ---
     health_events = domain_events["健康"]
     health_static = []
-    # Fix5：旺衰判断同时读 "结论"(身旺/身弱/中和) + "程度"(太旺/极旺/偏弱/极弱等)
     conclusion_text = wangshuai.get("结论", "") + wangshuai.get("程度", "")
     if any(k in conclusion_text for k in ("过旺", "太旺", "极旺")):
-        health_static.append("身过旺，易有气血上涌/高血压之象")
-    elif any(k in conclusion_text for k in ("极弱", "太弱", "偏弱")):
-        health_static.append("身偏弱，需注意免疫力和体力")
+        health_static.append("身过旺，易有气血上涌/高血压/肝火旺之象")
+    elif any(k in conclusion_text for k in ("极弱", "太弱")):
+        health_static.append("身极弱，免疫力低下，需高度关注体质调养")
+    elif "偏弱" in conclusion_text or "微弱" in conclusion_text:
+        health_static.append("身偏弱，体质偏虚，需注意作息规律")
     elif "身弱" in conclusion_text:
         health_static.append("身弱，体质偏虚，需注意作息调养")
+    # 五行偏枯对应脏腑风险（来源：黄帝内经五行脏腑对应）
+    WUXING_ZANGFU = {"木": "肝胆/眼/筋", "火": "心脏/血压/小肠",
+                     "土": "脾胃/消化", "金": "肺/呼吸/皮肤", "水": "肾/泌尿/骨"}
+    wuxing_scores = wangshuai.get("五行得分", {})
+    if wuxing_scores:
+        total_wx = sum(wuxing_scores.values())
+        for wx, score in wuxing_scores.items():
+            ratio = score / total_wx if total_wx > 0 else 0.2
+            if ratio > 0.4:
+                health_static.append(f"{wx}过旺({WUXING_ZANGFU.get(wx, wx)}易亢进/实证)")
+            elif ratio < 0.05 and wx != dm_wuxing:
+                health_static.append(f"{wx}极弱({WUXING_ZANGFU.get(wx, wx)}为薄弱环节)")
+    # 日支五行对应健康弱点
+    day_zhi_wx = WUXING_OF_DIZHI_V3.get(day_zhi, "")
+    if day_zhi_is_chong:
+        health_static.append(f"日支{day_zhi}({day_zhi_wx})被冲，{WUXING_ZANGFU.get(day_zhi_wx, '')}需关注")
 
     health_advantages = [e["事件"] for e in health_events if "吉" in e["吉凶"]][:3]
     health_risks = [e["事件"] for e in health_events if "凶" in e["吉凶"]][:3]
@@ -5246,9 +6426,13 @@ def full_analysis(paipan_data: dict, gender: str = "男") -> dict:
     返回 JSON 包含：旺衰/格局/十神/合冲刑害/用神/神煞/六亲/流年/流月/当下定位/人生四段/推演文本
     """
     wangshuai = judge_wangshuai(paipan_data)
-    geju = judge_geju(paipan_data, wangshuai)
     shishen = analyze_shishen(paipan_data)
     relationships = analyze_relationships(paipan_data)
+
+    # P0: 合冲力量修正 — 基于合冲关系回调修正旺衰得分
+    wangshuai = adjust_wangshuai_by_relationships(wangshuai, relationships, paipan_data)
+
+    geju = judge_geju(paipan_data, wangshuai)
     yongshen_raw = judge_yongshen(paipan_data, wangshuai, geju)
     # 注入日主五行和旺衰结论，供仲裁层生成日常策略使用
     dm_wuxing = paipan_data.get("日主", {}).get("五行", "")

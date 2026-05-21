@@ -50,6 +50,56 @@ CANGGAN = {
     "亥": [("壬", "本气", 21), ("甲", "中气", 9)],
 }
 
+# ============================================================
+# 空亡 / 胎元 / 命宫
+# ============================================================
+
+def calc_kongwang(day_gan: str, day_zhi: str) -> list:
+    """计算日柱空亡（以日柱所在旬推算，返回两个地支）"""
+    gan_idx = TIANGAN.index(day_gan)
+    zhi_idx = DIZHI.index(day_zhi)
+    start_zhi_idx = (zhi_idx - gan_idx) % 12
+    kw1 = DIZHI[(start_zhi_idx + 10) % 12]
+    kw2 = DIZHI[(start_zhi_idx + 11) % 12]
+    return [kw1, kw2]
+
+
+def calc_taiyuan(month_gan: str, month_zhi: str) -> str:
+    """计算胎元（月干进一位，月支进三位）"""
+    gan_idx = TIANGAN.index(month_gan)
+    zhi_idx = DIZHI.index(month_zhi)
+    ty_gan = TIANGAN[(gan_idx + 1) % 10]
+    ty_zhi = DIZHI[(zhi_idx + 3) % 12]
+    return ty_gan + ty_zhi
+
+
+def calc_minggong(year_gan: str, month_zhi: str, hour_zhi: str) -> str:
+    """
+    计算命宫干支
+    地支公式：14 - 月数(寅=1) - 时数(子=1)，结果≤0则加12
+    天干：五虎遁法由年干推算
+    """
+    month_num = (DIZHI.index(month_zhi) - 2) % 12 + 1
+    hour_num = DIZHI.index(hour_zhi) + 1
+
+    mg_num = 14 - month_num - hour_num
+    while mg_num <= 0:
+        mg_num += 12
+
+    mg_zhi_idx = (mg_num + 1) % 12
+    mg_zhi = DIZHI[mg_zhi_idx]
+
+    WUHU_DUN = {"甲": "丙", "己": "丙", "乙": "戊", "庚": "戊",
+                "丙": "庚", "辛": "庚", "丁": "壬", "壬": "壬",
+                "戊": "甲", "癸": "甲"}
+    start_gan = WUHU_DUN[year_gan]
+    start_gan_idx = TIANGAN.index(start_gan)
+    offset = (mg_zhi_idx - 2) % 12
+    mg_gan = TIANGAN[(start_gan_idx + offset) % 10]
+
+    return mg_gan + mg_zhi
+
+
 # 十神关系映射：(日主五行, 日主阴阳, 其他天干五行, 其他天干阴阳) → 十神
 def get_shishen(day_master: str, other_gan: str) -> str:
     """计算十神关系"""
@@ -575,6 +625,11 @@ def paipan(birth_year: int, birth_month: int, birth_day: int,
             "合计权重": round(total, 2),
         }
 
+    # --- 空亡 / 胎元 / 命宫 ---
+    kongwang = calc_kongwang(day_gan, day_zhi)
+    taiyuan = calc_taiyuan(month_gan, month_zhi)
+    minggong = calc_minggong(year_gan, month_zhi, time_zhi)
+
     # --- 组装结果 ---
     result = {
         "命主信息": {
@@ -593,6 +648,9 @@ def paipan(birth_year: int, birth_month: int, birth_day: int,
             "阴阳": YINYANG_OF_TIANGAN[day_master],
         },
         "月令": yue_ling,
+        "空亡": kongwang,
+        "胎元": taiyuan,
+        "命宫": minggong,
         "节气": jieqi_info,
         "五行统计": {
             "得分": wuxing_score,
