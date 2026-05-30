@@ -107,7 +107,7 @@ export default function SubjectDetailPage() {
       </div>
       <div className="flex-1 overflow-y-auto">
         {tab === "info" && <InfoTab subject={subject} onSave={handleSaveSubject} />}
-        {tab === "report" && <ReportTab report={report} loading={reportLoading} onGenerate={handleGenerate} onRegenerate={handleRegenerate} infoUpdated={subject.info_updated_after_report} />}
+        {tab === "report" && <ReportTab report={report} loading={reportLoading} onGenerate={handleGenerate} onRegenerate={handleRegenerate} onRefresh={refreshReport} infoUpdated={subject.info_updated_after_report} />}
         {tab === "chat" && <ChatTab messages={messages} question={question} loading={chatLoading} onQuestionChange={setQuestion} onSend={handleSend} chatEndRef={chatEndRef} reportReady={report?.status === "已生成"} onDeleteMessage={handleDeleteMessage} />}
       </div>
     </div>
@@ -235,8 +235,8 @@ function InfoTab({ subject, onSave }: { subject: Subject; onSave: (data: Partial
 }
 
 
-function ReportTab({ report, loading, onGenerate, onRegenerate, infoUpdated }: {
-  report: Report | null; loading: boolean; onGenerate: () => void; onRegenerate: () => void; infoUpdated: boolean;
+function ReportTab({ report, loading, onGenerate, onRegenerate, onRefresh, infoUpdated }: {
+  report: Report | null; loading: boolean; onGenerate: () => void; onRegenerate: () => void; onRefresh: () => void; infoUpdated: boolean;
 }) {
   const status = report?.status || "未生成";
   const [reportType, setReportType] = useState<"master" | "consumer" | "wechat" | "html">("html");
@@ -346,9 +346,13 @@ function ReportTab({ report, loading, onGenerate, onRegenerate, infoUpdated }: {
             style={{ borderColor: "var(--border)", color: "var(--text-secondary)" }}>
             {reportType === "html" ? "下载 .html" : "下载 .md"}
           </button>
+          <button onClick={onRefresh} className="px-3 py-1 rounded text-xs border"
+            style={{ borderColor: "var(--border)", color: "var(--text-secondary)" }}>
+            刷新
+          </button>
           <button onClick={onRegenerate} disabled={loading} className="px-3 py-1 rounded text-xs border"
             style={{ borderColor: "var(--border)", color: "var(--text-secondary)" }}>
-            {loading ? "..." : "🔄 重新生成"}
+            {loading ? "..." : "重新生成"}
           </button>
         </div>
       </div>

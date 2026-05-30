@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vincy · 精读决策报告 Mock</title>
+  <style>
+    :root {
+      --page: #f6f2e9;
+      --paper: #fffdf8;
+      --ink: #15120f;
+      --muted: #70685e;
+      --soft: #eee5d5;
+      --line: #d9cdb9;
+      --gold: #a77a2e;
+      --red: #a8332b;
+      --green: #3c7a5a;
+      --blue: #34526f;
+      --shadow: 0 18px 50px rgba(28, 22, 15, 0.1);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        linear-gradient(90deg, rgba(21, 18, 15, 0.035) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(21, 18, 15, 0.025) 1px, transparent 1px),
+        var(--page);
+      background-size: 36px 36px;
+      font-family: "Noto Serif SC", "Songti SC", "Source Han Serif SC", Georgia, serif;
+      font-size: 16px;
+      line-height: 1.72;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .shell {
+      display: grid;
+      grid-template-columns: 132px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    .rail {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      background: #12171b;
+      color: #fff8e8;
+      border-right: 1px solid rgba(255, 248, 232, 0.12);
+      padding: 26px 10px;
+    }
+
+    .rail-title {
+      margin: 0 0 22px;
+      padding: 0 16px 16px;
+      color: #dec58d;
+      font-size: 17px;
+      font-weight: 700;
+      border-bottom: 1px solid rgba(222, 197, 141, 0.26);
+    }
+
+    .rail a {
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      gap: 10px;
+      align-items: center;
+      min-height: 54px;
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(255, 248, 232, 0.1);
+      color: rgba(255, 248, 232, 0.78);
+    }
+
+    .rail a.is-active {
+      color: #fff8e8;
+      background: linear-gradient(90deg, rgba(167, 122, 46, 0.45), rgba(167, 122, 46, 0.08));
+      border-left: 3px solid #d5b06a;
+    }
+
+    .rail small {
+      display: block;
+      color: #d5b06a;
+      font-size: 16px;
+      line-height: 1;
+    }
+
+    .rail span {
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    .page {
+      width: min(1280px, calc(100% - 52px));
+      margin: 0 auto;
+      padding: 26px 0 64px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .identity h1 {
+      margin: 0 0 8px;
+      font-size: 31px;
+      line-height: 1.18;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 18px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .badge {
+      border: 1px solid rgba(167, 122, 46, 0.32);
+      background: rgba(255, 253, 248, 0.72);
+      color: var(--gold);
+      padding: 8px 12px;
+      font-size: 13px;
+      white-space: nowrap;
+      border-radius: 6px;
+    }
+
+    .decision-panel {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 520px;
+      gap: 26px;
+      align-items: stretch;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      padding: 28px;
+      border-radius: 8px;
+    }
+
+    .verdict-label,
+    .section-kicker {
+      color: var(--gold);
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .verdict h2 {
+      margin: 0 0 16px;
+      font-size: 42px;
+      line-height: 1.18;
+      font-weight: 700;
+    }
+
+    .verdict h2 span { color: var(--red); }
+
+    .verdict p {
+      margin: 0;
+      max-width: 720px;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .decision-strips {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0;
+      border: 1px solid var(--line);
+      background: #fbf6ec;
+    }
+
+    .decision-strips article {
+      padding: 18px;
+      border-right: 1px solid var(--line);
+    }
+
+    .decision-strips article:last-child { border-right: 0; }
+
+    .decision-strips span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 7px;
+    }
+
+    .decision-strips strong {
+      display: block;
+      font-size: 18px;
+      line-height: 1.35;
+    }
+
+    .decision-strips p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .section {
+      margin-top: 18px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 10px 28px rgba(28, 22, 15, 0.065);
+      overflow: hidden;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: end;
+      padding: 22px 24px 16px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255, 253, 248, 0.95), rgba(249, 243, 233, 0.95));
+    }
+
+    .section-head h3 {
+      margin: 0;
+      font-size: 23px;
+      line-height: 1.25;
+    }
+
+    .section-note {
+      color: var(--muted);
+      font-size: 13px;
+      max-width: 420px;
+      text-align: right;
+    }
+
+    .year-section {
+      border-color: rgba(167, 122, 46, 0.48);
+      box-shadow: 0 18px 46px rgba(88, 56, 16, 0.12);
+    }
+
+    .year-section .section-head {
+      background:
+        linear-gradient(90deg, rgba(167, 122, 46, 0.12), rgba(255, 253, 248, 0.96) 42%),
+        linear-gradient(180deg, rgba(255, 253, 248, 0.98), rgba(249, 243, 233, 0.96));
+    }
+
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      position: relative;
+      padding: 24px;
+      gap: 22px;
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 72px;
+      right: 72px;
+      top: 53px;
+      height: 1px;
+      background: linear-gradient(90deg, var(--green), var(--gold), var(--red));
+    }
+
+    .year {
+      position: relative;
+      z-index: 1;
+      background: rgba(255, 253, 248, 0.94);
+      border: 1px solid var(--line);
+      padding: 18px;
+      min-height: 276px;
+      border-radius: 6px;
+    }
+
+    .year.is-core {
+      border-color: rgba(167, 122, 46, 0.48);
+      box-shadow: inset 0 0 0 1px rgba(167, 122, 46, 0.1);
+    }
+
+    .year-mark {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 56px;
+      height: 56px;
+      margin-bottom: 12px;
+      color: #fff;
+      background: var(--green);
+      border-radius: 50%;
+      font-weight: 700;
+      line-height: 1.1;
+    }
+
+    .year:nth-child(2) .year-mark { background: var(--gold); }
+    .year:nth-child(3) .year-mark { background: var(--red); }
+
+    .year h4 {
+      margin: 0 0 10px;
+      font-size: 18px;
+    }
+
+    .year-summary {
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .year dl {
+      margin: 0;
+      display: grid;
+      grid-template-columns: 68px 1fr;
+      gap: 8px 10px;
+      font-size: 14px;
+    }
+
+    .year dt { color: var(--muted); }
+    .year dd { margin: 0; }
+
+    .year dd strong {
+      color: var(--red);
+      font-weight: 700;
+    }
+
+    .year-gate {
+      margin-top: 14px;
+      padding: 11px 12px;
+      border-left: 4px solid var(--gold);
+      background: #fbf6ec;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .year-gate b {
+      display: block;
+      color: var(--ink);
+      margin-bottom: 3px;
+    }
+
+    .near-term {
+      border-top: 1px solid var(--line);
+      padding: 22px 24px 24px;
+      background: linear-gradient(180deg, rgba(251, 246, 236, 0.72), rgba(255, 253, 248, 0.92));
+    }
+
+    .near-term-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: end;
+      margin-bottom: 14px;
+    }
+
+    .near-term-head h4 {
+      margin: 0;
+      font-size: 21px;
+      line-height: 1.25;
+    }
+
+    .near-term-head p {
+      margin: 0;
+      max-width: 480px;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: right;
+    }
+
+    .month-map {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .month-card {
+      min-height: 150px;
+      border: 1px solid var(--line);
+      background: #fffdf8;
+      padding: 12px;
+      border-radius: 6px;
+    }
+
+    .month-card.is-good { border-top: 4px solid var(--green); }
+    .month-card.is-mid { border-top: 4px solid var(--gold); }
+    .month-card.is-risk { border-top: 4px solid var(--red); }
+
+    .month-card span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 5px;
+    }
+
+    .month-card strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 16px;
+      line-height: 1.3;
+    }
+
+    .month-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .month-card em {
+      display: inline-block;
+      margin-top: 8px;
+      color: var(--red);
+      font-style: normal;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .decision-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 15px;
+      table-layout: fixed;
+    }
+
+    .decision-table th,
+    .decision-table td {
+      border-bottom: 1px solid var(--line);
+      border-right: 1px solid var(--line);
+      padding: 16px 18px;
+      vertical-align: top;
+    }
+
+    .decision-table th:last-child,
+    .decision-table td:last-child { border-right: 0; }
+
+    .decision-table tr:last-child td { border-bottom: 0; }
+
+    .decision-table th {
+      background: #181512;
+      color: #fff8e8;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .domain {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      background: var(--green);
+      border-radius: 50%;
+      flex: 0 0 auto;
+    }
+
+    .dot.gold { background: var(--gold); }
+    .dot.red { background: var(--red); }
+    .dot.blue { background: var(--blue); }
+
+    .decision-table strong {
+      color: var(--red);
+      font-weight: 700;
+    }
+
+    .action-grid {
+      display: grid;
+      grid-template-columns: 0.86fr 1fr;
+      gap: 0;
+    }
+
+    .action-block {
+      padding: 24px;
+      border-right: 1px solid var(--line);
+    }
+
+    .action-block:last-child { border-right: 0; }
+
+    .action-block h4 {
+      margin: 0 0 12px;
+      font-size: 19px;
+    }
+
+    .action-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 10px;
+    }
+
+    .action-list li {
+      display: grid;
+      grid-template-columns: 26px 1fr;
+      gap: 10px;
+      align-items: start;
+      color: var(--muted);
+    }
+
+    .action-list b {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      color: #fff;
+      background: var(--gold);
+      border-radius: 50%;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    details.evidence {
+      margin-top: 18px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 10px 28px rgba(28, 22, 15, 0.065);
+      overflow: hidden;
+    }
+
+    details.evidence summary {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      padding: 18px 24px;
+      cursor: pointer;
+      color: var(--ink);
+      list-style: none;
+      background: #fbf6ec;
+    }
+
+    details.evidence summary::-webkit-details-marker { display: none; }
+
+    .evidence-title {
+      display: grid;
+      gap: 2px;
+    }
+
+    .evidence-title span {
+      color: var(--gold);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .evidence-title strong { font-size: 18px; }
+
+    .chevron {
+      color: var(--gold);
+      font-size: 22px;
+    }
+
+    details[open] .chevron { transform: rotate(180deg); }
+
+    .evidence-body {
+      padding: 22px 24px 26px;
+      border-top: 1px solid var(--line);
+    }
+
+    .evidence-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .evidence-card {
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, #fffdf8, #fbf6ec);
+      padding: 14px;
+      border-radius: 6px;
+      min-height: 160px;
+    }
+
+    .evidence-card span {
+      display: block;
+      color: var(--gold);
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .evidence-card h4 {
+      margin: 0 0 10px;
+      font-size: 17px;
+      line-height: 1.35;
+    }
+
+    .evidence-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .mini-bars {
+      display: grid;
+      gap: 9px;
+      margin-top: 10px;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 62px 1fr 48px;
+      gap: 8px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .bar-track {
+      height: 8px;
+      background: #eadfcd;
+      overflow: hidden;
+      border-radius: 999px;
+    }
+
+    .bar-track i {
+      display: block;
+      height: 100%;
+      background: var(--green);
+    }
+
+    .bar-track.red i { background: var(--red); }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 3px 8px;
+      border: 1px solid rgba(167, 122, 46, 0.36);
+      color: var(--gold);
+      background: rgba(167, 122, 46, 0.08);
+      font-size: 12px;
+      border-radius: 999px;
+    }
+
+    .tag.warn {
+      border-color: rgba(168, 51, 43, 0.32);
+      color: var(--red);
+      background: rgba(168, 51, 43, 0.07);
+    }
+
+    .pillar-table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .pillar-table th,
+    .pillar-table td {
+      border: 1px solid var(--line);
+      padding: 10px 8px;
+      background: #fffdf8;
+    }
+
+    .pillar-table th {
+      background: #181512;
+      color: #fff8e8;
+      font-weight: 700;
+    }
+
+    .glyph {
+      font-size: 27px;
+      font-weight: 700;
+    }
+
+    .wood { color: var(--green); }
+    .fire { color: var(--red); }
+    .earth { color: var(--gold); }
+    .metal { color: #827f78; }
+    .water { color: #2f6ca1; }
+
+    .evidence-summary {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .evidence-summary div {
+      border: 1px solid var(--line);
+      background: #fbf6ec;
+      padding: 12px;
+      border-radius: 6px;
+    }
+
+    .evidence-summary span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+
+    .evidence-summary strong {
+      display: block;
+      font-size: 16px;
+      line-height: 1.35;
+    }
+
+    .logic-table {
+      width: 100%;
+      margin-top: 16px;
+      border-collapse: collapse;
+      table-layout: fixed;
+      font-size: 14px;
+    }
+
+    .logic-table th,
+    .logic-table td {
+      border: 1px solid var(--line);
+      padding: 12px 14px;
+      vertical-align: top;
+      background: #fffdf8;
+    }
+
+    .logic-table th {
+      background: #181512;
+      color: #fff8e8;
+      font-weight: 700;
+    }
+
+    .logic-table td:first-child {
+      color: var(--gold);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .evidence-note {
+      margin: 14px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .footer {
+      margin-top: 24px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+    }
+
+    @media (max-width: 980px) {
+      .shell { grid-template-columns: 1fr; }
+      .rail {
+        position: static;
+        height: auto;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 0;
+        padding: 0;
+      }
+      .rail-title { display: none; }
+      .rail a { min-height: 48px; padding: 9px 12px; }
+      .page { width: min(100% - 24px, 900px); padding-top: 16px; }
+      .decision-panel { grid-template-columns: 1fr; }
+      .timeline,
+      .month-map,
+      .evidence-grid,
+      .evidence-summary { grid-template-columns: 1fr; }
+      .timeline::before { display: none; }
+      .near-term-head { display: block; }
+      .near-term-head p { text-align: left; margin-top: 8px; }
+      .action-grid { grid-template-columns: 1fr; }
+      .action-block { border-right: 0; border-bottom: 1px solid var(--line); }
+      .action-block:last-child { border-bottom: 0; }
+    }
+
+    @media (max-width: 640px) {
+      body { font-size: 15px; }
+      .rail { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .topbar { align-items: start; flex-direction: column; }
+      .identity h1 { font-size: 26px; }
+      .decision-panel { padding: 20px; }
+      .verdict h2 { font-size: 31px; }
+      .decision-strips { grid-template-columns: 1fr; }
+      .decision-strips article { border-right: 0; border-bottom: 1px solid var(--line); }
+      .decision-strips article:last-child { border-bottom: 0; }
+      .section-head { display: block; }
+      .section-note { text-align: left; margin-top: 8px; }
+      .decision-table { table-layout: auto; min-width: 820px; }
+      .table-scroll { overflow-x: auto; }
+      .pillar-table { min-width: 720px; }
+      .logic-table { min-width: 820px; }
+      .evidence-body { overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <nav class="rail" aria-label="报告导航">
+      <p class="rail-title">目录</p>
+      <a class="is-active" href="#core"><small>01</small><span>核心判决</span></a>
+      <a href="#model"><small>02</small><span>底层模型</span></a>
+      <a href="#years"><small>03</small><span>三年地图</span></a>
+      <a href="#domain"><small>04</small><span>四域决策</span></a>
+      <a href="#action"><small>05</small><span>行动清单</span></a>
+      <a href="#evidence"><small>06</small><span>专业证据</span></a>
+    </nav>
+
+    <main class="page">
+      <header class="topbar">
+        <div class="identity">
+          <h1>Vincy · 精读决策报告</h1>
+          <div class="meta">
+            <span>女</span>
+            <span>1998-08-09 13:50</span>
+            <span>真太阳时校正：12:51</span>
+            <span>出生地：贵州</span>
+            <span>生成：2026-05-19</span>
+          </div>
+        </div>
+        <div class="badge">付费决策版 · Mock V1</div>
+      </header>
+
+      <section class="decision-panel" id="core">
+        <div class="verdict">
+          <div class="verdict-label">一句话判决</div>
+          <h2>先补承载力，<span>再用才华变现</span></h2>
+          <p>这不是直接追财的盘。优势在表达、专业输出和资源整合，但当前底盘偏弱，越急着变现越容易透支；先把学习、证书、稳定收入和身体恢复打牢，机会来时才接得住。</p>
+        </div>
+        <div class="decision-strips">
+          <article>
+            <span>当前阶段</span>
+            <strong class="green">蓄力修根期</strong>
+            <p>2025-2027 打基础，适合补短板、建作品、修复状态。</p>
+          </article>
+          <article>
+            <span>最该做</span>
+            <strong class="earth">提升承载力</strong>
+            <p>稳定现金流、证书加持、规律生活、减少无效社交。</p>
+          </article>
+          <article>
+            <span>必须避</span>
+            <strong class="fire">冒进透支</strong>
+            <p>高杠杆投资、裸辞硬冲、情绪决策、长期熬夜消耗。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="model">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">底层模型</div>
+            <h3>高输出、低续航、靠结构放大价值</h3>
+          </div>
+          <div class="section-note">把命理术语翻译成可执行的使用说明，不重复排盘细节。</div>
+        </div>
+        <div class="action-grid">
+          <div class="action-block">
+            <h4>优势怎么用</h4>
+            <ul class="action-list">
+              <li><b>1</b><span>用表达、内容、专业服务建立可信度，不适合长期做纯执行位。</span></li>
+              <li><b>2</b><span>把学习成果产品化：作品集、案例库、证书、可复用流程。</span></li>
+              <li><b>3</b><span>与稳定平台绑定，先借平台信用，再逐步做个人品牌。</span></li>
+            </ul>
+          </div>
+          <div class="action-block">
+            <h4>卡点怎么避</h4>
+            <ul class="action-list">
+              <li><b>1</b><span>不要用焦虑驱动选择，越急越容易选高消耗关系和机会。</span></li>
+              <li><b>2</b><span>财富机会要有预算上限，先看能不能承载，再看收益空间。</span></li>
+              <li><b>3</b><span>身体状态是事业上限，睡眠、脾胃和情绪管理必须进计划。</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section year-section" id="years">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">时间窗口</div>
+            <h3>三年决策地图</h3>
+          </div>
+          <div class="section-note">这是本报告的主轴：先定三年战略，再把近期月份拆成可执行窗口。</div>
+        </div>
+        <div class="timeline">
+          <article class="year is-core">
+            <div class="year-mark">2026<br>丙午</div>
+            <h4>破局调整年</h4>
+            <p class="year-summary">火气启动，适合修根基、补能力、建立稳定节奏；不是冒进扩张年。</p>
+            <dl>
+              <dt>主任务</dt><dd>学习进修、技能升级、人脉沉淀</dd>
+              <dt>决策门槛</dt><dd>任何新机会必须满足：<strong>现金流可控 + 时间不透支</strong></dd>
+              <dt>风险红线</dt><dd>情绪波动、冲动决策、口舌是非</dd>
+            </dl>
+            <div class="year-gate"><b>判断标准</b>能不能让你更稳、更专业、更有作品；不能，就先不接。</div>
+          </article>
+          <article class="year is-core">
+            <div class="year-mark">2027<br>丁未</div>
+            <h4>资源整合年</h4>
+            <p class="year-summary">土火更稳，适合把前一年积累转成可见成果，开始争取更明确的位置。</p>
+            <dl>
+              <dt>主任务</dt><dd>项目落地、收入结构优化、贵人协作</dd>
+              <dt>决策门槛</dt><dd>合作要先定权责、分账、退出机制</dd>
+              <dt>风险红线</dt><dd>合作分歧、细节失误、过度操劳</dd>
+            </dl>
+            <div class="year-gate"><b>判断标准</b>能不能形成长期资产；只赚快钱但消耗身体的项目要降级。</div>
+          </article>
+          <article class="year is-core">
+            <div class="year-mark">2028<br>戊申</div>
+            <h4>起势突破年</h4>
+            <p class="year-summary">食神被引动，输出、品牌、收入都更容易放大，但规模越大越要控风险。</p>
+            <dl>
+              <dt>主任务</dt><dd>品牌扩张、规模试水、收益放大</dd>
+              <dt>决策门槛</dt><dd>先验证小闭环，再做大投入</dd>
+              <dt>风险红线</dt><dd>贪多求快、合同漏洞、健康透支</dd>
+            </dl>
+            <div class="year-gate"><b>判断标准</b>能复制、能交付、能回款，才值得放大。</div>
+          </article>
+        </div>
+        <div class="near-term">
+          <div class="near-term-head">
+            <div>
+              <div class="section-kicker">近期决策地图</div>
+              <h4>近半年关键月份 · 2026.06—2026.11</h4>
+            </div>
+            <p>把年度判断拆到月份，方便决定什么时候推进、什么时候收缩、什么时候只做准备。</p>
+          </div>
+          <div class="month-map">
+            <article class="month-card is-mid">
+              <span>2026.06 · 甲午月</span>
+              <strong>启动但别冲</strong>
+              <p>适合开始学习计划、建立作息、整理作品。先定节奏，不急着变现。</p>
+              <em>避：情绪上头拍板</em>
+            </article>
+            <article class="month-card is-good">
+              <span>2026.07 · 乙未月</span>
+              <strong>打基础窗口</strong>
+              <p>适合补证书、打磨技能、做长期项目框架，贵人和稳定资源更容易接上。</p>
+              <em>宜：确定一个主方向</em>
+            </article>
+            <article class="month-card is-risk">
+              <span>2026.08 · 丙申月</span>
+              <strong>机会与消耗并行</strong>
+              <p>表达和曝光机会变多，但压力也上来。只接能力范围内的项目。</p>
+              <em>避：同时开多线</em>
+            </article>
+            <article class="month-card is-mid">
+              <span>2026.09 · 丁酉月</span>
+              <strong>复盘修正月</strong>
+              <p>适合优化流程、收口项目、修正合作细节，不适合盲目扩大投入。</p>
+              <em>宜：做财务复盘</em>
+            </article>
+            <article class="month-card is-good">
+              <span>2026.10 · 戊戌月</span>
+              <strong>稳定推进月</strong>
+              <p>土气增强，适合确定长期合作、沉淀方法论、把成果变成可展示资产。</p>
+              <em>宜：签清楚规则</em>
+            </article>
+            <article class="month-card is-risk">
+              <span>2026.11 · 己亥月</span>
+              <strong>财水诱惑月</strong>
+              <p>容易出现赚钱机会或消费冲动，但身弱承载不足，要先控预算和精力。</p>
+              <em>避：高风险投资</em>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="domain">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">四域决策</div>
+            <h3>结论、行动、风险边界</h3>
+          </div>
+          <div class="section-note">付费感来自边界清楚：能做什么，不能做什么，做到什么程度。</div>
+        </div>
+        <div class="table-scroll">
+          <table class="decision-table">
+            <thead>
+              <tr>
+                <th style="width: 14%;">领域</th>
+                <th style="width: 31%;">结论</th>
+                <th style="width: 32%;">行动</th>
+                <th>风险边界</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><div class="domain"><i class="dot green"></i>事业</div></td>
+                <td>稳中上升，适合专业深耕到管理进阶。<strong>27年后起势更明显</strong>。</td>
+                <td>2026 打磨能力，2027 拿结果说话，2028 再扩大影响力。</td>
+                <td>不裸辞硬冲，不接超承载项目，不靠情绪证明自己。</td>
+              </tr>
+              <tr>
+                <td><div class="domain"><i class="dot gold"></i>财富</div></td>
+                <td>正财为主，偏财宜慎。赚钱靠专业、稳定渠道和复利积累。</td>
+                <td>建立预算、固定储蓄、提升议价能力，副业先小规模测试。</td>
+                <td>高杠杆投资、朋友合伙、人情借贷是主要破财点。</td>
+              </tr>
+              <tr>
+                <td><div class="domain"><i class="dot red"></i>感情</div></td>
+                <td>有缘分，但节奏关键。先自我成长，关系才更稳。</td>
+                <td>选择情绪稳定、有责任感、尊重事业节奏的人。</td>
+                <td>远离消耗型关系，不用恋爱填补焦虑，不冷战拖延沟通。</td>
+              </tr>
+              <tr>
+                <td><div class="domain"><i class="dot blue"></i>健康</div></td>
+                <td>体质偏弱，能量管理是所有决策的前置条件。</td>
+                <td>固定睡眠、温和运动、调脾胃，减少甜冷辣和夜间脑力过载。</td>
+                <td>熬夜透支、压力积压、饮食不规律会直接拉低事业状态。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section" id="action">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">执行层</div>
+            <h3>接下来 90 天行动清单</h3>
+          </div>
+          <div class="section-note">最后只给真正可执行的动作，不再重复命理解释。</div>
+        </div>
+        <div class="action-grid">
+          <div class="action-block">
+            <h4>必须做</h4>
+            <ul class="action-list">
+              <li><b>1</b><span>确定一个可复利的专业方向，并做出 3 个可展示成果。</span></li>
+              <li><b>2</b><span>每周固定 3 次 30 分钟运动，先恢复体能和睡眠。</span></li>
+              <li><b>3</b><span>做一张收入结构表，砍掉低收益高消耗事项。</span></li>
+            </ul>
+          </div>
+          <div class="action-block">
+            <h4>必须避</h4>
+            <ul class="action-list">
+              <li><b>1</b><span>不做高杠杆投资，不用未来收入赌短期机会。</span></li>
+              <li><b>2</b><span>不在情绪低谷做跳槽、分手、投资等重大决定。</span></li>
+              <li><b>3</b><span>不同时开太多战线，2026 年先把一个方向做扎实。</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <details class="evidence" id="evidence">
+        <summary>
+          <div class="evidence-title">
+            <span>专业证据</span>
+            <strong>四柱 / 旺衰 / 用忌 / 大运</strong>
+          </div>
+          <div class="chevron">⌄</div>
+        </summary>
+        <div class="evidence-body">
+          <div class="evidence-grid">
+            <article class="evidence-card">
+              <span>01 排盘校验</span>
+              <h4>13:50 经真太阳时校正为 12:51</h4>
+              <p>出生地贵州，地方时较北京时间提前进入午时边界；本稿按真太阳时取时柱，避免时柱错位影响用忌和流年判断。</p>
+            </article>
+            <article class="evidence-card">
+              <span>02 旺衰证据</span>
+              <h4>日主方 114.0 / 克泄耗方 209.0</h4>
+              <p>ratio 0.353，判为身弱微弱。结论不是“不能赚钱”，而是不能先用高消耗方式追财。</p>
+              <div class="mini-bars">
+                <div class="bar-row"><em>日主方</em><div class="bar-track"><i style="width: 35%;"></i></div><b>114</b></div>
+                <div class="bar-row"><em>泄耗方</em><div class="bar-track red"><i style="width: 65%;"></i></div><b>209</b></div>
+              </div>
+            </article>
+            <article class="evidence-card">
+              <span>03 用忌仲裁</span>
+              <h4>主用土，火为辅助，水财条件使用</h4>
+              <p>食神格有财星变现逻辑，但身弱不胜财，必须先补承载力。水不是绝对不用，是预算、体力、节奏可控时才用。</p>
+              <div class="tag-row">
+                <i class="tag">土：主用</i>
+                <i class="tag">火：调候辅助</i>
+                <i class="tag warn">水：条件用</i>
+                <i class="tag warn">金：泄身需控</i>
+              </div>
+            </article>
+            <article class="evidence-card">
+              <span>04 时间窗口</span>
+              <h4>癸亥大运：机会变多，承载更重要</h4>
+              <p>27-36 岁财水气增强，适合接触资源和变现机会，但也更容易过劳、情绪内耗和财务冒进。</p>
+            </article>
+          </div>
+
+          <table class="pillar-table">
+            <thead>
+              <tr><th>四柱</th><th>年柱</th><th>月柱</th><th>日柱</th><th>时柱</th><th>结论</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>主星</td>
+                <td>比肩</td>
+                <td>食神</td>
+                <td>元女</td>
+                <td>正印</td>
+                <td>食神透月，才华输出是主线</td>
+              </tr>
+              <tr>
+                <td>天干</td>
+                <td><span class="glyph earth">戊</span></td>
+                <td><span class="glyph metal">庚</span></td>
+                <td><span class="glyph earth">戊</span></td>
+                <td><span class="glyph earth">戊</span></td>
+                <td>戊土日主，身弱微弱</td>
+              </tr>
+              <tr>
+                <td>地支</td>
+                <td><span class="glyph wood">寅</span></td>
+                <td><span class="glyph metal">申</span></td>
+                <td><span class="glyph water">子</span></td>
+                <td><span class="glyph fire">午</span></td>
+                <td>先补土火承载，财水条件使用</td>
+              </tr>
+              <tr>
+                <td>藏干</td>
+                <td>甲 / 丙 / 戊</td>
+                <td>庚 / 壬 / 戊</td>
+                <td>癸</td>
+                <td>丁 / 己</td>
+                <td>财星藏而不透，机会需通过能力和平台引出</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="evidence-summary">
+            <div><span>旺衰</span><strong>身弱 · 微弱</strong></div>
+            <div><span>格局</span><strong>食神格</strong></div>
+            <div><span>主策略</span><strong>先补身蓄力</strong></div>
+            <div><span>当前大运</span><strong>蓄力修根期</strong></div>
+          </div>
+          <table class="logic-table">
+            <thead>
+              <tr><th>证据</th><th>命理解释</th><th>落到决策</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>月干庚食神</td>
+                <td>食神透出，表达、作品、专业输出是可见天赋。</td>
+                <td>优先做能沉淀作品和口碑的岗位，不宜长期纯执行。</td>
+              </tr>
+              <tr>
+                <td>日主身弱</td>
+                <td>承载力不足，财官机会来得太猛会变压力。</td>
+                <td>先稳收入、作息、证书和能力，再扩大项目规模。</td>
+              </tr>
+              <tr>
+                <td>子午冲</td>
+                <td>日支与时支冲，关系、情绪和长期规划容易被激活。</td>
+                <td>重大感情与合作决策必须留冷静期，不在情绪峰值拍板。</td>
+              </tr>
+              <tr>
+                <td>癸亥大运</td>
+                <td>财水增强，资源机会变多，但也增加耗身与透支。</td>
+                <td>2026-2027 控风险、修根基，2028 再做更大范围扩张。</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="evidence-note">设计原则：主报告只给判断和动作；专业证据层负责证明“为什么这样判断”，但不展开成完整命理师报告。</p>
+        </div>
+      </details>
+
+      <footer class="footer">Mock 数据仅用于确认 HTML 设计方向，暂不接入真实生成链路。</footer>
+    </main>
+  </div>
+</body>
+</html>

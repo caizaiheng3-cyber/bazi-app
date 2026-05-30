@@ -103,6 +103,7 @@
 **条件用神**（存在用忌冲突，需条件性使用）：
 {% for ys in rules.用神忌神.条件用神 %}
 - **{{ ys.五行 }}**（{{ ys.十神 }}）→ {{ ys.理由 }}
+  - 📌 **使用条件**：{{ ys.使用条件 if ys.使用条件 is defined else "须结合大运流年具体判断" }}
 {% endfor %}
 {% endif %}
 
@@ -129,6 +130,8 @@
 
 **格局：{{ rules.格局.格局 }}**
 **依据：{{ rules.格局.依据 }}**
+**是否成格：{{ rules.格局.成败 | default("待判定") }}**（{{ rules.格局.成败依据 | default("") }}）
+{% if rules.格局.层次 %}**格局层次：{{ rules.格局.层次 }}**{% endif %}
 
 {{ AI_JUDGE.geju_detail }}
 

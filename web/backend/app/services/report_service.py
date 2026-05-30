@@ -34,12 +34,9 @@ def run_rules(paipan_data: dict, gender: str = "男") -> dict:
     return compute_rules(paipan_data, gender=gender)
 
 
-def render_html_report(master_markdown: str, subject: Subject) -> str:
-    """将命理师版 Markdown 报告转为精美排版的独立 HTML 页面"""
-    import html
-    import re
-
-    lines = master_markdown.strip().split("\n")
+def _markdown_to_report_html(markdown: str) -> tuple[str, list]:
+    """将 Markdown 正文转成报告 HTML，并生成目录。"""
+    lines = (markdown or "").strip().split("\n")
     html_body_parts = []
     in_list = False
     table_lines = []
@@ -141,27 +138,62 @@ def render_html_report(master_markdown: str, subject: Subject) -> str:
     close_section()
 
     body_html = "\n".join(html_body_parts)
+    return body_html, toc_items
+
+
+def render_html_report(report_markdown: str, subject: Subject,
+                       evidence_markdown: str = "") -> str:
+    """将精读决策版 Markdown 报告转为独立 HTML，命理师版作为专业依据。"""
+    import html
+
+    source_markdown = evidence_markdown or report_markdown or ""
+    body_html, toc_items = _markdown_to_report_html(report_markdown or "")
+    evidence_body_html, evidence_toc_items = ("", [])
+    if evidence_markdown and evidence_markdown != report_markdown:
+        evidence_body_html, evidence_toc_items = _markdown_to_report_html(evidence_markdown)
+
     gen_time = datetime.now().strftime("%Y年%m月%d日")
-    escaped_name = html.escape(subject.name)
-    escaped_gender = html.escape(subject.gender)
-    escaped_birth_date = html.escape(subject.birth_date)
-    escaped_birth_time = html.escape(subject.birth_time)
-    escaped_birth_city = html.escape(subject.birth_city)
-    pillars = _extract_pillars(master_markdown)
-    elements = _extract_elements(master_markdown)
+    escaped_name = html.escape(subject.name or "")
+    escaped_gender = html.escape(subject.gender or "")
+    escaped_birth_date = html.escape(str(subject.birth_date or ""))
+    escaped_birth_time = html.escape(str(subject.birth_time or ""))
+    escaped_birth_city = html.escape(subject.birth_city or "")
+    pillars = _extract_pillars(source_markdown)
+    elements = _extract_elements(source_markdown)
     verdict = _extract_first_match(
-        master_markdown, r"\*\*结论：(.+?)\*\*", "待校验"
+        source_markdown, r"\*\*结论：(.+?)\*\*", "待校验"
     )
     geju = _extract_first_match(
-        master_markdown, r"\*\*格局：(.+?)\*\*", "格局待判"
+        source_markdown, r"\*\*格局：(.+?)\*\*", "格局待判"
     )
     toc_html = _render_toc(toc_items)
+    evidence_toc_html = _render_toc(evidence_toc_items)
     pro_paipan_html = _render_professional_paipan(
-        pillars, elements, verdict, geju, toc_items
+        pillars, elements, verdict, geju, evidence_toc_items or toc_items
     )
     visual_story_html = _render_visual_story(
-        master_markdown, toc_items, pillars, elements, verdict, geju
+        source_markdown, evidence_toc_items or toc_items, pillars, elements, verdict, geju
     )
+    decision_map_html = _render_paid_decision_overview(report_markdown or "")
+    evidence_detail_html = ""
+    if evidence_body_html:
+        evidence_detail_html = f"""
+  <details class="source-report">
+    <summary>
+      <span>完整推演依据</span>
+      <strong>展开命理师版全文与原始表格</strong>
+    </summary>
+    <div class="reader-layout">
+      <aside class="toc-rail">
+        <div class="toc-title">依据目录</div>
+        {evidence_toc_html}
+      </aside>
+      <main class="report-content">
+        {evidence_body_html}
+      </main>
+    </div>
+  </details>
+"""
     css = _report_html_css()
     interaction_js = _report_html_interaction_js()
 
@@ -179,8 +211,8 @@ def render_html_report(master_markdown: str, subject: Subject) -> str:
 <div class="report-shell">
   <section class="report-hero">
     <div class="hero-copy">
-      <div class="report-kicker">八字精读卷宗</div>
-      <h1>{escaped_name} · 命理报告</h1>
+      <div class="report-kicker">付费决策报告</div>
+      <h1>{escaped_name} · 精读决策报告</h1>
       <div class="hero-meta">
         <span>{escaped_gender}</span>
         <span>{escaped_birth_date} {escaped_birth_time}</span>
@@ -211,6 +243,26 @@ def render_html_report(master_markdown: str, subject: Subject) -> str:
   </section>
 
   {visual_story_html}
+  {decision_map_html}
+
+  <section class="decision-reader">
+    <div class="visual-story-head">
+      <div>
+        <div class="report-kicker">精读决策版</div>
+        <h2>完整付费决策报告</h2>
+      </div>
+      <p>主报告直接面向决策：我是谁、卡在哪里、怎么走、什么能做、什么不能做。</p>
+    </div>
+    <div class="reader-layout">
+      <aside class="toc-rail">
+        <div class="toc-title">报告目录</div>
+        {toc_html}
+      </aside>
+      <main class="report-content">
+        {body_html}
+      </main>
+    </div>
+  </section>
 
   <details class="evidence-drawer">
     <summary>
@@ -219,22 +271,7 @@ def render_html_report(master_markdown: str, subject: Subject) -> str:
     </summary>
     {pro_paipan_html}
   </details>
-
-  <details class="source-report">
-    <summary>
-      <span>完整推演依据</span>
-      <strong>展开命理师版全文与原始表格</strong>
-    </summary>
-    <div class="reader-layout">
-      <aside class="toc-rail">
-        <div class="toc-title">目录</div>
-        {toc_html}
-      </aside>
-      <main class="report-content">
-        {body_html}
-      </main>
-    </div>
-  </details>
+  {evidence_detail_html}
 
   <div class="footer">
     <p>我命由天挺好的 · AI 命理工作台</p>
@@ -353,12 +390,14 @@ def _element_class(element: str) -> str:
 def _section_theme_class(text: str) -> str:
     if "基础" in text:
         return "section-base"
-    if "核心" in text or "命局" in text:
+    if "核心" in text or "命局" in text or "判决" in text:
         return "section-core"
-    if "干支" in text or "合冲" in text:
+    if "干支" in text or "合冲" in text or "领域" in text:
         return "section-relation"
-    if "大运" in text or "流年" in text:
+    if "大运" in text or "流年" in text or "时间" in text or "月度" in text:
         return "section-time"
+    if "必须做" in text or "不做" in text:
+        return "section-action"
     return "section-default"
 
 
@@ -635,6 +674,63 @@ def _render_visual_story(
     {ten_god_html}
     {relation_html}
     {time_html}
+  </section>
+"""
+
+
+def _extract_decision_sections(markdown: str) -> list:
+    sections = []
+    current = None
+    for line in (markdown or "").splitlines():
+        stripped = line.strip()
+        if stripped.startswith("## "):
+            if current:
+                sections.append(current)
+            current = {"title": _strip_md_to_text(stripped[3:]), "lines": []}
+        elif current is not None:
+            current["lines"].append(line)
+    if current:
+        sections.append(current)
+    return sections
+
+
+def _section_summary(lines: list, limit: int = 72) -> str:
+    for line in lines:
+        stripped = line.strip()
+        if not stripped or stripped.startswith(("#", "---", "|")):
+            continue
+        if stripped.startswith(("-", "*")):
+            stripped = stripped[1:].strip()
+        text = _strip_md_to_text(stripped)
+        if text:
+            return _short_text(text, limit)
+    return "本节给出结论、证据和可执行动作。"
+
+
+def _render_paid_decision_overview(markdown: str) -> str:
+    sections = _extract_decision_sections(markdown)
+    if not sections:
+        return ""
+    labels = ("核心", "必做", "不做", "时间", "领域", "月度", "依据", "附录")
+    cards = []
+    for idx, section in enumerate(sections[:8]):
+        label = labels[idx] if idx < len(labels) else f"{idx + 1:02d}"
+        title = section["title"]
+        summary = _section_summary(section.get("lines", []))
+        cards.append(
+            '<article>'
+            f'<span>{_inline_md_to_html(label)}</span>'
+            f'<strong>{_inline_md_to_html(title)}</strong>'
+            f'<p>{_inline_md_to_html(summary)}</p>'
+            '</article>'
+        )
+    return f"""
+  <section class="visual-module decision-map-module">
+    <div class="module-title">
+      <span>付费版导航</span>
+      <h3>决策板块总览</h3>
+    </div>
+    <div class="decision-map-grid">{''.join(cards)}</div>
   </section>
 """
 
@@ -1767,6 +1863,23 @@ def _report_html_css() -> str:
     gap: 18px;
     min-width: 0;
   }
+  .decision-reader {
+    margin: 22px 0;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    box-shadow: 0 10px 32px rgba(31,24,16,0.08);
+    overflow: hidden;
+  }
+  .decision-reader .visual-story-head {
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    box-shadow: none;
+  }
+  .decision-reader .reader-layout {
+    margin: 0;
+    border: 0;
+    box-shadow: none;
+  }
   .visual-story *,
   .visual-report-section * {
     min-width: 0;
@@ -1853,6 +1966,41 @@ def _report_html_css() -> str:
     border: 1px solid var(--line);
     padding: 26px;
     box-shadow: 0 10px 32px rgba(31,24,16,0.07);
+  }
+  .decision-map-module {
+    margin: 22px 0;
+  }
+  .decision-map-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .decision-map-grid article {
+    min-height: 188px;
+    border: 1px solid rgba(221,212,198,0.95);
+    background:
+      linear-gradient(180deg, rgba(255,253,250,0.96), rgba(247,240,229,0.96));
+    padding: 16px;
+    overflow-wrap: anywhere;
+  }
+  .decision-map-grid span {
+    display: inline-block;
+    color: var(--gold);
+    font-size: 12px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid rgba(184,138,59,0.35);
+    padding-bottom: 4px;
+  }
+  .decision-map-grid strong {
+    display: block;
+    font-size: 18px;
+    line-height: 1.35;
+    margin-bottom: 10px;
+  }
+  .decision-map-grid p {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.65;
   }
   .module-title {
     display: flex;
@@ -2099,6 +2247,7 @@ def _report_html_css() -> str:
   .visual-report-section.section-core > h2 { border-left-color: var(--gold); }
   .visual-report-section.section-relation > h2 { border-left-color: var(--jade); }
   .visual-report-section.section-time > h2 { border-left-color: var(--indigo); }
+  .visual-report-section.section-action > h2 { border-left-color: var(--crimson, #c0392b); }
   .evidence-drawer,
   .source-report {
     margin: 18px 0;
@@ -2328,6 +2477,7 @@ def _report_html_css() -> str:
     .visual-nav,
     .birth-grid,
     .core-decision-grid,
+    .decision-map-grid,
     .wangshuai-steps,
     .relation-grid,
     .shensha-grid,
@@ -2404,6 +2554,7 @@ def _report_html_css() -> str:
     .visual-nav,
     .birth-grid,
     .core-decision-grid,
+    .decision-map-grid,
     .force-compare,
     .wangshuai-steps,
     .relation-grid,
@@ -2503,7 +2654,11 @@ async def generate_full_report(subject_id: int, db: Session):
         report.master_report = results["master"]
         report.consumer_report = results["consumer"] or ""
         report.wechat_report = results["wechat"]
-        report.html_report = render_html_report(results["master"], subject)
+        report.html_report = render_html_report(
+            results["consumer"] or results["master"],
+            subject,
+            evidence_markdown=results["master"],
+        )
         report.generated_at = datetime.utcnow()
 
         subject.report_status = "已生成"

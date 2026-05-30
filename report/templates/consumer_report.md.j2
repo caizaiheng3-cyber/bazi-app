@@ -1,54 +1,64 @@
-{# 精读决策版报告模板 - Jinja2 #}
-{# 定位：付费决策报告。回答"我是谁、卡在哪、怎么走、什么能做什么不能做" #}
-{# 内部字段名仍为 consumer_report，对外展示为"精读决策版" #}
-# {{ name }} · 人生策略报告
+{# 消费者决策报告模板 - v2 直接架构 #}
+{# 原则：结论先行→行动→证据(可选)。禁止翻译链/比喻/安慰。≤5000字 #}
+# {{ name }} · 命理决策书
 
-> **生成时间**：{{ gen_time }} ｜ **报告类型**：精读决策版
+> {{ gen_time }} ｜ 精读决策版
 
 ---
 
-## 一、核心判决
+## 0. 核心判决
 
 {{ AI_JUDGE.core_verdict }}
 
 ---
 
-## 二、命主底层模型
+## 1. 三件必须做的事
 
-{{ AI_JUDGE.underlying_model }}
-
----
-
-## 三、当前三年决策地图
-
-{{ AI_JUDGE.three_year_map }}
+{{ AI_JUDGE.must_do }}
 
 ---
 
-## 四、事业决策
+## 2. 三件绝对不做的事
 
-{{ AI_JUDGE.career_decision }}
-
----
-
-## 五、财富决策
-
-{{ AI_JUDGE.wealth_decision }}
+{{ AI_JUDGE.must_not_do }}
 
 ---
 
-## 六、感情决策
+## 3. 近三年时间表
 
-{{ AI_JUDGE.relationship_decision }}
-
----
-
-## 七、健康与能量管理
-
-{{ AI_JUDGE.health_energy }}
+{{ AI_JUDGE.timeline }}
 
 ---
 
-## 八、行动清单
+## 4. 领域决策
 
-{{ AI_JUDGE.action_list }}
+### 事业
+
+{{ AI_JUDGE.career }}
+
+### 财运
+
+{{ AI_JUDGE.wealth }}
+
+### 婚恋
+
+{{ AI_JUDGE.relationship }}
+
+### 健康
+
+{{ AI_JUDGE.health }}
+
+---
+
+## 5. 月度指引（{{ current_year }}年）
+
+{{ AI_JUDGE.monthly_guide }}
+
+---
+
+<details>
+<summary>附：命理依据（点击展开）</summary>
+
+{{ AI_JUDGE.evidence }}
+
+</details>

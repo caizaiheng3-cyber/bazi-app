@@ -86,7 +86,23 @@ export default function SubjectCreatePage() {
 
         <div>
           <label className="block text-sm mb-1" style={{ color: "var(--text-secondary)" }}>出生时间</label>
-          <input type="time" className={inputStyle} style={{ borderColor: "var(--border)" }} value={form.birth_time} onChange={(e) => update("birth_time", e.target.value)} />
+          <div className="flex gap-2 items-center">
+            <select className={inputStyle + " flex-1"} style={{ borderColor: "var(--border)" }}
+              value={form.birth_time.split(":")[0]}
+              onChange={(e) => update("birth_time", e.target.value + ":" + form.birth_time.split(":")[1])}>
+              {Array.from({ length: 24 }, (_, i) => String(i).padStart(2, "0")).map((h) => (
+                <option key={h} value={h}>{h}时</option>
+              ))}
+            </select>
+            <span style={{ color: "var(--text-secondary)" }}>:</span>
+            <select className={inputStyle + " flex-1"} style={{ borderColor: "var(--border)" }}
+              value={form.birth_time.split(":")[1]}
+              onChange={(e) => update("birth_time", form.birth_time.split(":")[0] + ":" + e.target.value)}>
+              {Array.from({ length: 60 }, (_, i) => String(i).padStart(2, "0")).map((m) => (
+                <option key={m} value={m}>{m}分</option>
+              ))}
+            </select>
+          </div>
         </div>
 
         <div>

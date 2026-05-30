@@ -96,12 +96,17 @@ def render_skeletons(name: str, gender: str, paipan_data: dict, rules_data: dict
     env = Environment(loader=FileSystemLoader(str(TEMPLATES_PATH)))
     current_year = datetime.now().year
     ai_judge_keys = [
+        # 命理师版
         "dangxia_dingwei", "geju_detail", "liunian_detail", "liuyue_detail",
         "liulingyu", "juanshou_sanjuhua", "wangshuai_consumer", "yongshen_consumer",
         "geju_yijuhua", "renge_huaxiang", "liuqin_kapian", "lingyu_kapian",
         "dangxia_consumer", "liunian_consumer", "liuyue_consumer", "sannian_qingdan",
         "rensheng_siduan", "juanwei_xin", "current_dayun", "index_summary",
         "wechat_summary",
+        # 消费者决策版 v2
+        "core_verdict", "must_do", "must_not_do", "timeline",
+        "career", "wealth", "relationship", "health",
+        "monthly_guide", "evidence",
     ]
     ai_judge = {k: f"【待填充：{k}】" for k in ai_judge_keys}
     context = {
@@ -405,6 +410,46 @@ def extract_engine_summary(paipan_data: dict, rules_data: dict, name: str, gende
             conflict_lines += f"- **{c.get('五行', '')}**：{c.get('仲裁结论', '')}\n"
         conflict_lines += "\n**铁律**：报告中涉及以上冲突五行时，必须按仲裁结论表述，严禁自相矛盾。\n"
 
+    # 合冲修正摘要
+    hechong_adj = wangshuai.get("合冲修正", {})
+    hechong_text = ""
+    if hechong_adj.get("结论变化"):
+        hechong_text = (
+            f"\n### 合冲力量修正（引擎确定性计算）\n\n"
+            f"- 修正前：{hechong_adj.get('修正前_程度', '')}（日主方{hechong_adj.get('修正前_日主方', '')} / 克泄耗方{hechong_adj.get('修正前_克泄耗方', '')}）\n"
+            f"- 修正后：{wangshuai.get('程度', '')}（日主方{wangshuai.get('助力总分', '')} / 克泄耗方{wangshuai.get('泄耗总分', '')}）\n"
+            f"- 原因：{'；'.join(hechong_adj.get('明细', [])[:5])}\n"
+            f"- **铁律**：旺衰结论以修正后为准，禁止使用修正前的结论。\n"
+        )
+    elif hechong_adj.get("明细"):
+        hechong_text = (
+            f"\n### 合冲力量修正\n\n"
+            f"- 有合冲但未改变结论：{'；'.join(hechong_adj.get('明细', [])[:3])}\n"
+        )
+
+    # 用神策略总论摘要
+    strategy_zonglun = yongshen.get("策略总论", {})
+    strategy_card = ""
+    if strategy_zonglun:
+        strategy_card = f"\n### 用神策略总论（引擎最终裁决）\n\n"
+        strategy_card += f"**一句话**：{strategy_zonglun.get('一句话', '')}\n\n"
+        do_items = strategy_zonglun.get("做", [])
+        if do_items:
+            strategy_card += "**做**：\n"
+            for item in do_items:
+                strategy_card += f"- {item.get('五行', '')}({item.get('十神', '')})：{item.get('动作', '')}\n"
+        dont_items = strategy_zonglun.get("不做", [])
+        if dont_items:
+            strategy_card += "\n**不做**：\n"
+            for item in dont_items:
+                strategy_card += f"- {item.get('五行', '')}({item.get('十神', '')})：{item.get('回避', '')}\n"
+        cond_items = strategy_zonglun.get("条件性", [])
+        if cond_items:
+            strategy_card += "\n**条件性**：\n"
+            for item in cond_items:
+                strategy_card += f"- {item.get('五行', '')}：{item.get('条件', '')[:80]}\n"
+        strategy_card += "\n**铁律**：报告建议必须与策略总论方向一致。\n"
+
     return (
         f"## 已确定的核心事实（后续章节必须与以下事实保持一致，不得矛盾）\n\n"
         f"- 命主：{name}，{gender}，{birth_year}年生，当前虚岁{current_age}\n"
@@ -422,8 +467,10 @@ def extract_engine_summary(paipan_data: dict, rules_data: dict, name: str, gende
         f"{sizhu_facts}\n"
         f"**铁律**：只有天干才叫'透出'，藏干不能说'透出'。"
         f"'有力'需看力量值，力量≤5为微弱，≤10为较弱。\n"
+        f"{hechong_text}"
         f"{conflict_lines}"
         f"{strategy_lines}"
+        f"{strategy_card}"
     )
 
 
@@ -673,49 +720,37 @@ async def generate_consumer_report(
 
     current_year = datetime.now().year
 
-    # 第1次调用：板块1-4（核心判决 + 底层模型 + 三年决策 + 事业决策）
+    # 第1次调用：核心判决 + 必须做 + 不做 + 时间表 + 事业
     prompt_part1 = (
-        f"你是一位顶级命理策略顾问。请基于命理师版报告，输出精读决策版的前4个板块。\n\n"
+        f"基于命理师版报告+引擎数据，输出消费者决策书前5个板块。\n\n"
         f"{engine_summary_text}\n\n"
-        f"## 精读决策版定位\n\n"
-        f"这是一份**付费决策报告**，不是白话命书。\n"
-        f"目标：让用户觉得'这份报告能指导我做决定'。\n"
-        f"每个判断必须落到：该做什么 / 不该做什么 / 时间窗口 / 风险边界。\n"
-        f"禁止泛泛讲命理术语。禁止'注意健康''把握机会'等空话。\n\n"
-        f"## 输出格式（严格按以下结构，用 markdown 二级标题分隔）\n\n"
-        f"## 一、核心判决\n\n"
-        f"要求：\n"
-        f"- 一句话定命（像标语一样记忆深刻，如'低电量高才华型'）\n"
-        f"- 三个关键词概括此人\n"
-        f"- 当前人生阶段一句话定性（如'蓄力期第3年'）\n"
-        f"- 不超过200字\n\n"
-        f"## 二、命主底层模型\n\n"
-        f"要求：\n"
-        f"- 不讲术语，讲'这个人怎么运转'\n"
-        f"- 用比喻或模型概括（如：充电宝型人格、高输出低续航、才华输出>承载力）\n"
-        f"- 讲清楚：天赋在哪、卡点在哪、能量从哪来、会从哪漏\n"
-        f"- 300-500字\n\n"
-        f"## 三、当前三年决策地图\n\n"
-        f"要求：\n"
-        f"- 逐年（{current_year}/{current_year+1}/{current_year+2}）给出：\n"
-        f"  - 本年主题（一句话）\n"
-        f"  - 该做什么（3条具体行动）\n"
-        f"  - 不该做什么（3条红线）\n"
-        f"  - 最大风险\n"
-        f"  - 最佳投入方向\n"
-        f"- 每年300-400字\n\n"
-        f"## 四、事业决策\n\n"
-        f"要求：\n"
-        f"- 适合什么类型的工作环境/岗位/节奏\n"
-        f"- 不适合什么（具体到场景）\n"
-        f"- 跳槽/创业/考证/平台/副业 各给一句决策建议\n"
-        f"- 当前阶段的事业策略（时间窗口+行动）\n"
-        f"- 500-700字\n\n"
-        f"## 铁律\n"
-        f"1. 所有事实必须基于命理师版报告，不得编造\n"
-        f"2. 每条建议必须有命理依据支撑（但不堆术语，一句话带过）\n"
-        f"3. 禁止输出'待分析'、'待填充'\n"
-        f"4. 直接输出内容，不要加角色寒暄\n\n"
+        f"## 写作铁律\n\n"
+        f"1. 结论先行：每段第一句是结论，不是铺垫\n"
+        f"2. 行动优先：先说做什么，再说为什么\n"
+        f"3. 一事一说：同一结论全文只出现一次\n"
+        f"4. 禁止翻译链：不写'X翻译成人话=Y'\n"
+        f"5. 禁止比喻：不写'就像...'/'好比...'\n"
+        f"6. 禁止安慰：不写'别担心'/'这不是坏事'\n"
+        f"7. 禁止空话：不接受'注意健康'/'把握机会'/'多运动'\n"
+        f"8. 所有事实必须来自命理师版报告，不得编造\n\n"
+        f"## 输出格式（严格按以下结构）\n\n"
+        f"## 0. 核心判决\n\n"
+        f"≤100字。三句话：你是[定位]，当前[状态]，接下来[方向]。\n\n"
+        f"## 1. 三件必须做的事\n\n"
+        f"≤300字。每件格式：\n"
+        f"1. **[具体动作]**（时间窗口）—— 一句话理由\n"
+        f"必须可执行（有时间+方式），不是泛泛而谈。\n\n"
+        f"## 2. 三件绝对不做的事\n\n"
+        f"≤300字。每件格式：\n"
+        f"1. **[禁止动作]**（适用期间）—— 一句话后果\n"
+        f"必须具体（不是'不要冲动'，而是'{current_year}-{current_year+1}不碰合伙生意'）。\n\n"
+        f"## 3. 近三年时间表\n\n"
+        f"≤500字。每年一段：\n"
+        f"**{current_year}年**（干支·十神）🟢/🟡/🔴\n"
+        f"一句话定性 + 最重要的1-2个行动/规避。基于引擎事件推理结果。\n\n"
+        f"## 4. 领域决策\n\n"
+        f"### 事业\n\n"
+        f"≤400字。结论（1句）→ 做什么（2-3条）→ 不做什么（1-2条）→ 拐点年份。\n\n"
         f"## 命理师版报告（事实来源）\n\n{master_report[:8000]}"
     )
     result_part1 = await call_deepseek(judge_prompt, prompt_part1)
@@ -723,48 +758,28 @@ async def generate_consumer_report(
 
     progress("精读决策版生成中：板块5-8")
 
-    # 第2次调用：板块5-8（财富 + 感情 + 健康 + 行动清单）
+    # 第2次调用：财运 + 婚恋 + 健康 + 月度指引
     prompt_part2 = (
-        f"继续输出精读决策版的后4个板块。\n\n"
+        f"继续输出消费者决策书后半部分。\n\n"
         f"{engine_summary_text}\n\n"
-        f"## 输出格式（严格按以下结构）\n\n"
-        f"## 五、财富决策\n\n"
-        f"要求：\n"
-        f"- 钱从哪里来（正财/偏财/哪种赚钱模式适合）\n"
-        f"- 钱会从哪里漏（花钱习惯/人情/合伙/投资风险）\n"
-        f"- 能不能合伙（具体条件）\n"
-        f"- 能不能投资（具体边界）\n"
-        f"- 当前三年的财务策略\n"
-        f"- 500-700字\n\n"
-        f"## 六、感情决策\n\n"
-        f"要求：\n"
-        f"- 正缘节奏（什么时候容易遇到/确认关系）\n"
-        f"- 择偶标准（什么类型适合，什么类型踩雷）\n"
-        f"- 关系中的雷区（哪些模式容易出问题）\n"
-        f"- 关键年份标注\n"
-        f"- 400-600字\n\n"
-        f"## 七、健康与能量管理\n\n"
-        f"要求：\n"
-        f"- 不是养生泛话，是'命主使用说明书'\n"
-        f"- 哪些器官/系统容易出问题\n"
-        f"- 能量补充方式（适合什么运动/作息/环境）\n"
-        f"- 能量消耗警报（什么行为/环境会快速耗电）\n"
-        f"- 300-500字\n\n"
-        f"## 八、行动清单\n\n"
-        f"要求：\n"
-        f"- 30天行动（立刻能做的3-5件事）\n"
-        f"- 90天行动（本季度重点方向）\n"
-        f"- 1年行动（今年的核心目标）\n"
-        f"- 3年行动（中期战略方向）\n"
-        f"- 每条行动必须具体到可执行（不是'注意健康'而是'每周三次30分钟慢跑'）\n"
-        f"- 这是全报告的收尾，是付费感最强的部分\n\n"
-        f"## 铁律\n"
-        f"1. 所有事实必须基于命理师版报告\n"
-        f"2. 每条建议有命理依据（简短带过）\n"
-        f"3. 禁止输出'待分析'、'待填充'\n"
-        f"4. 直接输出内容，不要加角色寒暄\n\n"
-        f"## 命理师版报告（事实来源）\n\n{master_report[4000:12000]}\n\n"
-        f"## 前半部分已生成内容（保持一致性）\n\n{result_part1[:4000]}"
+        f"## 写作铁律（同上）\n\n"
+        f"结论先行/行动优先/一事一说/禁翻译链/禁比喻/禁安慰/禁空话\n\n"
+        f"## 输出格式\n\n"
+        f"### 财运\n\n"
+        f"≤400字。结论（1句）→ 做什么（2-3条）→ 不做什么（1-2条）→ 拐点年份。\n"
+        f"必须回答：能不能合伙？能不能投资？什么模式赚钱？\n\n"
+        f"### 婚恋\n\n"
+        f"≤400字。结论（1句）→ 做什么（2-3条）→ 不做什么（1-2条）→ 关键年份。\n"
+        f"必须回答：什么类型适合？什么时候容易遇到？雷区是什么？\n\n"
+        f"### 健康\n\n"
+        f"≤300字。薄弱器官/系统 → 日常该做什么（具体到频率/方式）→ 高危年份。\n"
+        f"禁止'多运动''注意休息'，要具体到'每周3次有氧30分钟'。\n\n"
+        f"## 5. 月度指引（{current_year}年）\n\n"
+        f"≤600字。12个月逐月：\n"
+        f"**X月**（干支）🟢/🟡/🔴 一句话 + 一个动作\n"
+        f"重点月展开2-3句，次要月一行带过。基于引擎流月事件推理。\n\n"
+        f"## 命理师版报告\n\n{master_report[4000:12000]}\n\n"
+        f"## 前半部分已生成（保持一致）\n\n{result_part1[:4000]}"
     )
     result_part2 = await call_deepseek(judge_prompt, prompt_part2)
     result_part2 = clean_ai_preamble(result_part2)
@@ -810,7 +825,9 @@ async def generate_wechat_report(
         f"- 命理术语说出来就立刻翻译成人话（同一句话里完成）\n"
         f"- 每条建议必须具体到可执行（不是'注意健康'而是'每周三次出汗运动'）\n"
         f"- 数字有来源（力量值、年龄、年份）\n"
-        f"- 所有事实必须与命理师版一致，不能编造\n\n"
+        f"- 所有事实必须与命理师版一致，不能编造\n"
+        f"- **全文只允许一个比喻**——选最精妙贴切的那个，放在最关键的地方。其余一律用直白的话讲清楚，不要绕弯子。比喻多了显得啰嗦，信息密度也被稀释\n"
+        f"- 每条信息一句话讲完就走，不要反复解释同一个意思\n\n"
         f"## 绝对禁止\n\n"
         f"- 标题（#）、表格、加粗、分隔线\n"
         f"- '权重'、'维度'、'P0'、'条件用神' 等产品/专业堆砌\n"

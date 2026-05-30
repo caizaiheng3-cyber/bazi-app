@@ -71,7 +71,9 @@ export const subjectsApi = {
 };
 
 export const reportsApi = {
-  get: (subjectId: number) => api.get<Report>(`/reports/${subjectId}`),
+  get: (subjectId: number) => api.get<Report>(`/reports/${subjectId}`, {
+    params: { _t: Date.now() },
+  }),
   generate: (subjectId: number) =>
     api.post("/reports/generate", { subject_id: subjectId }),
 };

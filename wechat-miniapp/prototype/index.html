@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>八字关系签 · 微信小程序原型</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main class="board">
+    <header class="board-header">
+      <div>
+        <p class="eyebrow">微信小程序真实产品风 · 原型 v0.1</p>
+        <h1>八字关系签</h1>
+        <p class="subtitle">两个首页方案并列对比；后续页面按“落签给 TA”和“向 TA 求签”两条动线展开。</p>
+      </div>
+      <div class="legend">
+        <span><i class="dot dot-primary"></i>落签动线</span>
+        <span><i class="dot dot-green"></i>求签动线</span>
+        <span><i class="dot dot-gold"></i>隐私与命理依据</span>
+      </div>
+    </header>
+
+    <section class="section">
+      <div class="section-title">
+        <p>首页方案</p>
+        <h2>两个入口权重对比</h2>
+      </div>
+      <div class="phone-grid two">
+        <article class="phone-card">
+          <div class="variant-label">方案 A · 主推落签</div>
+          <div class="phone">
+            <div class="status"><span>9:41</span><b></b></div>
+            <div class="nav"><span>八字关系签</span><i></i></div>
+            <div class="screen home-a">
+              <div class="seal-mini">八字关系签</div>
+              <h3>落一支只给 TA 打开的八字关系签</h3>
+              <p class="lead">你先交出自己的八字。TA 打开后，会看到只属于 TA 的那一面。</p>
+              <button class="primary-btn">落签给 TA</button>
+              <button class="quiet-btn">向 TA 求一支密封签</button>
+              <div class="privacy-line">TA 会知道你来过，但看不到你的签文。</div>
+              <div class="mini-panel">
+                <p>今日签意</p>
+                <strong>有些靠近，不必先问出口。</strong>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="phone-card">
+          <div class="variant-label">方案 B · 主推求签</div>
+          <div class="phone">
+            <div class="status"><span>9:41</span><b></b></div>
+            <div class="nav"><span>八字关系签</span><i></i></div>
+            <div class="screen home-b">
+              <div class="seal-mini green">密封关系签</div>
+              <h3>向 TA 求一支八字关系签</h3>
+              <p class="lead">请 TA 留下密封命盘。你看不到 TA 的八字，只能打开属于你的那一面。</p>
+              <button class="primary-btn green-btn">向 TA 求签</button>
+              <button class="quiet-btn">我先落签给 TA</button>
+              <div class="privacy-line">TA 愿意留签，本身就是一种回应。</div>
+              <div class="mini-panel green-panel">
+                <p>密封说明</p>
+                <strong>TA 的出生信息不会展示给你。</strong>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-title">
+        <p>动线一</p>
+        <h2>落签给 TA</h2>
+      </div>
+      <div class="phone-grid">
+        <article class="phone-card">
+          <div class="variant-label">A 输入八字</div>
+          <div class="phone">
+            <div class="status"><span>9:41</span><b></b></div>
+            <div class="nav"><span>落签给 TA</span><i></i></div>
+            <div class="screen form-screen">
+              <h3>先落下你的八字</h3>
+              <p class="lead">填得越完整，签文越细。只知道生日也可以先开签。</p>
+              <label>昵称<input value="阿澈"></label>
+              <label>出生日期<input value="1998-05-21"></label>
+              <div class="field-title">出生时辰</div>
+              <div class="segmented">
+                <button class="active">准确</button><button>大概</button><button>不知道</button>
+              </div>
+              <label>时辰<input value="酉时 17:00-19:00"></label>
+              <button class="primary-btn">生成我的关系签</button>
+              <p class="hint">时辰越准，越能看到细节里的靠近和退让。</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="phone-card">
+          <div class="variant-label">A 签预览</div>
+          <div class="phone">
+            <div class="status"><span>9:41</span><b></b></div>
+            <div class="nav"><span>签已落成</span><i></i></div>
+            <div class="screen result-screen">
+              <div class="sign-card">
+                <p>你的关系签</p>
+                <h3>半明半暗签</h3>
+                <span>想靠近，但不急着交底</span>
+              </div>
+              <div class="copy-block">
+                <h4>发给 TA 后</h4>
+                <p>TA 输入自己的八字，会看到 TA 与你之间的吸引点、卡点，以及适合怎么回应。</p>
+              </div>
+              <div class="basis short">
+                <span>八字依据</span>
+                <p>你的命盘里带着一层“先观察、后靠近”的关系气。像灯隔着纱，亮着，但不逼人抬头。</p>
+              </div>
+              <button class="primary-btn">发给 TA</button>
+              <button class="ghost-btn">保存签图</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="phone-card">
+          <div class="variant-label">B 打开落签</div>
+          <div class="phone">
+            <div class="status"><span>9:41</span><b></b></div>
+            <div class="nav"><span>TA 的关系签</span><i></i></div>
+            <div class="screen invite-screen">
+              <div class="blur-row">
+                <div class="blur-avatar"></div>
+                <div><strong>阿澈</strong><p>给你留了一支八字关系签</p></div>
+              </div>
+              <h3>打开你的那一面</h3>
+              <p class="lead">你填的八字只用于生成你的私密视角。TA 看不到内容，但会知道你来过。</p>
+              <button class="primary-btn">打开我的视角</button>
+              <div class="safe-note">这不是合盘判决，也不是表白答案。</div>
+            </div>
+          </div>
+        </article>
+
+        <article class="phone-card">
+          <div class="variant-label">B 私密结果</div>
+          <div class="phone">
+            <div class="status"><span>9:41</span><b></b></div>
+            <div class="nav"><span>只给你看的签</span><i></i></div>
+            <div class="screen result-screen">
+              <div class="sign-card green-card">
+                <p>你们之间</p>
+                <h3>有风但不落地</h3>
+                <span>有好奇牵引，但不适合逼问</span>
+              </div>
+              <div class="copy-block">
+                <h4>你会被什么牵动</h4>
+                <p>你容易被 TA 没完全说破的部分吸引。越是半句留白，越容易让你多想一点。</p>
+              </div>
+              <div class="basis short">
+                <span>八字依据</span>
+                <p>两张命盘之间有轻合之意，像风碰到灯火：会晃一下，但不一定马上落定。</p>
+              </div>
+              <div class="reply-box">回馈一句：有一句有点准。</div>
+              <button class="primary-btn green-btn">回馈给 TA</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="phone-card">
+          <div class="variant-label">A 状态页</div>
+          <div class="phone">
+            <div class="status"><span>9:41</span><b></b></div>
+            <div class="nav"><span>我的关系签</span><i></i></div>
+            <div class="screen status-screen">
+              <h3>半明半暗签</h3>
+              <div class="stats">
+                <div><strong>3</strong><span>已打开</span></div>
+                <div><strong>2</strong><span>已生成</span></div>
+                <div><strong>1</strong><span>有回馈</span></div>
+              </div>
+              <div class="status-item">
+                <div class="blur-avatar small"></div>
+                <div><strong>林一</strong><p>认真算了你们之间的那一面</p></div>
+                <span>已生成</span>
+              </div>
+              <div class="status-item">
+                <div class="blur-avatar small alt"></div>
+                <div><strong>小南</strong><p>回了你一句：有一句有点准</p></div>
+                <span>有回馈</span>
+              </div>
+              <div class="status-item muted">
+                <div class="blur-avatar small pale"></div>
+                <div><strong>未命名</strong><p>打开了你的关系签</p></div>
+                <span>已打开</span>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-title">
+        <p>动线二</p>
+        <h2>向 TA 求签</h2>
+      </div>
+      <div class="phone-grid">
+        <article class="phone-card">
+          <div class="variant-label">A 求签邀约</div>
+          <div class="phone">
+            <div class="status"><span>9:41</span><b></b></div>
+            <div class="nav"><span>向 TA 求签</span><i></i></div>
+            <div class="screen request-screen">
+              <div class="seal-mini green">密封关系签</div>
+              <h3>我想向你求一支签</h3>
+              <p class="lead">TA 留下的八字不会展示给你。你也输入八字后，才能打开属于你的那一面。</p>
+              <div class="mini-panel green-panel">
+                <p>发给 TA 的话</p>
+                <strong>你愿意把你的命盘密封给我吗？</strong>
+              </div>
+              <button class="primary-btn green-btn">发出求签邀约</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="phone-card">
+          <div class="variant-label">B 留密封签</div>
+          <div class="phone">
+            <div class="status"><span>9:41</span><b></b></div>
+            <div class="nav"><span>密封留签</span><i></i></div>
+            <div class="screen invite-screen">
+              <div class="blur-row">
+                <div class="blur-avatar alt"></div>
+                <div><strong>阿澈</strong><p>想向你求一支关系签</p></div>
+              </div>
+              <h3>愿意给 TA 留签吗？</h3>
+              <p class="lead">你的八字会被密封保存，TA 看不到出生信息。TA 只能在输入自己的八字后，看见 TA 的那一面。</p>
+              <button class="primary-btn green-btn">我愿意留签</button>
+              <button class="quiet-btn">先不了</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="phone-card">
+          <div class="variant-label">A 打开密封签</div>
+          <div class="phone">
+            <div class="status"><span>9:41</span><b></b></div>
+            <div class="nav"><span>密封签已收到</span><i></i></div>
+            <div class="screen form-screen">
+              <div class="blur-row compact">
+                <div class="blur-avatar small"></div>
+                <div><strong>林一</strong><p>已为你留下一支密封签</p></div>
+              </div>
+              <h3>输入你的八字，打开这一面</h3>
+              <p class="lead">你不会看到 TA 的出生信息，只会看到你自己的关系视角。</p>
+              <label>出生日期<input value="1997-09-14"></label>
+              <div class="segmented">
+                <button>准确</button><button class="active">大概</button><button>不知道</button>
+              </div>
+              <label>大概时段<input value="晚上"></label>
+              <button class="primary-btn green-btn">打开这支签</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="phone-card">
+          <div class="variant-label">A 求签结果</div>
+          <div class="phone">
+            <div class="status"><span>9:41</span><b></b></div>
+            <div class="nav"><span>你求来的签</span><i></i></div>
+            <div class="screen result-screen">
+              <div class="sign-card green-card">
+                <p>你与 TA</p>
+                <h3>隔着一层雾的火</h3>
+                <span>有明显好奇牵引，但节奏不算直接</span>
+              </div>
+              <div class="copy-block">
+                <h4>你容易被什么牵动</h4>
+                <p>你容易被 TA 身上的不确定感吸引，也容易因为 TA 没立刻回应而补全很多细节。</p>
+              </div>
+              <div class="basis short">
+                <span>八字依据</span>
+                <p>你这边火意先动，TA 那边水气藏锋。像雾里有火，近了会暖，急了会散。</p>
+              </div>
+              <div class="reply-box">回馈一句：这支签我收下了。</div>
+              <button class="primary-btn green-btn">回馈给 TA</button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
+
